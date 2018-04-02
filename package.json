@@ -1,0 +1,51 @@
+{
+  "name": "top-sub",
+  "version": "0.1.0",
+  "license": "MIT",
+  "engines": {
+    "node": ">=9.6.1"
+  },
+  "scripts": {
+    "start": "razzle start",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom",
+    "start:prod": "NODE_ENV=production node build/server.js",
+    "db:start": "docker run --name streamkey-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5445:5432 postgres",
+    "db:rm": "docker stop streamkey-postgres && docker rm streamkey-postgres"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "babel-preset-react": "^6.24.1",
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "connect-pg-simple": "^4.2.1",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "lodash": "^4.17.5",
+    "material-ui": "^1.0.0-beta.38",
+    "mdi-svg": "^2.1.99",
+    "moment": "^2.21.0",
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "razzle": "^0.8.12",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-jss": "^8.3.5",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-svg": "^2.2.15",
+    "redux": "^3.7.2",
+    "sequelize": "^4.37.3",
+    "sequelize-cli": "^4.0.0",
+    "uuid": "^3.2.1",
+    "validator": "^9.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "jest-get-type": "^22.1.0"
+  }
+}

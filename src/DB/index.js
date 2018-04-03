@@ -1,10 +1,12 @@
 import Sequelize from 'sequelize'
 
 import User from './models/user'
+import Report from './models/report'
 
 // Order is important for associations
 const modelsDefinitions = [
-  User
+  User,
+  Report
 ]
 
 const models = {}

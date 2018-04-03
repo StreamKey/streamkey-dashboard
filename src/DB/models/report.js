@@ -1,7 +1,8 @@
 import Sequelize from 'sequelize'
 
 export default sequelize => {
-  var Report = sequelize.define('Report', {
+  // All costs are in USD
+  const Report = sequelize.define('Report', {
     id: {
       primaryKey: true,
       type: Sequelize.INTEGER
@@ -22,9 +23,15 @@ export default sequelize => {
     as: Sequelize.STRING,
     asOpp: Sequelize.INTEGER,
     asImp: Sequelize.INTEGER,
-    asRev: Sequelize.DECIMAL,
-    profit: Sequelize.DECIMAL,
-    margin: Sequelize.DECIMAL
+    asCost: Sequelize.DECIMAL,
+    profit: {
+      // sspRev - asCost
+      type: Sequelize.DECIMAL
+    },
+    margin: {
+      // Percentage of profit/sspRev
+      type: Sequelize.DECIMAL
+    }
   }, {
     indexes: [
       {

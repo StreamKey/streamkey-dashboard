@@ -12,7 +12,7 @@
     "start:prod": "NODE_ENV=production node build/server.js",
     "db:start": "docker run --name streamkey-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5445:5432 postgres",
     "db:rm": "docker stop streamkey-postgres && docker rm streamkey-postgres",
-    "workers:scrapeDaily": "babel-node src/workers/scrapeDaily.js --presets es2015,stage-2"
+    "workers:scrapeDaily": "babel-node src/workers/scrapeDaily/index.js --presets es2015,stage-2"
   },
   "dependencies": {
     "axios": "^0.18.0",

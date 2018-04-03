@@ -38,7 +38,7 @@ module.exports = {
       asImp: {
         type: Sequelize.INTEGER
       },
-      asRev: {
+      asCost: {
         type: Sequelize.DECIMAL
       },
       profit: {

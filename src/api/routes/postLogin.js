@@ -15,6 +15,14 @@ function checkParams({ email, password }) {
 }
 
 export default async req => {
+  return {
+    success: true,
+    user: {
+      id: 1,
+      email: 'bob@streamkey.tv',
+      name: 'Bob'
+    }
+  }
   const params = checkParams(req.body)
   if (!params) {
     throw new Error('invalid-input')

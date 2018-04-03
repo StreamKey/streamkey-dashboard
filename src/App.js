@@ -6,7 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import CssBaseline from 'material-ui/CssBaseline'
 import { withStyles } from 'material-ui/styles'
 
-import Home from './pages/Home'
+import Report from './pages/Report'
 import Login from './pages/Login'
 import Theme from './Theme'
 
@@ -34,8 +34,10 @@ class App extends React.Component {
           <CssBaseline />
           <div className={classes.root}>
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/" component={Login} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/admin" component={Report} />
+              <Route exact path="/report" component={Report} />
             </Switch>
           </div>
         </MuiThemeProvider>

@@ -11,13 +11,15 @@ import { setUser } from '../store/actions'
 import API from './API'
 import MdIcon from './MdIcon'
 import AccountSvg from 'mdi-svg/svg/account.svg'
-import SubscriptionsSvg from 'mdi-svg/svg/bell.svg'
 import LogoutSvg from 'mdi-svg/svg/logout.svg'
 import Logo from '../assets/streamkey-logo-transparent.png'
 
 const styles = theme => {
   return {
     root: {
+      backgroundColor: theme.palette.custom.greyDark,
+    },
+    container: {
       paddingLeft: theme.spacing.triple,
       display: 'flex',
       flexDirection: 'row',
@@ -26,7 +28,6 @@ const styles = theme => {
       '&[with-border=true]': {
         borderBottom: '1px solid ' + theme.palette.divider
       },
-      backgroundColor: theme.palette.custom.greyDark,
       ...theme.utils.container
     },
     title: {
@@ -144,49 +145,43 @@ class NavBar extends React.Component {
       userName = userName.slice(0,20) + '…'
     }
     return (
-      <div className={classes.root} with-border={this.props.withBorder ? 'true' : 'false'}>
-        <Link className={classes.title} to='/'>
-          <img className={classes.logo} src={Logo} alt='StreamKey Logo' />
-        </Link>
-        {
-          this.state.isLoading && <div className={classes.buttonsPlaceholder}>&nbsp;</div>
-        }
-        {
-          !this.state.isLoading && this.props.user.id &&
-          <div className={classes.user}>
-            <StyledButton onClick={this.openMenu}>
-              {userName}
-              <MdIcon svg={AccountSvg} className={classes.menuIcon} />
-            </StyledButton>
-            <Menu
-              open={this.state.isMenuOpen}
-              onClose={this.closeMenu}
-              anchorEl={this.state.anchorEl}
-              transitionDuration={0}
-            >
-              <MenuItem onClick={this.navTo('/profile')}>
-                <MdIcon svg={AccountSvg} className={classes.menuItemIcon} />
-                Profile
-              </MenuItem>
-              <MenuItem onClick={this.navTo('/subscriptions')}>
-                <MdIcon svg={SubscriptionsSvg} className={classes.menuItemIcon} />
-                Subscriptions
-              </MenuItem>
-              <MenuItem onClick={this.logout}>
-                <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />
-                Logout
-              </MenuItem>
-            </Menu>
-          </div>
-        }
-        {
-          !this.state.isLoading && !this.props.user.id &&
-          <div>
-            <StyledButton to='/login' component={Link}>
-              Login
-            </StyledButton>
-          </div>
-        }
+      <div className={classes.root}>
+        <div className={classes.container} with-border={this.props.withBorder ? 'true' : 'false'}>
+          <Link className={classes.title} to='/'>
+            <img className={classes.logo} src={Logo} alt='StreamKey Logo' />
+          </Link>
+          {
+            this.state.isLoading && <div className={classes.buttonsPlaceholder}>&nbsp;</div>
+          }
+          {
+            !this.state.isLoading && this.props.user.id &&
+            <div className={classes.user}>
+              <StyledButton onClick={this.openMenu}>
+                {userName}
+                <MdIcon svg={AccountSvg} className={classes.menuIcon} />
+              </StyledButton>
+              <Menu
+                open={this.state.isMenuOpen}
+                onClose={this.closeMenu}
+                anchorEl={this.state.anchorEl}
+                transitionDuration={0}
+              >
+                <MenuItem onClick={this.logout}>
+                  <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />
+                  Logout
+                </MenuItem>
+              </Menu>
+            </div>
+          }
+          {
+            !this.state.isLoading && !this.props.user.id &&
+            <div>
+              <StyledButton to='/login' component={Link}>
+                Login
+              </StyledButton>
+            </div>
+          }
+        </div>
       </div>
     )
   }

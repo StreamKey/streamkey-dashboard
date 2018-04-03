@@ -1,18 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
 import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
-import CheckSvg from 'mdi-svg/svg/check.svg'
 
 import { setUser } from '../store/actions'
 import API from '../components/API'
 import NavBar from '../components/NavBar'
 import Footer from '../components/Footer'
-import MdIcon from '../components/MdIcon'
 
 const styles = theme => {
   return {
@@ -88,25 +85,6 @@ class Login extends React.Component {
     }
   }
 
-  activateAcount = async (email, emailToken) => {
-    try {
-      await API.post('/validate', { email, emailToken })
-      this.setState({
-        ...this.state,
-        email,
-        isVerifying: false,
-        showVerificationSuccess: true
-      })
-    } catch (e) {
-      const errorMessage = e.message || 'Something went wrong'
-      this.setState({
-        ...this.state,
-        isVerifying: false,
-        error: errorMessage
-      })
-    }
-  }
-
   handleChange = field => event => {
     this.setState({
       [field]: event.target.value,
@@ -117,7 +95,7 @@ class Login extends React.Component {
 
   onLoginSuccess = user => {
     this.props.setUser(user)
-    this.props.history.push('/')
+    this.props.history.push('/admin')
   }
 
   submit = e => {
@@ -155,61 +133,43 @@ class Login extends React.Component {
     return (
       <div className={classes.root}>
         <NavBar withBorder />
-        {
-          !this.state.isVerifying &&
-          <div className={classes.container}>
-            <h3 className={classes.title}>Log into StreamKey</h3>
-            <form className={classes.form} onSubmit={this.submit}>
-              {
-                this.state.showVerificationSuccess &&
-                <div className={classes.success}>
-                  <MdIcon svg={CheckSvg} />
-                  Your email has been successfully verified
-                </div>
-              }
-              <TextField
-                label="Email"
-                type="email"
-                className={classes.textField}
-                value={this.state.email}
-                onChange={this.handleChange('email')}
-                disabled={this.state.isLoading}
-                />
-                <TextField
-                label="Password"
-                type="password"
-                className={classes.textField}
-                value={this.state.password}
-                onChange={this.handleChange('password')}
-                disabled={this.state.isLoading}
+        <div className={classes.container}>
+          <h3 className={classes.title}>Log into StreamKey</h3>
+          <form className={classes.form} onSubmit={this.submit}>
+            <TextField
+              label="Email"
+              type="email"
+              className={classes.textField}
+              value={this.state.email}
+              onChange={this.handleChange('email')}
+              disabled={this.state.isLoading}
               />
-              {
-                this.state.error &&
-                <div className={classes.error}>
-                  {this.state.error}
-                </div>
-              }
-              <Button
-                variant="raised"
-                color="primary"
-                type="submit"
-                className={classes.button}
-                onClick={this.submit}
-                disabled={this.state.isLoading}
-                >
-                Log in
-              </Button>
-            </form>
-            <div className={classes.secondaryContainer}>
-              <Link className={classes.secondary} to='/forgot'>
-                Forgot password
-              </Link>
-              <Link className={classes.secondary} to='/register'>
-                Sign up
-              </Link>
-            </div>
-          </div>
-        }
+              <TextField
+              label="Password"
+              type="password"
+              className={classes.textField}
+              value={this.state.password}
+              onChange={this.handleChange('password')}
+              disabled={this.state.isLoading}
+            />
+            {
+              this.state.error &&
+              <div className={classes.error}>
+                {this.state.error}
+              </div>
+            }
+            <Button
+              variant="raised"
+              color="primary"
+              type="submit"
+              className={classes.button}
+              onClick={this.submit}
+              disabled={this.state.isLoading}
+              >
+              Log in
+            </Button>
+          </form>
+        </div>
         <Footer />
       </div>
     )

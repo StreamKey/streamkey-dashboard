@@ -1,9 +1,6 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
-import Button from 'material-ui/Button'
-import { Link } from 'react-router-dom'
-
 const styles = theme => {
   return {
     root: {
@@ -11,7 +8,7 @@ const styles = theme => {
       paddingRight: 0,
       ...theme.typography.caption,
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       '&[with-border=true]': {
         borderTop: '1px solid ' + theme.palette.divider
       },
@@ -24,21 +21,6 @@ const styles = theme => {
   }
 }
 
-const buttonStyles = theme => {
-  return {
-    root: {
-      ...theme.typography.caption,
-      color: theme.palette.text.secondary,
-      textTransform: 'none',
-      '&:hover': {
-        color: theme.palette.text.primary,
-        backgroundColor: 'transparent'
-      }
-    }
-  }
-}
-const StyledButton = withStyles(buttonStyles)(Button)
-
 class Footer extends React.Component {
   render() {
     const { classes } = this.props
@@ -46,14 +28,6 @@ class Footer extends React.Component {
       <div className={classes.root} with-border={this.props.withBorder ? 'true' : 'false'}>
         <div className={classes.text}>
           StreamKey
-        </div>
-        <div>
-          <StyledButton to='/terms' component={Link} disableRipple>
-            Terms
-          </StyledButton>
-          <StyledButton to='/privacy' component={Link} disableRipple>
-            Privacy
-          </StyledButton>
         </div>
       </div>
     )

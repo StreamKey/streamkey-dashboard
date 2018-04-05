@@ -1,4 +1,5 @@
-import '../../../../env'
+import moment from 'moment'
+
 import GenerateAxiosCookies from '../GenerateAxiosCookies'
 
 const axios = GenerateAxiosCookies()
@@ -8,7 +9,13 @@ const credentials = {
   password: process.env.RAZZLE_CREDENTIALS_TELARIA_PASSWORD
 }
 
+const TIMEOUT = process.env.RAZZLE_CREDENTIALS_TELARIA_TIMEOUT
+
 axios.defaults.baseURL = 'https://console.telaria.com/platform/resources'
+
+const waitAsync = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 const login = async () => {
   await axios.post('/sessions', {
@@ -18,32 +25,48 @@ const login = async () => {
 }
 
 const submitQuery = async dateTs => {
-  /*
-  POST /queries
-  {
-    "source":"adstats-publisher",
-    "fields":["day","adUnit","requests","impressions","fillRate","sspNetRevenue","currency","netCpm"],
-    "filters":[],
-    "constraints":[],
-    "orderings":[],
-    "range":{"fromDate":"2018-04-04","toDate":"2018-04-04","timeZone":"UTC"},
-    "conversions":null,
-    "parent":{"field":"seat","value":60749}}
-
-  Result:
-  {
-    "code" : "hf8oikq0k",
-    "status" : 2,
-    "startTime" : "2018-04-05T11:26:45.724+0000",
-    "error" : null
+  const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
+  const form = {
+    source: 'adstats-publisher',
+    fields: [
+      'adUnit',
+      'requests',
+      'impressions',
+      'sspNetRevenue',
+      'currency',
+      'netCpm'
+    ],
+    filters: [],
+    constraints: [],
+    orderings: [],
+    range: {
+      fromDate: date,
+      toDate: date,
+      timeZone: 'UTC'
+    },
+    conversions: null,
+    parent: {
+      field: 'seat',
+      value: 60749
+    }
   }
-  */
- return 'hf8oikq0k'
+  const res = await axios.post(`/queries`, form)
+  return res.data.code
 }
 
 const waitUntilResultsReady = async queryId => {
-  const res = await axios.get(`/queries/${queryId}`)
-  // console.log('status', res.data.status === 3)
+  let resultsReady = false
+  let retries = TIMEOUT
+  while (!resultsReady) {
+    await waitAsync(1000)
+    const res = await axios.get(`/queries/${queryId}`)
+    console.log(res.data)
+    resultsReady = res.data.status === 3
+    retries--
+    if (retries < 0) {
+      throw new Error('Telaria timeout')
+    }
+  }
 }
 
 const getResults = async queryId => {

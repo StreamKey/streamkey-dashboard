@@ -37,7 +37,7 @@ const mergeByTags = (sspResults, asResults) => {
 }
 
 const main = async topic => {
-  const utcTime = moment.utc().startOf('day').format('YYYY-MM-DD HH:mm:ss+0000')
+  const utcTime = moment.utc().startOf('day')
   console.log('utcTime start of day', utcTime)
 
   await DB.init()

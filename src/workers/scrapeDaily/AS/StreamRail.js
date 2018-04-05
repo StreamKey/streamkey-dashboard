@@ -18,7 +18,12 @@ const login = async () => {
     username: credentials.username,
     password: credentials.password
   }
-  await axios.post('/v2/login', qs.stringify(form))
+  try {
+    await axios.post('/v2/login', qs.stringify(form))
+  } catch (e) {
+    console.error(e)
+    throw new Error('StreamRail login failed', e)
+  }
 }
 
 const getResults = async dateTs => {
@@ -38,6 +43,8 @@ const getResults = async dateTs => {
     reportToFetch: 'demand',
     ramp: 3527
   }
+
+  //TODO get all pages
 
   const res = await axios.get('/report/demand', { params })
   if (res.data.data.length !== res.data.meta.total) {

@@ -18,10 +18,15 @@ const waitAsync = ms => {
 }
 
 const login = async () => {
-  await axios.post('/sessions', {
-    emailAddress: credentials.username,
-    password: credentials.password
-  })
+  try {
+    await axios.post('/sessions', {
+      emailAddress: credentials.username,
+      password: credentials.password
+    })
+  } catch (e) {
+    console.error(e)
+    throw new Error('Telaria login failed', e)
+  }
 }
 
 const submitQuery = async dateTs => {
@@ -60,7 +65,10 @@ const waitUntilResultsReady = async queryId => {
   while (!resultsReady) {
     await waitAsync(1000)
     const res = await axios.get(`/queries/${queryId}`)
-    console.log(res.data)
+    if (res.data.error) {
+      console.error(res)
+      throw new Error('Telaria error', res.data.error)
+    }
     resultsReady = res.data.status === 3
     retries--
     if (retries < 0) {

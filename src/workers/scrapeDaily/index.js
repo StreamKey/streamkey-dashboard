@@ -37,14 +37,17 @@ const mergeByTags = (sspResults, asResults) => {
 }
 
 const main = async topic => {
-  const utcTime = moment.utc().startOf('day')
+  const utcTime = moment.utc().subtract(1, 'days').startOf('day')
   console.log('utcTime start of day', utcTime)
 
   await DB.init()
-  // const sspResults = await GetSSPData(utcTime)
+  const sspResults = await GetSSPData(utcTime)
   const asResults = await GetASData(utcTime)
 
-  console.log(asResults[0].data)
+  console.log('SSP')
+  console.log(_.sampleSize(sspResults[0].data, 5))
+  console.log('AS')
+  console.log(_.sampleSize(asResults[0].data, 5))
   process.exit()
 
   // Match tags

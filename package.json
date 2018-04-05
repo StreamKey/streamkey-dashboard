@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-cookiejar-support": "^0.3.5",
     "babel-preset-react": "^6.24.1",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
@@ -40,6 +41,7 @@
     "redux": "^3.7.2",
     "sequelize": "^4.37.3",
     "sequelize-cli": "^4.0.0",
+    "tough-cookie": "^2.3.4",
     "uuid": "^3.2.1",
     "validator": "^9.4.1"
   },

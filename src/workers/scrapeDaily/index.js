@@ -44,6 +44,10 @@ const main = async topic => {
   const sspResults = await GetSSPData(utcTime)
   const asResults = await GetASData(utcTime)
 
+  console.log('sspResults')
+  console.log(JSON.stringify(sspResults, null, 2))
+  process.exit()
+
   // Match tags
   const merged = mergeByTags(sspResults, asResults)
   const itemsToStore = merged.map(i => ({

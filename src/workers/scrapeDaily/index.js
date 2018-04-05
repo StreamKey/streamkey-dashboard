@@ -41,11 +41,10 @@ const main = async topic => {
   console.log('utcTime start of day', utcTime)
 
   await DB.init()
-  const sspResults = await GetSSPData(utcTime)
+  // const sspResults = await GetSSPData(utcTime)
   const asResults = await GetASData(utcTime)
 
-  console.log('sspResults')
-  console.log(JSON.stringify(sspResults, null, 2))
+  console.log(asResults[0].data)
   process.exit()
 
   // Match tags

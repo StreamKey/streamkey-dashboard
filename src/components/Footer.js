@@ -1,6 +1,8 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
+import Logo from '../assets/streamkey-logo-greyscale.png'
+
 const styles = theme => {
   return {
     root: {
@@ -17,6 +19,11 @@ const styles = theme => {
     text: {
       padding: theme.spacing.unit,
       paddingLeft: 0
+    },
+    logo: {
+      maxHeight: 50,
+      height: '100%',
+      width: 'auto'
     }
   }
 }
@@ -27,7 +34,7 @@ class Footer extends React.Component {
     return (
       <div className={classes.root} with-border={this.props.withBorder ? 'true' : 'false'}>
         <div className={classes.text}>
-          StreamKey
+          <img className={classes.logo} src={Logo} alt='StreamKey Logo' />
         </div>
       </div>
     )

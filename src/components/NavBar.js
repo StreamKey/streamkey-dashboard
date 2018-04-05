@@ -12,7 +12,7 @@ import API from './API'
 import MdIcon from './MdIcon'
 import AccountSvg from 'mdi-svg/svg/account.svg'
 import LogoutSvg from 'mdi-svg/svg/logout.svg'
-import Logo from '../assets/streamkey-logo-transparent.png'
+import Logo from '../assets/streamkey-logo-horizontal.png'
 
 const styles = theme => {
   return {
@@ -36,7 +36,6 @@ const styles = theme => {
     },
     logo: {
       maxHeight: 60,
-      padding: theme.spacing.unit,
       height: '100%',
       width: 'auto'
     },

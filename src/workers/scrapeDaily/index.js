@@ -41,15 +41,20 @@ const main = async topic => {
   console.log('utcTime start of day', utcTime)
 
   await DB.init()
+
   const sspResults = await GetSSPData(utcTime)
-  const asResults = await GetASData(utcTime)
-
   console.log('SSP')
-  console.log(_.sampleSize(sspResults[0].data, 5))
-  console.log('AS')
-  console.log(_.sampleSize(asResults[0].data, 5))
-  process.exit()
+  _.each(sspResults, r => {
+    console.log(_.sampleSize(r.data, 5))
+  })
 
+  const asResults = await GetASData(utcTime)
+  console.log('AS')
+  _.each(asResults, r => {
+    console.log(_.sampleSize(r.data, 5))
+  })
+  process.exit()
+  
   // Match tags
   const merged = mergeByTags(sspResults, asResults)
   const itemsToStore = merged.map(i => ({

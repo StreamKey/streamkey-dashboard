@@ -54,7 +54,7 @@ const main = async topic => {
     console.log(_.sampleSize(r.data, 5))
   })
   process.exit()
-  
+
   // Match tags
   const merged = mergeByTags(sspResults, asResults)
   const itemsToStore = merged.map(i => ({

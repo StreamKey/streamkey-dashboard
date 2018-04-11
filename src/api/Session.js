@@ -5,9 +5,9 @@ import ConnectPG from 'connect-pg-simple'
 
 // Using a custom DB pool, as Sequelize doesn't expose its pool
 const pool = new Pool({
-  host:     process.env.RAZZLE_PG_HOST,
-  port:     process.env.RAZZLE_PG_PORT,
-  user:     process.env.RAZZLE_PG_USER,
+  host: process.env.RAZZLE_PG_HOST,
+  port: process.env.RAZZLE_PG_PORT,
+  user: process.env.RAZZLE_PG_USER,
   password: process.env.RAZZLE_PG_PASSWORD,
   database: process.env.RAZZLE_PG_DB,
   max: 10,
@@ -15,7 +15,7 @@ const pool = new Pool({
   Promise
 })
 
-pool.on('error',  (err, client) => {
+pool.on('error', (err, client) => {
   console.error('idle client error', err.message, err.stack)
 })
 
@@ -26,8 +26,8 @@ const {
   RAZZLE_COOKIE_DAYS_TOEXPIRE = 90
 } = process.env
 
-const pgSession = ConnectPG(session)
-const store = pool ? new pgSession({
+const PgSession = ConnectPG(session)
+const store = pool ? new PgSession({
   pool,
   tableName: RAZZLE_SESSION_TABLE
 }) : new session.MemoryStore()

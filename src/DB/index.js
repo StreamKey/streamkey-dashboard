@@ -55,7 +55,6 @@ const init = async () => {
 
 const close = async () => {
   await sequelize.close()
-  return
 }
 
 export default {

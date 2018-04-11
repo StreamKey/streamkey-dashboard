@@ -12,10 +12,6 @@ const credentials = {
 
 axios.defaults.baseURL = 'https://platform.beachfront.io'
 
-const waitAsync = ms => {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 const login = async () => {
   const form = {
     username: credentials.username,
@@ -23,7 +19,7 @@ const login = async () => {
     remember_me: 'on'
   }
   try {
-    const res = await axios.post('/en/login', qs.stringify(form))
+    await axios.post('/en/login', qs.stringify(form))
   } catch (e) {
     console.error(e)
     throw new Error('Beachfront login failed', e)

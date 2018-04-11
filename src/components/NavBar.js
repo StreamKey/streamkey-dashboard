@@ -17,7 +17,7 @@ import Logo from '../assets/streamkey-logo-horizontal.png'
 const styles = theme => {
   return {
     root: {
-      backgroundColor: theme.palette.custom.greyDark,
+      backgroundColor: theme.palette.custom.greyDark
     },
     container: {
       paddingLeft: theme.spacing.triple,
@@ -77,7 +77,7 @@ const buttonStyles = theme => {
 const StyledButton = withStyles(buttonStyles)(Button)
 
 class NavBar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       isLoading: true,
@@ -86,7 +86,7 @@ class NavBar extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.checkIfLoggedIn()
   }
 
@@ -137,11 +137,11 @@ class NavBar extends React.Component {
     this.props.history.push('/')
   }
 
-  render() {
+  render () {
     const { classes } = this.props
     let userName = this.props.user.name || this.props.user.email || ''
     if (userName.length > 20) {
-      userName = userName.slice(0,20) + '…'
+      userName = userName.slice(0, 20) + '…'
     }
     return (
       <div className={classes.root}>
@@ -194,7 +194,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setUser(user) {
+    setUser (user) {
       dispatch(setUser(user))
     }
   }

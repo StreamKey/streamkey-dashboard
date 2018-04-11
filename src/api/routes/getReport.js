@@ -43,7 +43,7 @@ const mockReport = {
       as: 'AS2',
       tag: 'TAG4',
       opportunities: 0
-    },
+    }
   ]
 }
 

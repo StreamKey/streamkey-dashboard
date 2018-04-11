@@ -12,57 +12,57 @@ const isAdmin = async req => {
 
 const isLoggedIn = async req => {
   return true
-  if (req.session && req.session.isLoggedIn === true) {
-    return true
-  }
-  req.session.isLoggedIn = false
-  req.session.save()
-  throw new Error('not-authorized')
+  // if (req.session && req.session.isLoggedIn === true) {
+  //   return true
+  // }
+  // req.session.isLoggedIn = false
+  // req.session.save()
+  // throw new Error('not-authorized')
 }
 
 const asyncMiddleware = promise => {
   return (req, res) => {
     promise(req)
-    .then(data => {
-      res.json({
-        success: true,
-        ...data
+      .then(data => {
+        res.json({
+          success: true,
+          ...data
+        })
       })
-    })
-    .catch(e => {
-      parseError(res, e)
-    })
+      .catch(e => {
+        parseError(res, e)
+      })
   }
 }
 
 const ensureAdmin = (req, res, next) => {
   isAdmin(req)
-  .then(() => {
-    next()
-  })
-  .catch(e => {
-    next(e)
-  })
+    .then(() => {
+      next()
+    })
+    .catch(e => {
+      next(e)
+    })
 }
 
 const ensureLoggedIn = (req, res, next) => {
   isLoggedIn(req)
-  .then(() => {
-    next()
-  })
-  .catch(e => {
-    next(e)
-  })
+    .then(() => {
+      next()
+    })
+    .catch(e => {
+      next(e)
+    })
 }
 
 export default app => {
-  app.get ('/api/status', asyncMiddleware(getStatus))
+  app.get('/api/status', asyncMiddleware(getStatus))
 
   app.post('/api/login', asyncMiddleware(postLogin))
-  app.get ('/api/logout', asyncMiddleware(getLogout))
+  app.get('/api/logout', asyncMiddleware(getLogout))
 
-  app.get ('/api/profile', ensureLoggedIn, asyncMiddleware(getProfile))
-  app.get ('/api/report', ensureLoggedIn, asyncMiddleware(getReport))
+  app.get('/api/profile', ensureLoggedIn, asyncMiddleware(getProfile))
+  app.get('/api/report', ensureLoggedIn, asyncMiddleware(getReport))
 
   app.use('/api/admin/*', ensureAdmin)
 

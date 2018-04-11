@@ -27,7 +27,7 @@ const styles = theme => {
 }
 
 class MdIcon extends Component {
-  render() {
+  render () {
     const { classes } = this.props
     return (
       <ReactSVG
@@ -35,7 +35,7 @@ class MdIcon extends Component {
         className={classes.root}
         wrapperClassName={classes.wrapper}
         {...this.props}
-        />
+      />
     )
   }
 }

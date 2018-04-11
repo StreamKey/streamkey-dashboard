@@ -22,11 +22,11 @@ const styles = theme => {
 }
 
 class App extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     document.getElementById('root').classList.remove('hidden')
   }
 
-  render() {
+  render () {
     const { classes } = this.props
     return (
       <Provider store={store}>
@@ -34,10 +34,10 @@ class App extends React.Component {
           <CssBaseline />
           <div className={classes.root}>
             <Switch>
-              <Route exact path="/" component={Login} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/admin" component={Report} />
-              <Route exact path="/report" component={Report} />
+              <Route exact path='/' component={Login} />
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/admin' component={Report} />
+              <Route exact path='/report' component={Report} />
             </Switch>
           </div>
         </MuiThemeProvider>

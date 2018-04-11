@@ -1,5 +1,5 @@
 export default {
-  setUser(user) {
+  setUser (user) {
     return {
       type: 'SET_USER',
       user

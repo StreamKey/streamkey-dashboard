@@ -29,7 +29,7 @@ const styles = theme => {
 }
 
 class Footer extends React.Component {
-  render() {
+  render () {
     const { classes } = this.props
     return (
       <div className={classes.root} with-border={this.props.withBorder ? 'true' : 'false'}>

@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     // Will run this query: https://github.com/voxpelli/node-connect-pg-simple/blob/master/table.sql
-   return queryInterface.sequelize.query(`
+    return queryInterface.sequelize.query(`
     CREATE TABLE "session" (
       "sid" varchar NOT NULL COLLATE "default",
       "sess" json NOT NULL,
@@ -17,4 +17,4 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('session')
   }
-};
+}

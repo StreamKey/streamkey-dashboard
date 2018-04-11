@@ -52,16 +52,30 @@ const main = async () => {
       template: '',
       stage: 'RealmRouter1',
       header: 'ENTERPRISE LOGIN SERVICE',
-      callbacks: [{type: 'NameCallback',
-      output: [{name: 'prompt',
-      value: 'Username'}],
-      input: [{name: 'IDToken1',
-      value: credentials.username}]},
-      {type: 'TextOutputCallback',
-      output: [{name: 'message',
-      value: ' '},
-      {name: 'messageType',
-      value: '2'}]}]
+      callbacks: [
+        {
+          type: 'NameCallback',
+          output: [{
+            name: 'prompt',
+            value: 'Username'
+          }],
+          input: [{
+            name: 'IDToken1',
+            value: credentials.username
+          }]
+        }, {
+          type: 'TextOutputCallback',
+          output: [
+            {
+              name: 'message',
+              value: ' '
+            }, {
+              name: 'messageType',
+              value: '2'
+            }
+          ]
+        }
+      ]
     },
     headers: {
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
@@ -86,16 +100,28 @@ const main = async () => {
       template: '',
       stage: 'RealmRouter2',
       header: 'Username',
-      callbacks: [{type: 'TextOutputCallback',
-      output: [{name: 'message',
-      value: credentials.username},
-      {name: 'messageType',
-      value: '0'}]},
-      {type: 'PasswordCallback',
-      output: [{name: 'prompt',
-      value: 'Password'}],
-      input: [{name: 'IDToken2',
-      value: credentials.password}]}]
+      callbacks: [{
+        type: 'TextOutputCallback',
+        output: [
+          {
+            name: 'message',
+            value: credentials.username
+          }, {
+            name: 'messageType',
+            value: '0'
+          }
+        ]
+      }, {
+        type: 'PasswordCallback',
+        output: [{
+          name: 'prompt',
+          value: 'Password'
+        }],
+        input: [{
+          name: 'IDToken2',
+          value: credentials.password
+        }]
+      }]
     },
     headers: {
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',

@@ -24,18 +24,18 @@ const styles = theme => {
     },
     reportContainer: {},
     table: {
-      minWidth: 700,
+      minWidth: 700
     },
     row: {
       '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
+        backgroundColor: theme.palette.background.default
+      }
     }
   }
 }
 
 class Home extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       header: [],
@@ -45,11 +45,11 @@ class Home extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.getReport()
   }
 
-  getReport() {
+  getReport () {
     this.setState({
       ...this.state,
       isLoading: true,
@@ -70,13 +70,13 @@ class Home extends React.Component {
   renderHeader = () => {
     return <TableHead>
       <TableRow>
-      {
-        this.state.header.map((h, i) => <TableCell
-          key={i}
-          numeric={h.type === 'integer' ? true : undefined}>
+        {
+          this.state.header.map((h, i) => <TableCell
+            key={i}
+            numeric={h.type === 'integer' ? true : undefined}>
             {h.title}
           </TableCell>)
-      }
+        }
       </TableRow>
     </TableHead>
   }
@@ -98,13 +98,13 @@ class Home extends React.Component {
         this.state.header.map((h, i) => <TableCell
           key={i}
           numeric={h.type === 'integer' ? true : undefined}>
-            {row[h.key]}
-          </TableCell>)
+          {row[h.key]}
+        </TableCell>)
       }
     </TableRow>
   }
 
-  render() {
+  render () {
     const { classes } = this.props
     return (
       <div className={classes.root}>

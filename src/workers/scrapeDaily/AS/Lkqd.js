@@ -1,5 +1,4 @@
 import moment from 'moment'
-import qs from 'querystring'
 
 import GenerateAxiosCookies from '../GenerateAxiosCookies'
 
@@ -15,10 +14,6 @@ axios.defaults.headers = {
   'LKQD-Api-Version': 75
 }
 
-const waitAsync = ms => {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 const login = async () => {
   const form = {
     login: credentials.username,
@@ -26,7 +21,7 @@ const login = async () => {
     rememberMe: true
   }
   try {
-    const res = await axios.post('/sessions', form)
+    await axios.post('/sessions', form)
   } catch (e) {
     console.error(e)
     throw new Error('LKQD login failed', e)
@@ -38,11 +33,11 @@ const getResults = async dateTs => {
   const form = {
     whatRequest: 'breakdown',
     uuid: 'bb0cef31-035b-5bf8-894f-7a3d502c414c',
-    reportFormat:' JSON',
+    reportFormat: 'JSON',
     includeSummary: true,
     dateRangeType: 'YESTERDAY',
-    "startDate": date,
-    "endDate": date,
+    startDate: date,
+    endDate: date,
     startHour: 0,
     endHour: 23,
     timeDimension: 'OVERALL',

@@ -44,7 +44,7 @@ const getResults = async dateTs => {
     ramp: 3527
   }
 
-  //TODO get all pages
+  // TODO get all pages
 
   const res = await axios.get('/report/demand', { params })
   if (res.data.data.length !== res.data.meta.total) {

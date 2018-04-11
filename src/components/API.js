@@ -6,16 +6,16 @@ const baseUrl = '/api'
 const handleRequest = (method, route, params) => {
   return new Promise((resolve, reject) => {
     axios[method](baseUrl + route, params)
-    .then(response => {
-      resolve(response)
-    })
-    .catch(e => {
-      if (_has(e, 'response.data.error')) {
-        reject(new Error(e.response.data.error.message))
-      } else {
-        reject(e)
-      }
-    })
+      .then(response => {
+        resolve(response)
+      })
+      .catch(e => {
+        if (_has(e, 'response.data.error')) {
+          reject(new Error(e.response.data.error.message))
+        } else {
+          reject(e)
+        }
+      })
   })
 }
 

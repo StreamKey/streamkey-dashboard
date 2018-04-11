@@ -3,7 +3,7 @@ import _ from 'lodash'
 
 import findUser from './findUser'
 
-export default async({ email, password }) => {
+export default async ({ email, password }) => {
   try {
     const user = await findUser({ email })
     const isPassCorrect = await bcrypt.compare(password, user.dataValues.passwordHash)

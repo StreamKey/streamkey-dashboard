@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Reports', {
@@ -55,14 +55,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    }, {});
+    }, {})
     await queryInterface.addIndex('Reports', {
       unique: true,
       fields: ['date', 'ssp', 'as', 'tag']
-    });
+    })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Reports');
-    await queryInterface.removeIndex('Reports', 'reports_date_ssp_as_tag');
+    await queryInterface.dropTable('Reports')
+    await queryInterface.removeIndex('Reports', 'reports_date_ssp_as_tag')
   }
-};
+}

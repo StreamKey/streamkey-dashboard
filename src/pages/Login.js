@@ -73,7 +73,7 @@ const styles = theme => {
 }
 
 class Login extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       isVerifying: true,
@@ -128,7 +128,7 @@ class Login extends React.Component {
     })
   }
 
-  render() {
+  render () {
     const { classes } = this.props
     return (
       <div className={classes.root}>
@@ -137,16 +137,16 @@ class Login extends React.Component {
           <h3 className={classes.title}>Log into StreamKey</h3>
           <form className={classes.form} onSubmit={this.submit}>
             <TextField
-              label="Email"
-              type="email"
+              label='Email'
+              type='email'
               className={classes.textField}
               value={this.state.email}
               onChange={this.handleChange('email')}
               disabled={this.state.isLoading}
-              />
-              <TextField
-              label="Password"
-              type="password"
+            />
+            <TextField
+              label='Password'
+              type='password'
               className={classes.textField}
               value={this.state.password}
               onChange={this.handleChange('password')}
@@ -159,13 +159,13 @@ class Login extends React.Component {
               </div>
             }
             <Button
-              variant="raised"
-              color="primary"
-              type="submit"
+              variant='raised'
+              color='primary'
+              type='submit'
               className={classes.button}
               onClick={this.submit}
               disabled={this.state.isLoading}
-              >
+            >
               Log in
             </Button>
           </form>
@@ -184,7 +184,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setUser(user) {
+    setUser (user) {
       dispatch(setUser(user))
     }
   }

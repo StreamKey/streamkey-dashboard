@@ -12,10 +12,6 @@ const credentials = {
 
 axios.defaults.baseURL = 'https://sfx.freewheel.tv'
 
-const waitAsync = ms => {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 const login = async () => {
   const form = {
     username: credentials.username,

@@ -12,6 +12,8 @@ const credentials = {
   username: process.env.RAZZLE_CREDENTIALS_ANIVIEW_USERNAME,
   password: process.env.RAZZLE_CREDENTIALS_ANIVIEW_PASSWORD
 }
+
+// Assumes a saved "yesterday" report
 const reportId = process.env.RAZZLE_CREDENTIALS_ANIVIEW_REPORTID
 
 axios.axios.defaults.baseURL = 'http://manage.aniview.com/api'

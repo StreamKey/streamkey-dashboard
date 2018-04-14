@@ -23,6 +23,8 @@
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "connect-pg-simple": "^4.2.1",
+    "crypto-js": "^3.1.9-1",
+    "csvtojson": "^1.1.9",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
@@ -44,7 +46,8 @@
     "sequelize-cli": "^4.0.0",
     "tough-cookie": "^2.3.4",
     "uuid": "^3.2.1",
-    "validator": "^9.4.1"
+    "validator": "^9.4.1",
+    "ws": "^5.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

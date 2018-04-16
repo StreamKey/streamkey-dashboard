@@ -8,9 +8,12 @@ import qs from 'querystring'
 
 const credentials = {
   clientId: process.env.RAZZLE_CREDENTIALS_ONEVIDEO_CLIENTID,
-  secret: process.env.RAZZLE_CREDENTIALS_ONEVIDEO_SECRET
+  secret: process.env.RAZZLE_CREDENTIALS_ONEVIDEO_SECRET,
+  orgId: process.env.RAZZLE_CREDENTIALS_ONEVIDEO_ORGID
 }
-const authUrl = 'https://id-uat2.corp.aol.com/identity/oauth2/access_token'
+
+const authUrl = 'https://id.corp.aol.com/identity/oauth2/access_token'
+const apiUrl = 'https://onevideo.aol.com'
 
 const generateJwtToken = () => {
   const now = Number(moment().utc().format('X'))
@@ -19,7 +22,7 @@ const generateJwtToken = () => {
     aud: `${authUrl}?realm=aolcorporate/aolexternals`,
     iss: credentials.clientId,
     sub: credentials.clientId,
-    exp: 600,
+    exp: now + 600,
     iat: now,
     jti: uuid()
   }
@@ -38,16 +41,55 @@ const auth = async () => {
   }
   try {
     const res = await axios.post(authUrl, qs.stringify(form))
-    return res.data
+    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`
   } catch (e) {
     console.error(e)
     throw new Error('AOL login failed', e)
   }
 }
 
-const main = async () => {
-  const oAuthToken = await auth()
-  console.log(oAuthToken)
+const runReport = async dateTs => {
+  const date = moment.utc(dateTs, 'X')
+  const startDate = date.startOf('day').format('X')
+  const endDate = date.endOf('day').format('X')
+  const params = {
+    org_id: credentials.orgId,
+    keys: 'date,ad',
+    metrics: 'seller_market_opportunities,ad_attempts,ad_impressions,ad_revenue,cpm',
+    start_date: startDate,
+    end_date: endDate,
+    timezone: 1 // UTC
+  }
+  const res = await axios.get(`${apiUrl}/reporting/run_report`, { params })
+  return res.data
 }
 
-main()
+const normalize = (columns, data) => {
+  console.log('columns', columns)
+  if (columns[0] !== 'date' ||
+      columns[1] !== 'ad' ||
+      columns[2] !== 'seller_market_opportunities' ||
+      columns[3] !== 'ad_attempts' ||
+      columns[4] !== 'ad_impressions' ||
+      columns[5] !== 'ad_revenue' ||
+      columns[6] !== 'cpm') {
+    throw new Error('AOL invalid report columns')
+  }
+  return data.map(r => {
+    return {
+      tag: r.row[1],
+      opp: Number(r.row[2]),
+      imp: Number(r.row[4]),
+      rev: Number(r.row[5]),
+      cpm: Number(r.row[6])
+    }
+  })
+}
+
+export default {
+  getData: async dateTs => {
+    await auth()
+    const { columns, data } = await runReport(dateTs)
+    return normalize(columns, data)
+  }
+}

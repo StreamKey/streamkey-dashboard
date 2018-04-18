@@ -1,6 +1,6 @@
 import '../../../../env'
 
-import axios from 'axios'
+import Axios from 'axios'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import uuid from 'uuid/v4'
@@ -14,6 +14,7 @@ const credentials = {
 
 const authUrl = 'https://id.corp.aol.com/identity/oauth2/access_token'
 const apiUrl = 'https://onevideo.aol.com'
+const axios = Axios.create()
 
 const generateJwtToken = () => {
   const now = Number(moment().utc().format('X'))

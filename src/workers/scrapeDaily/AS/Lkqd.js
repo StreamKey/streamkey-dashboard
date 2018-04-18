@@ -1,5 +1,5 @@
 import moment from 'moment'
-import axios from 'axios'
+import Axios from 'axios'
 
 const credentials = {
   key: process.env.RAZZLE_CREDENTIALS_LKQD_APIKEY,
@@ -11,8 +11,12 @@ const toBase64 = str => {
 }
 
 const authStr = `${credentials.key}:${credentials.secret}`
-axios.defaults.headers.common['Authorization'] = `Basic ${toBase64(authStr)}`
-axios.defaults.baseURL = 'https://api.lkqd.com'
+const axios = Axios.create({
+  baseURL: 'https://api.lkqd.com',
+  headers: {
+    'Authorization': `Basic ${toBase64(authStr)}`
+  }
+})
 
 const getResults = async dateTs => {
   const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
@@ -24,7 +28,6 @@ const getResults = async dateTs => {
     endDate: date,
     timezone: 'UTC',
     metrics: [
-      'OPPORTUNITIES',
       'IMPRESSIONS',
       'REQUESTS',
       'FILL_RATE',
@@ -46,7 +49,7 @@ const normalize = results => {
   return results.map(r => {
     return {
       tag: r.fieldName,
-      opp: r.adImpressions,
+      opp: r.adRequests,
       imp: r.adCompletedViews,
       rev: r.revenue,
       cpm: r.cpm

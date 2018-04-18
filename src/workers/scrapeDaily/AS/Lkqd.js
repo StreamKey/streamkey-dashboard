@@ -1,96 +1,37 @@
 import moment from 'moment'
-
-import GenerateAxiosCookies from '../GenerateAxiosCookies'
-
-const axios = GenerateAxiosCookies()
+import axios from 'axios'
 
 const credentials = {
-  username: process.env.RAZZLE_CREDENTIALS_LKQD_USERNAME,
-  password: process.env.RAZZLE_CREDENTIALS_LKQD_PASSWORD
+  key: process.env.RAZZLE_CREDENTIALS_LKQD_APIKEY,
+  secret: process.env.RAZZLE_CREDENTIALS_LKQD_APISECRET
 }
 
-axios.defaults.baseURL = 'https://ui-api.lkqd.com'
-axios.defaults.headers = {
-  'LKQD-Api-Version': 75
+const toBase64 = str => {
+  return Buffer.from(str).toString('base64')
 }
 
-const login = async () => {
-  const form = {
-    login: credentials.username,
-    password: credentials.password,
-    rememberMe: true
-  }
-  try {
-    await axios.post('/sessions', form)
-  } catch (e) {
-    console.error(e)
-    throw new Error('LKQD login failed', e)
-  }
-}
+const authStr = `${credentials.key}:${credentials.secret}`
+axios.defaults.headers.common['Authorization'] = `Basic ${toBase64(authStr)}`
+axios.defaults.baseURL = 'https://api.lkqd.com'
 
 const getResults = async dateTs => {
   const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
   const form = {
-    whatRequest: 'breakdown',
-    uuid: 'bb0cef31-035b-5bf8-894f-7a3d502c414c',
+    timeDimension: 'DAILY',
+    reportType: ['TAG'],
     reportFormat: 'JSON',
-    includeSummary: true,
-    dateRangeType: 'YESTERDAY',
     startDate: date,
     endDate: date,
-    startHour: 0,
-    endHour: 23,
-    timeDimension: 'OVERALL',
     timezone: 'UTC',
-    reportType: ['SITE'],
-    environmentIds: [1, 2, 3, 4],
-    filters: [
-      {
-        dimension: 'ENVIRONMENT',
-        operation: 'include',
-        filters: [
-          {
-            matchType: 'id',
-            value: '1',
-            label: 'Mobile Web'
-          }, {
-            matchType: 'id',
-            value: '2',
-            label: 'Mobile App'
-          }, {
-            matchType: 'id',
-            value: '3',
-            label: 'Desktop'
-          }, {
-            matchType: 'id',
-            value: '4',
-            label: 'CTV'
-          }
-        ]
-      }
-    ],
     metrics: [
       'OPPORTUNITIES',
       'IMPRESSIONS',
+      'REQUESTS',
       'FILL_RATE',
-      'EFFICIENCY',
       'CPM',
       'REVENUE',
-      'COST',
-      'PROFIT',
-      'PROFIT_MARGIN',
-      'CTR',
-      'FIRST_QUARTILE_RATE',
-      'MIDPOINT_RATE',
-      'THIRD_QUARTILE_RATE',
-      'VTR'
-    ],
-    sort: [{
-      field: 'REVENUE',
-      order: 'desc'
-    }],
-    offset: 0,
-    limit: 200
+      'COST'
+    ]
   }
   try {
     const res = await axios.post('/reports', form)
@@ -115,7 +56,6 @@ const normalize = results => {
 
 export default {
   getData: async dateTs => {
-    await login()
     const results = await getResults(dateTs)
     return normalize(results)
   }

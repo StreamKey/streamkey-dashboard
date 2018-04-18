@@ -41,11 +41,11 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'sspCpm',
         title: 'SSP CPM',
-        type: 'string' // Float
+        type: 'float'
       }, {
         key: 'sspRev',
         title: 'SSP Rev',
-        type: 'string' // Float
+        type: 'float'
       }, {
         key: 'as',
         title: 'AS',
@@ -61,15 +61,15 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'asCost',
         title: 'AS Cost',
-        type: 'string' // Float
+        type: 'usd'
       }, {
         key: 'profit',
         title: 'Profit',
-        type: 'string' // Float
+        type: 'usd'
       }, {
         key: 'margin',
         title: 'Margin',
-        type: 'string' // Float
+        type: 'percent'
       }
     ],
     data

@@ -50,8 +50,9 @@ const normalize = results => {
     return {
       tag: r.fieldName,
       opp: r.adRequests,
-      imp: r.adCompletedViews,
+      imp: r.adImpressions,
       rev: r.revenue,
+      cost: r.siteCost,
       cpm: r.cpm
     }
   })

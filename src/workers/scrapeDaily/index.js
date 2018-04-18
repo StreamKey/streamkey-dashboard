@@ -6,6 +6,14 @@ import DB from '../../DB/'
 import GetSSPData from './GetSSPData'
 import GetASData from './GetASData'
 
+const calcMargin = (rev, cost) => {
+  if (rev > 0) {
+    return (rev - cost) / rev * 100
+  } else {
+    return 0
+  }
+}
+
 const mergeByTags = (sspResults, asResults) => {
   const results = []
   _.each(sspResults, ssp => {
@@ -26,7 +34,7 @@ const mergeByTags = (sspResults, asResults) => {
               asCost: asData.cost,
               asCpm: asData.cpm,
               profit: sspData.rev - asData.cost,
-              margin: (sspData.rev - asData.cost) / sspData.rev * 100
+              margin: calcMargin(sspData.rev, asData.cost)
             })
           }
         })
@@ -37,20 +45,19 @@ const mergeByTags = (sspResults, asResults) => {
 }
 
 const main = async topic => {
+  const errors = []
   const utcTime = moment.utc().subtract(1, 'days').startOf('day')
   console.log('utcTime start of day', utcTime)
 
   await DB.init()
 
-  const sspResults = await GetSSPData(utcTime)
-  console.log('SSP')
+  const sspResults = await GetSSPData(utcTime, errors)
   _.each(sspResults, r => {
     console.log(r.key)
     console.log(_.sampleSize(r.data, 5))
   })
   
-  const asResults = await GetASData(utcTime)
-  console.log('AS')
+  const asResults = await GetASData(utcTime, errors)
   _.each(asResults, r => {
     console.log(r.key)
     console.log(_.sampleSize(r.data, 5))
@@ -64,16 +71,21 @@ const main = async topic => {
   }))
   console.log('itemsToStore', itemsToStore)
 
-  // // Store data
-  // const storeJobs = itemsToStore.map(async item => {
-  //   await DB.models.Reports.upsert(item)
-  // })
-  // try {
-  //   await Promise.all(storeJobs)
-  // } catch (e) {
-  //   console.error(e)
-  // }
+  // Store data
+  const storeJobs = itemsToStore.map(async item => {
+    await DB.models.Reports.upsert(item)
+  })
+  try {
+    await Promise.all(storeJobs)
+  } catch (e) {
+    console.error(e)
+  }
 
+  if (errors.length > 0) {
+    console.log('[ERRORS]')
+    console.log(errors)
+    errors.map(e => console.log)
+  }
   await DB.close()
 }
 

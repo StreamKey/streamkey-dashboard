@@ -5,30 +5,43 @@ import Aerserv from './SSP/Aerserv'
 import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
 
-export default async dateTs => {
-  // const telariaData = await Telaria.getData(dateTs)
-  // const freewheelData = await Freewheel.getData(dateTs)
-  // const beachfrontData = await Beachfront.getData(dateTs)
-  // const aerservData = await Aerserv.getData(dateTs)
-  // const spotxData = await SpotX.getData(dateTs)
-  // const onevideoData = await OneVideo.getData(dateTs)
-  return [{
-  //   key: 'telaria',
-  //   data: telariaData
+const SSPs = [
+  {
+    key: 'telaria',
+    controller: Telaria
   // }, {
   //   key: 'freewheel',
-  //   data: freewheelData
+  //   controller: Freewheel
   // }, {
   //   key: 'beachfront',
-  //   data: beachfrontData
+  //   controller: Beachfront
   // }, {
   //   key: 'aerserv',
-  //   data: aerservData
+  //   controller: Aerserv
   // }, {
   //   key: 'spotx',
-  //   data: spotxData
+  //   controller: SpotX
   // }, {
   //   key: 'onevideo',
-  //   data: onevideoData
-  }]
+  //   controller: OneVideo
+  }
+]
+
+export default async (dateTs, errors) => {
+  const results = []
+
+  const fetchJobs = SSPs.map(async item => {
+    try {
+      const data = await item.controller.getData(dateTs)
+      results.push({
+        key: item.key,
+        data
+      })
+    } catch (e) {
+      errors.push(e)
+    }
+  })
+  await Promise.all(fetchJobs)
+
+  return results
 }

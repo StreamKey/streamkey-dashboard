@@ -3,22 +3,37 @@ import Lkqd from './AS/Lkqd'
 import Aniview from './AS/Aniview'
 import SpringServe from './AS/SpringServe'
 
-export default async dateTs => {
-  const streamRailData = await StreamRail.getData(dateTs)
-  const lkqdData = await Lkqd.getData(dateTs)
-  const aniviewData = await Aniview.getData(dateTs)
-  const springserveData = await SpringServe.getData(dateTs)
-  return [{
-    key: 'streamRail',
-    data: streamRailData
-  }, {
+const AdServers = [
+  {
+  //   key: 'streamrail',
+  //   controller: StreamRail
+  // }, {
     key: 'lkqd',
-    data: lkqdData
-  }, {
-    key: 'aniview',
-    data: aniviewData
-  }, {
-    key: 'springserve',
-    data: springserveData
-  }]
+    controller: Lkqd
+  // }, {
+  //   key: 'aniview',
+  //   controller: Aniview
+  // }, {
+  //   key: 'springserve',
+  //   controller: SpringServe
+  }
+]
+
+export default async (dateTs, errors) => {
+  const results = []
+
+  const fetchJobs = AdServers.map(async item => {
+    try {
+      const data = await item.controller.getData(dateTs)
+      results.push({
+        key: item.key,
+        data
+      })
+    } catch (e) {
+      errors.push(e)
+    }
+  })
+  await Promise.all(fetchJobs)
+
+  return results
 }

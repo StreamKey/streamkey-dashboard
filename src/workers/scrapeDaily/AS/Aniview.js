@@ -112,6 +112,7 @@ const normalize = results => {
       opp: r['Request'],
       imp: r['Impression'],
       rev: r['Revenue'],
+      cost: 0, // TODO
       cpm: r['Cpm']
     }
   })

@@ -24,6 +24,12 @@ const styles = theme => {
       fontWeight: 300,
       paddingTop: theme.spacing.quad,
       paddingBottom: theme.spacing.double
+    },
+    datepicker: {
+      marginBottom: theme.spacing.quad,
+      '& [class*="MuiInput-input-"]': {
+        textAlign: 'center'
+      }
     }
   }
 }
@@ -84,6 +90,7 @@ class Home extends React.Component {
         <div className={classes.container}>
           <h3 className={classes.title}>Daily Report</h3>
           <DatePicker
+            className={classes.datepicker}
             value={this.state.date}
             onChange={this.onDateChange}
             labelFunc={this.renderDate}

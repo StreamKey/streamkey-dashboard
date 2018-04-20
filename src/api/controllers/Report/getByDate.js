@@ -42,11 +42,11 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'sspCpm',
         title: 'SSP CPM',
-        type: 'float'
+        type: 'usd'
       }, {
         key: 'sspRev',
         title: 'SSP Rev',
-        type: 'float'
+        type: 'usd'
       }, {
         key: 'as',
         title: 'AS',

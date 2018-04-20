@@ -29,6 +29,17 @@ const login = async () => {
   }
 }
 
+const getCurrencies = async () => {
+  const currencies = {}
+  const res = await axios.get(`/currencies/conversions`)
+  res.data.map(c => {
+    if (c.targetCurrencyCode === 'USD') {
+      currencies[c.sourceCurrencyCode] = c.rate
+    }
+  })
+  return currencies
+}
+
 const submitQuery = async dateTs => {
   const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
   const form = {
@@ -49,7 +60,11 @@ const submitQuery = async dateTs => {
       toDate: date,
       timeZone: 'UTC'
     },
-    conversions: null,
+    conversions: [{
+      // Convert to USD
+      field: 'currency',
+      value: 1
+    }],
     parent: {
       field: 'seat',
       value: 60749
@@ -82,10 +97,15 @@ const getResults = async queryId => {
   return res.data
 }
 
-const normalize = results => {
+const normalize = (results, currencies) => {
   return results.map(r => {
+    let revenue = r.sspNetRevenue
     if (r.currency !== 'USD') {
-      console.error('SSP revenue not in USD', r)
+      if (currencies[r.currency]) {
+        revenue = r.sspNetRevenue * currencies[r.currency]
+      } else {
+        console.error('Unknown revenue currency', r)
+      }
     }
     return {
       tag: r.adUnit,
@@ -101,8 +121,9 @@ export default {
   getData: async dateTs => {
     await login()
     const queryId = await submitQuery(dateTs)
+    const currencies = await getCurrencies()
     await waitUntilResultsReady(queryId)
     const results = await getResults(queryId)
-    return normalize(results)
+    return normalize(results, currencies)
   }
 }

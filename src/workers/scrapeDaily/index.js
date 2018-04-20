@@ -6,14 +6,6 @@ import DB from '../../DB/'
 import GetSSPData from './GetSSPData'
 import GetASData from './GetASData'
 
-const calcMargin = (rev, cost) => {
-  if (rev > 0) {
-    return (rev - cost) / rev * 100
-  } else {
-    return 0
-  }
-}
-
 const mergeByTags = (sspResults, asResults) => {
   const results = []
   _.each(sspResults, ssp => {
@@ -21,6 +13,8 @@ const mergeByTags = (sspResults, asResults) => {
       _.each(asResults, as => {
         _.each(as.data, asData => {
           if (sspData.tag === asData.tag) {
+            const profit = sspData.rev - asData.cost
+            const margin = profit / sspData.rev
             results.push({
               tag: sspData.tag,
               ssp: ssp.key,
@@ -33,8 +27,8 @@ const mergeByTags = (sspResults, asResults) => {
               asImp: asData.imp,
               asCost: asData.cost,
               asCpm: asData.cpm,
-              profit: sspData.rev - asData.cost,
-              margin: calcMargin(sspData.rev, asData.cost)
+              profit,
+              margin
             })
           }
         })

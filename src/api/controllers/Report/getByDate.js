@@ -2,6 +2,7 @@ import Sequelize from 'sequelize'
 import moment from 'moment'
 
 import DB from '../../../DB/'
+import calcServingCosts from './calcServingCosts'
 
 export default async (fromTs, toTs) => {
   const reports = await DB.models.Reports.findAll({
@@ -13,8 +14,10 @@ export default async (fromTs, toTs) => {
     }
   })
   const data = reports.map(report => {
+    const servingCosts = calcServingCosts(report.dataValues)
     return {
-      ...report.dataValues
+      ...report.dataValues,
+      ...servingCosts
     }
   })
   return {
@@ -48,6 +51,10 @@ export default async (fromTs, toTs) => {
         title: 'SSP Rev',
         type: 'usd'
       }, {
+        key: 'sspScost',
+        title: 'SSP sCost',
+        type: 'usd'
+      }, {
         key: 'as',
         title: 'AS',
         type: 'string'
@@ -62,6 +69,10 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'asCost',
         title: 'AS Cost',
+        type: 'usd'
+      }, {
+        key: 'asScost',
+        title: 'AS sCost',
         type: 'usd'
       }, {
         key: 'profit',

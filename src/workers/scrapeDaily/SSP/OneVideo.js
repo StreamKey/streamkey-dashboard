@@ -66,7 +66,6 @@ const runReport = async dateTs => {
 }
 
 const normalize = (columns, data) => {
-  console.log('columns', columns)
   if (columns[0] !== 'date' ||
       columns[1] !== 'ad' ||
       columns[2] !== 'seller_market_opportunities' ||

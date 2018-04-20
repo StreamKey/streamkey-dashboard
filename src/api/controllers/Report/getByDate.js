@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize'
+import moment from 'moment'
 
 import DB from '../../../DB/'
 
@@ -6,8 +7,8 @@ export default async (fromTs, toTs) => {
   const reports = await DB.models.Reports.findAll({
     where: {
       date: {
-        [Sequelize.Op.gt]: 0,
-        // [lt]: 0
+        [Sequelize.Op.gt]: moment(fromTs, 'X'),
+        [Sequelize.Op.lt]: moment(toTs, 'X')
       }
     }
   })

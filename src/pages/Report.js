@@ -1,5 +1,7 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
+import moment from 'moment'
+import DatePicker from 'material-ui-pickers/DatePicker'
 
 import Report from '../components/Report/'
 import API from '../components/API'
@@ -30,6 +32,7 @@ class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      date: moment(),
       header: [],
       data: [],
       isLoading: false,
@@ -47,8 +50,11 @@ class Home extends React.Component {
       isLoading: true,
       error: false
     }, async () => {
-      const form = {}
-      const response = await API.get('/report', form)
+      const form = {
+        from: moment(this.state.date).format('X'),
+        to: moment(this.state.date).add(1, 'day').format('X')
+      }
+      const response = await API.get('/report', { params: form })
       this.setState({
         ...this.state,
         header: response.data.report.header,
@@ -59,6 +65,17 @@ class Home extends React.Component {
     })
   }
 
+  onDateChange = date => {
+    this.setState({
+      ...this.state,
+      date
+    }, this.getReport)
+  }
+
+  renderDate = date => {
+    return date.format('YYYY-MM-DD')
+  }
+
   render () {
     const { classes } = this.props
     return (
@@ -66,6 +83,11 @@ class Home extends React.Component {
         <NavBar />
         <div className={classes.container}>
           <h3 className={classes.title}>Daily Report</h3>
+          <DatePicker
+            value={this.state.date}
+            onChange={this.onDateChange}
+            labelFunc={this.renderDate}
+            />
           <Report
             header={this.state.header}
             data={this.state.data}

@@ -18,6 +18,14 @@ const styles = theme => {
       '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.background.default
       }
+    },
+    cell: {
+    },
+    sspCell: {
+      backgroundColor: theme.palette.green[50]
+    },
+    asCell: {
+      backgroundColor: theme.palette.red[50]
     }
   }
 }
@@ -53,6 +61,7 @@ class Report extends React.Component {
       {
         this.props.header.map((h, i) => <TableCell
           key={i}
+          className={h.group === 'ssp' ? classes.sspCell : (h.group === 'as' ? classes.asCell : classes.cell)}
           numeric={h.type !== 'string' ? true : undefined}>
           {this.renderValue(h.type, row[h.key])}
         </TableCell>)

@@ -33,47 +33,58 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'ssp',
         title: 'SSP',
-        type: 'string'
+        type: 'string',
+        group: 'ssp'
       }, {
         key: 'sspOpp',
         title: 'SSP Opp',
-        type: 'integer'
+        type: 'integer',
+        group: 'ssp'
       }, {
         key: 'sspImp',
         title: 'SSP Imp',
-        type: 'integer'
+        type: 'integer',
+        group: 'ssp'
       }, {
         key: 'sspCpm',
         title: 'SSP CPM',
-        type: 'usd'
+        type: 'usd',
+        group: 'ssp'
       }, {
         key: 'sspRev',
         title: 'SSP Rev',
-        type: 'usd'
+        type: 'usd',
+        group: 'ssp'
       }, {
         key: 'sspScost',
         title: 'SSP sCost',
-        type: 'usd'
+        type: 'usd',
+        group: 'ssp'
       }, {
         key: 'as',
         title: 'AS',
-        type: 'string'
+        type: 'string',
+        group: 'as'
       }, {
         key: 'asOpp',
         title: 'AS Opp',
-        type: 'integer'
+        type: 'integer',
+        group: 'as'
       }, {
         key: 'asImp',
         title: 'AS Imp',
-        type: 'integer'
+        type: 'integer',
+        group: 'as'
       }, {
         key: 'asCost',
         title: 'AS Cost',
-        type: 'usd'
+        type: 'usd',
+        group: 'as'
       }, {
         key: 'asScost',
         title: 'AS sCost',
-        type: 'usd'
+        type: 'usd',
+        group: 'as'
       }, {
         key: 'profit',
         title: 'Profit',

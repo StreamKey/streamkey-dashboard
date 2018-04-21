@@ -4,7 +4,7 @@ export default report => {
     asScost: 0
   }
   if (report.as === 'lkqd') {
-    costs.asScost = report.asImp * 0.24
+    costs.asScost = (report.asImp / 1000) * 0.24
   }
   if (report.ssp === 'tremor') {
   }

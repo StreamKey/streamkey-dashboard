@@ -3,6 +3,11 @@ import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
 
+import IconButton from 'material-ui/IconButton'
+import MdIcon from '../components/MdIcon'
+import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
+import RightSvg from 'mdi-svg/svg/chevron-right.svg'
+
 import Report from '../components/Report/'
 import API from '../components/API'
 import NavBar from '../components/NavBar'
@@ -38,7 +43,7 @@ class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      date: moment(),
+      date: moment().startOf('day'),
       header: [],
       data: [],
       isLoading: false,
@@ -78,6 +83,14 @@ class Home extends React.Component {
     }, this.getReport)
   }
 
+  prevDay = () => {
+    this.onDateChange(moment(this.state.date).subtract(1, 'days'))
+  }
+  
+  nextDay = () => {
+    this.onDateChange(moment(this.state.date).add(1, 'days'))
+  }
+
   renderDate = date => {
     return date.format('YYYY-MM-DD')
   }
@@ -89,12 +102,26 @@ class Home extends React.Component {
         <NavBar />
         <div className={classes.container}>
           <h3 className={classes.title}>Daily Report</h3>
-          <DatePicker
-            className={classes.datepicker}
-            value={this.state.date}
-            onChange={this.onDateChange}
-            labelFunc={this.renderDate}
-            />
+          <div className={classes.datepickerContainer}>
+            <IconButton
+              className={classes.button}
+              onClick={this.prevDay}
+              >
+              <MdIcon svg={LeftSvg} className={classes.menuIcon} />
+            </IconButton>
+            <DatePicker
+              className={classes.datepicker}
+              value={this.state.date}
+              onChange={this.onDateChange}
+              labelFunc={this.renderDate}
+              />
+            <IconButton
+              className={classes.button}
+              onClick={this.nextDay}
+              >
+              <MdIcon svg={RightSvg} className={classes.menuIcon} />
+            </IconButton>
+          </div>
           <Report
             header={this.state.header}
             data={this.state.data}

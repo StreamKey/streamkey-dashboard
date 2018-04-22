@@ -86,7 +86,7 @@ class Home extends React.Component {
   prevDay = () => {
     this.onDateChange(moment(this.state.date).subtract(1, 'days'))
   }
-  
+
   nextDay = () => {
     this.onDateChange(moment(this.state.date).add(1, 'days'))
   }
@@ -106,7 +106,7 @@ class Home extends React.Component {
             <IconButton
               className={classes.button}
               onClick={this.prevDay}
-              >
+            >
               <MdIcon svg={LeftSvg} className={classes.menuIcon} />
             </IconButton>
             <DatePicker
@@ -114,18 +114,18 @@ class Home extends React.Component {
               value={this.state.date}
               onChange={this.onDateChange}
               labelFunc={this.renderDate}
-              />
+            />
             <IconButton
               className={classes.button}
               onClick={this.nextDay}
-              >
+            >
               <MdIcon svg={RightSvg} className={classes.menuIcon} />
             </IconButton>
           </div>
           <Report
             header={this.state.header}
             data={this.state.data}
-            />
+          />
         </div>
         <Footer />
       </div>

@@ -50,7 +50,7 @@ const main = async topic => {
     console.log(r.key)
     console.log(_.sampleSize(r.data, 5))
   })
-  
+
   const asResults = await GetASData(utcTime, errors)
   _.each(asResults, r => {
     console.log(r.key)

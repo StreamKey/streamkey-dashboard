@@ -33,8 +33,8 @@ class App extends React.Component {
     const { classes } = this.props
     return (
       <Provider store={store}>
-      <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
-        <MuiThemeProvider theme={Theme}>
+        <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
+          <MuiThemeProvider theme={Theme}>
             <CssBaseline />
             <div className={classes.root}>
               <Switch>

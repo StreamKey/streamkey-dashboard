@@ -24,6 +24,7 @@ export default sequelize => {
     asOpp: Sequelize.INTEGER,
     asImp: Sequelize.INTEGER,
     asCost: Sequelize.DECIMAL,
+    asCpm: Sequelize.DECIMAL,
     profit: {
       // sspRev - asCost
       type: Sequelize.DECIMAL

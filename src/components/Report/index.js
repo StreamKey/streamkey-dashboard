@@ -51,7 +51,7 @@ class Report extends React.Component {
         {
           header.map(h => <TableCell
             key={h.key}
-            numeric={h.type === 'integer' ? true : undefined}>
+            numeric={h.type === 'string' ? undefined : true}>
             <TableSortLabel
               active={orderBy === h.key}
               direction={order}

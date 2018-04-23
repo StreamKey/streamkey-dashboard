@@ -3,6 +3,7 @@ import moment from 'moment'
 
 import DB from '../../../DB/'
 import calcServingCosts from './calcServingCosts'
+import calcDiff from './calcDiff'
 
 export default async (fromTs, toTs) => {
   const reports = await DB.models.Reports.findAll({
@@ -15,9 +16,11 @@ export default async (fromTs, toTs) => {
   })
   const data = reports.map(report => {
     const servingCosts = calcServingCosts(report.dataValues)
+    const diffs = calcDiff(report.dataValues)
     return {
       ...report.dataValues,
-      ...servingCosts
+      ...servingCosts,
+      ...diffs
     }
   })
   return {
@@ -76,6 +79,11 @@ export default async (fromTs, toTs) => {
         type: 'integer',
         group: 'as'
       }, {
+        key: 'asCpm',
+        title: 'AS CPM',
+        type: 'usd',
+        group: 'as'
+      }, {
         key: 'asCost',
         title: 'AS Cost',
         type: 'usd',
@@ -85,6 +93,14 @@ export default async (fromTs, toTs) => {
         title: 'AS sCost',
         type: 'usd',
         group: 'as'
+      }, {
+        key: 'diffCpm',
+        title: 'CPM Diff',
+        type: 'usd'
+      }, {
+        key: 'diffImp',
+        title: 'Imp Diff',
+        type: 'integer'
       }, {
         key: 'profit',
         title: 'Profit',

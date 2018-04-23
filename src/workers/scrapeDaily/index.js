@@ -49,10 +49,25 @@ const calcProfit = (results, date) => {
   })
 }
 
+const getScriptDate = () => {
+  for (let i in process.argv) {
+    const next = Number(i) + 1
+    if (process.argv[i] === '--date' && process.argv[next]) {
+      const date = moment(process.argv[next], 'YYYY-MM-DD')
+      if (!date.isValid()) {
+        console.error('Invalid date')
+        process.exit()
+      }
+      return date
+    }
+  }
+  return moment().utc().subtract(1, 'days').startOf('day')
+}
+
 const main = async topic => {
   const errors = []
-  const utcTime = moment.utc().subtract(1, 'days').startOf('day')
-  console.log('utcTime start of day', utcTime)
+  const utcTime = getScriptDate()
+  console.log('Script time (UTC)', utcTime)
 
   await DB.init()
 

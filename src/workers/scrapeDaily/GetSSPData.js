@@ -55,7 +55,9 @@ export default async (dateTs, errors) => {
 
   const fetchJobs = SSPs.map(async item => {
     try {
+      console.log(`[${item.key}] Start`)
       const data = await item.controller.getData(dateTs)
+      console.log(`[${item.key}] Finish`)
       results.push({
         key: item.key,
         data: reduceByTag(data)

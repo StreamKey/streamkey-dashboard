@@ -13,22 +13,16 @@ const mergeByTags = (sspResults, asResults) => {
       _.each(asResults, as => {
         _.each(as.data, asData => {
           if (sspData.tag === asData.tag) {
-            const profit = sspData.rev - asData.cost
-            const margin = profit / sspData.rev
             results.push({
               tag: sspData.tag,
               ssp: ssp.key,
               sspOpp: sspData.opp,
               sspImp: sspData.imp,
               sspRev: sspData.rev,
-              sspCpm: sspData.cpm,
               as: as.key,
               asOpp: asData.opp,
               asImp: asData.imp,
-              asCost: asData.cost,
-              asCpm: asData.cpm,
-              profit,
-              margin
+              asCost: asData.cost
             })
           }
         })
@@ -36,6 +30,23 @@ const mergeByTags = (sspResults, asResults) => {
     })
   })
   return results
+}
+
+const calcProfit = (results, date) => {
+  return results.map(r => {
+    const profit = r.sspRev - r.asCost
+    const margin = r.sspRev === 0 ? 0 : profit / r.sspRev
+    const sspCpm = r.sspImp === 0 ? 0 : ((r.sspRev / r.sspImp) * 1000)
+    const asCpm = r.asImp === 0 ? 0 : ((r.asCost / r.asImp) * 1000)
+    return {
+      ...r,
+      date,
+      profit,
+      margin,
+      sspCpm,
+      asCpm
+    }
+  })
 }
 
 const main = async topic => {
@@ -46,23 +57,11 @@ const main = async topic => {
   await DB.init()
 
   const sspResults = await GetSSPData(utcTime, errors)
-  _.each(sspResults, r => {
-    console.log(r.key)
-    console.log(_.sampleSize(r.data, 5))
-  })
-
   const asResults = await GetASData(utcTime, errors)
-  _.each(asResults, r => {
-    console.log(r.key)
-    console.log(_.sampleSize(r.data, 5))
-  })
 
   // Match tags
   const merged = mergeByTags(sspResults, asResults)
-  const itemsToStore = merged.map(i => ({
-    date: utcTime,
-    ...i
-  }))
+  const itemsToStore = calcProfit(merged, utcTime)
   console.log('itemsToStore', itemsToStore)
 
   // Store data

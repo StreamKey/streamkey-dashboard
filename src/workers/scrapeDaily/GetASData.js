@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
 import Aniview from './AS/Aniview'
@@ -19,6 +21,27 @@ const AdServers = [
   }
 ]
 
+const reduceByTag = results => {
+  const tags = {}
+  _.each(results, r => {
+    if (tags[r.tag]) {
+      tags[r.tag] = mergeResults(tags[r.tag], r)
+    } else {
+      tags[r.tag] = r
+    }
+  })
+  return _.values(tags)
+}
+
+const mergeResults = (a, b) => {
+  return {
+    ...a,
+    asOpp: a.asOpp + b.asOpp,
+    asImp: a.asImp + b.asImp,
+    asCost: a.asCost + b.asCost
+  }
+}
+
 export default async (dateTs, errors) => {
   const results = []
 
@@ -27,7 +50,7 @@ export default async (dateTs, errors) => {
       const data = await item.controller.getData(dateTs)
       results.push({
         key: item.key,
-        data
+        data: reduceByTag(data)
       })
     } catch (e) {
       errors.push(e)

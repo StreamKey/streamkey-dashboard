@@ -71,8 +71,7 @@ const normalize = (columns, data) => {
       columns[2] !== 'seller_market_opportunities' ||
       columns[3] !== 'ad_attempts' ||
       columns[4] !== 'ad_impressions' ||
-      columns[5] !== 'ad_revenue' ||
-      columns[6] !== 'cpm') {
+      columns[5] !== 'ad_revenue') {
     throw new Error('AOL invalid report columns')
   }
   return data.map(r => {
@@ -80,8 +79,7 @@ const normalize = (columns, data) => {
       tag: r.row[1],
       opp: Number(r.row[2]),
       imp: Number(r.row[4]),
-      rev: Number(r.row[5]),
-      cpm: Number(r.row[6])
+      rev: Number(r.row[5])
     }
   })
 }

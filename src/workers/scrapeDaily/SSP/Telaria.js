@@ -111,8 +111,7 @@ const normalize = (results, currencies) => {
       tag: r.adUnit,
       opp: r.requests,
       imp: r.impressions,
-      rev: revenue,
-      cpm: r.netCpm
+      rev: revenue
     }
   })
 }

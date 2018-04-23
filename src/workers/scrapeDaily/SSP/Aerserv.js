@@ -44,8 +44,7 @@ const normalize = results => {
       tag: r['Placement'],
       opp: Number(r['Requests']),
       imp: Number(r['Impressions']),
-      rev: Number(r['Estimated Earnings'].replace(/^\$/, '')),
-      cpm: Number(r['eCPM'].replace(/^\$/, ''))
+      rev: Number(r['Estimated Earnings'].replace(/^\$/, ''))
     }
   })
 }

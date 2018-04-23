@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import Telaria from './SSP/Telaria'
 import Freewheel from './SSP/Freewheel'
 import Beachfront from './SSP/Beachfront'
@@ -27,6 +29,27 @@ const SSPs = [
   }
 ]
 
+const reduceByTag = results => {
+  const tags = {}
+  _.each(results, r => {
+    if (tags[r.tag]) {
+      tags[r.tag] = mergeResults(tags[r.tag], r)
+    } else {
+      tags[r.tag] = r
+    }
+  })
+  return _.values(tags)
+}
+
+const mergeResults = (a, b) => {
+  return {
+    ...a,
+    sspOpp: a.sspOpp + b.sspOpp,
+    sspImp: a.sspImp + b.sspImp,
+    sspRev: a.sspRev + b.sspRev
+  }
+}
+
 export default async (dateTs, errors) => {
   const results = []
 
@@ -35,7 +58,7 @@ export default async (dateTs, errors) => {
       const data = await item.controller.getData(dateTs)
       results.push({
         key: item.key,
-        data
+        data: reduceByTag(data)
       })
     } catch (e) {
       errors.push(e)

@@ -41,8 +41,7 @@ const normalize = results => {
       tag: r.advertiser.name, // ?
       opp: 0, // ?
       imp: r.impressions,
-      rev: r.revenue,
-      cpm: r.ecpm
+      rev: r.revenue
     }
   })
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
+import _orderBy from 'lodash/orderBy'
 
 import IconButton from 'material-ui/IconButton'
 import MdIcon from '../components/MdIcon'
@@ -46,6 +47,8 @@ class Home extends React.Component {
       date: moment().startOf('day'),
       header: [],
       data: [],
+      orderBy: null,
+      order: 'asc',
       isLoading: false,
       error: false
     }
@@ -95,6 +98,15 @@ class Home extends React.Component {
     return date.format('YYYY-MM-DD')
   }
 
+  onChangeOrder = ({ orderBy, order }) => {
+    this.setState({
+      ...this.state,
+      orderBy,
+      order,
+      data: _orderBy(this.state.data, [orderBy], [order])
+    })
+  }
+
   render () {
     const { classes } = this.props
     return (
@@ -125,6 +137,9 @@ class Home extends React.Component {
           <Report
             header={this.state.header}
             data={this.state.data}
+            orderBy={this.state.orderBy}
+            order={this.state.order}
+            onChangeOrder={this.onChangeOrder}
           />
         </div>
         <Footer />

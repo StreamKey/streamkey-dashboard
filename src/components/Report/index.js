@@ -2,7 +2,13 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import numeral from 'numeral'
 
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+import Table, {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel
+} from 'material-ui/Table'
 import Paper from 'material-ui/Paper'
 
 const styles = theme => {
@@ -31,14 +37,28 @@ const styles = theme => {
 }
 
 class Report extends React.Component {
+  changeOrderBy = key => {
+    this.props.onChangeOrder && this.props.onChangeOrder({
+      orderBy: key,
+      order: this.props.orderBy === key && this.props.order === 'asc' ? 'desc' : 'asc'
+    })
+  }
+
   renderHeader = () => {
+    const { header, orderBy, order } = this.props
     return <TableHead>
       <TableRow>
         {
-          this.props.header.map((h, i) => <TableCell
-            key={i}
+          header.map(h => <TableCell
+            key={h.key}
             numeric={h.type === 'integer' ? true : undefined}>
-            {h.title}
+            <TableSortLabel
+              active={orderBy === h.key}
+              direction={order}
+              onClick={() => this.changeOrderBy(h.key)}
+            >
+              {h.title}
+            </TableSortLabel>
           </TableCell>)
         }
       </TableRow>

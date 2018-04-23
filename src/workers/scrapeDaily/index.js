@@ -64,7 +64,7 @@ const getScriptDate = () => {
   return moment().utc().subtract(1, 'days').startOf('day')
 }
 
-const main = async topic => {
+const main = async () => {
   const errors = []
   const utcTime = getScriptDate()
   console.log('Script time (UTC)', utcTime)

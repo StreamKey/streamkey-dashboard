@@ -6,18 +6,17 @@ import getProfile from './getProfile'
 import getReport from './getReport'
 import { notFound, parseError, serverError } from './Errors'
 
-const isAdmin = async req => {
-  throw new Error('not-authorized')
-}
+// const isAdmin = async req => {
+//   throw new Error('not-authorized')
+// }
 
 const isLoggedIn = async req => {
-  return true
-  // if (req.session && req.session.isLoggedIn === true) {
-  //   return true
-  // }
-  // req.session.isLoggedIn = false
-  // req.session.save()
-  // throw new Error('not-authorized')
+  if (req.session && req.session.isLoggedIn === true) {
+    return true
+  }
+  req.session.isLoggedIn = false
+  req.session.save()
+  throw new Error('not-authorized')
 }
 
 const asyncMiddleware = promise => {
@@ -36,7 +35,8 @@ const asyncMiddleware = promise => {
 }
 
 const ensureAdmin = (req, res, next) => {
-  isAdmin(req)
+  // isAdmin(req)
+  isLoggedIn(req)
     .then(() => {
       next()
     })

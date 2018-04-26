@@ -9,6 +9,14 @@ const {
 } = process.env
 
 module.exports = {
+  production: {
+    username: RAZZLE_PG_USER,
+    password: RAZZLE_PG_PASSWORD,
+    database: RAZZLE_PG_DB,
+    host: RAZZLE_PG_HOST,
+    port: RAZZLE_PG_PORT,
+    dialect: 'postgres'
+  },
   development: {
     username: RAZZLE_PG_USER,
     password: RAZZLE_PG_PASSWORD,

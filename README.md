@@ -9,6 +9,10 @@
 ```
 NODE_ENV=development
 PORT=3011
+DEPLOY_USER=ubuntu
+DEPLOY_HOST=
+DEPLOY_SSH_KEY=
+
 RAZZLE_ROOT_URL=http://localhost:3011
 
 RAZZLE_PG_HOST=127.0.0.1

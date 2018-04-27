@@ -1,6 +1,6 @@
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST)
 
-export default ({ appMarkup }) => {
+export default () => {
   const cssTag = assets.client.css ? `<link rel="stylesheet" href="${assets.client.css}">` : ''
   const jsTag = process.env.NODE_ENV === 'production'
     ? `<script src="${assets.client.js}" defer></script>`
@@ -24,7 +24,7 @@ export default ({ appMarkup }) => {
     ${jsTag}
   </head>
   <body>
-    <div id="root" class="hidden">${appMarkup}</div>
+    <div id="root" class="hidden"></div>
   </body>
 </html>`
 

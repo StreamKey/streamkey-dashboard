@@ -98,3 +98,13 @@ Then edit the new migration in `src/DB/migrations` and provide up/down methods u
 `yarn test`
 
 ## Deployment
+* make sure all works locally (yarn build && NODE_ENV=production node build/server.js)
+* `yarn test`
+* bump version
+* push to `master`
+* `yarn shipit production deploy`
+* `yarn shipit production install`
+* `yarn shipit production restart`
+
+If something goes wrong, revert to previous deployment with:
+`yarn shipit production rollback`

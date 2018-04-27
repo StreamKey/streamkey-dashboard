@@ -10,7 +10,7 @@
     "build": "razzle build",
     "test": "yarn lint && razzle test --env=jsdom",
     "lint": "./node_modules/.bin/standard --parser=babel-eslint | ./node_modules/.bin/snazzy",
-    "start:prod": "NODE_ENV=production ./node_modules/.bin/forever build/server.js",
+    "start:prod": "NODE_ENV=production node build/server.js",
     "db:start": "docker run --name streamkey-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5445:5432 postgres",
     "db:rm": "docker stop streamkey-postgres && docker rm streamkey-postgres",
     "workers:scrapeDaily": "babel-node src/workers/scrapeDaily/index.js --presets es2015,stage-2",

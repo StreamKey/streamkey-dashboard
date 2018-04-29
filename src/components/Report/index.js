@@ -15,17 +15,33 @@ const styles = theme => {
   return {
     root: {
       maxWidth: '100%',
-      overflowX: 'scroll'
+      overflowX: 'scroll',
+      position: 'relative'
+    },
+    inner: {
+      overflowX: 'scroll',
+      overflowY: 'visible',
+      marginLeft: 260
     },
     table: {
-      minWidth: 700
+      width: 'auto',
+      tableLayout: 'fixed'
     },
     row: {
       '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.background.default
       }
     },
-    cell: {
+    fixedCell: {
+      height: 'inherit',
+      position: 'absolute',
+      marginLeft: -260,
+      width: 260,
+      overflowX: 'hidden',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      transform: 'translateY(1px)'
     },
     sspCell: {
       backgroundColor: theme.palette.green[50]
@@ -45,13 +61,15 @@ class Report extends React.Component {
   }
 
   renderHeader = () => {
-    const { header, orderBy, order } = this.props
+    const { header, orderBy, order, classes } = this.props
     return <TableHead>
       <TableRow>
         {
-          header.map(h => <TableCell
+          header.map((h, n) => <TableCell
             key={h.key}
-            numeric={h.type === 'string' ? undefined : true}>
+            numeric={h.type === 'string' ? undefined : true}
+            className={n === 0 ? classes.fixedCell : classes.cell}
+          >
             <TableSortLabel
               active={orderBy === h.key}
               direction={order}
@@ -81,8 +99,9 @@ class Report extends React.Component {
       {
         this.props.header.map((h, i) => <TableCell
           key={i}
-          className={h.group === 'ssp' ? classes.sspCell : (h.group === 'as' ? classes.asCell : classes.cell)}
-          numeric={h.type !== 'string' ? true : undefined}>
+          className={i === 0 ? classes.fixedCell : (h.group === 'ssp' ? classes.sspCell : (h.group === 'as' ? classes.asCell : classes.cell))}
+          numeric={h.type !== 'string' ? true : undefined}
+        >
           {this.renderValue(h.type, row[h.key])}
         </TableCell>)
       }
@@ -108,10 +127,12 @@ class Report extends React.Component {
     const { classes } = this.props
     return (
       <Paper className={classes.root}>
-        <Table className={classes.table}>
-          {this.renderHeader()}
-          {this.renderBody()}
-        </Table>
+        <div className={classes.inner}>
+          <Table className={classes.table}>
+            {this.renderHeader()}
+            {this.renderBody()}
+          </Table>
+        </div>
       </Paper>
     )
   }

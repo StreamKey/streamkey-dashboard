@@ -7,8 +7,8 @@ const styles = theme => {
   return {
     root: {
       display: 'inline-block',
-      color: 'currentColor',
-      fill: 'currentColor',
+      color: 'current-color',
+      fill: 'current-color',
       height: 24,
       width: 24,
       userSelect: 'none'

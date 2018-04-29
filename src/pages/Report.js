@@ -3,12 +3,16 @@ import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
 import _orderBy from 'lodash/orderBy'
+import csvStringify from 'csv-stringify/lib/sync'
+import FileSaver from 'file-saver'
+import Blob from 'blob'
 
 import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
 import MdIcon from '../components/MdIcon'
 import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
 import RightSvg from 'mdi-svg/svg/chevron-right.svg'
+import DownloadSvg from 'mdi-svg/svg/download.svg'
 
 import Report from '../components/Report/'
 import API from '../components/API'
@@ -37,6 +41,9 @@ const styles = theme => {
       '& [class*="MuiInput-input-"]': {
         textAlign: 'center'
       }
+    },
+    downloadButton: {
+      alignSelf: 'flex-end'
     },
     tagFilter: {
       alignSelf: 'flex-start',
@@ -134,6 +141,15 @@ class Home extends React.Component {
     })
   }
 
+  downloadCsv = () => {
+    const csv = csvStringify(this.state.filtered, {
+      columns: this.state.header.map(h => h.key),
+      header: true
+    })
+    const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'})
+    FileSaver.saveAs(blob, `streamkey-report-${this.state.date.format('YYYY-MM-DD')}.csv`)
+  }
+
   render () {
     const { classes } = this.props
     return (
@@ -161,6 +177,12 @@ class Home extends React.Component {
               <MdIcon svg={RightSvg} className={classes.menuIcon} />
             </IconButton>
           </div>
+          <IconButton
+            className={classes.downloadButton}
+            onClick={this.downloadCsv}
+          >
+            <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
+          </IconButton>
           <TextField
             className={classes.tagFilter}
             label='Tag Filter'

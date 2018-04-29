@@ -42,13 +42,16 @@ const styles = theme => {
         textAlign: 'center'
       }
     },
-    downloadButton: {
-      alignSelf: 'flex-end'
+    toolsContainer: {
+      ...theme.utils.container,
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: theme.spacing.double
     },
     tagFilter: {
-      alignSelf: 'flex-start',
-      width: 240,
-      marginBottom: theme.spacing.double
+      width: 240
     }
   }
 }
@@ -62,6 +65,8 @@ class Home extends React.Component {
       data: [],
       filtered: [],
       tagFilter: '',
+      sspFilter: '',
+      asFilter: '',
       orderBy: null,
       order: 'asc',
       isLoading: false,
@@ -131,12 +136,30 @@ class Home extends React.Component {
     }, this.onFilterChange)
   }
 
+  onSspFilterChange = e => {
+    this.setState({
+      ...this.state,
+      sspFilter: e.target.value
+    }, this.onFilterChange)
+  }
+
+  onAsFilterChange = e => {
+    this.setState({
+      ...this.state,
+      asFilter: e.target.value
+    }, this.onFilterChange)
+  }
+
   onFilterChange = () => {
     const tagFilter = new RegExp(this.state.tagFilter, 'i')
+    const sspFilter = new RegExp(this.state.sspFilter, 'i')
+    const asFilter = new RegExp(this.state.asFilter, 'i')
     this.setState({
       ...this.state,
       filtered: this.state.data.filter(d => {
-        return d.tag.match(tagFilter)
+        return d.tag.match(tagFilter) &&
+          d.ssp.match(sspFilter) &&
+          d.as.match(asFilter)
       })
     })
   }
@@ -177,18 +200,31 @@ class Home extends React.Component {
               <MdIcon svg={RightSvg} className={classes.menuIcon} />
             </IconButton>
           </div>
-          <IconButton
-            className={classes.downloadButton}
-            onClick={this.downloadCsv}
-          >
-            <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
-          </IconButton>
-          <TextField
-            className={classes.tagFilter}
-            label='Tag Filter'
-            value={this.state.tagFilter}
-            onChange={this.onTagFilterChange}
-          />
+          <div className={classes.toolsContainer}>
+            <div>
+              <TextField
+                className={classes.tagFilter}
+                label='Tag Filter'
+                value={this.state.tagFilter}
+                onChange={this.onTagFilterChange}
+              />
+              <TextField
+                label='SSP Filter'
+                value={this.state.sspFilter}
+                onChange={this.onSspFilterChange}
+              />
+              <TextField
+                label='AS Filter'
+                value={this.state.asFilter}
+                onChange={this.onAsFilterChange}
+              />
+            </div>
+            <IconButton
+              onClick={this.downloadCsv}
+            >
+              <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
+            </IconButton>
+          </div>
           <Report
             header={this.state.header}
             data={this.state.filtered}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import numeral from 'numeral'
+import each from 'lodash/each'
 
 import Table, {
   TableBody,
@@ -60,6 +61,28 @@ class Report extends React.Component {
     })
   }
 
+  calcTotal = () => {
+    const { header, data } = this.props
+    const total = {}
+    each(header, (h, n) => {
+      if (h.key === 'tag') {
+        total[h.key] = 'Total'
+      } else if (h.type === 'string') {
+        total[h.key] = ''
+      } else {
+        total[h.key] = 0
+      }
+    })
+    each(data, row => {
+      each(header, (h, n) => {
+        if (h.key !== 'tag' && h.type !== 'string') {
+          total[h.key] += Number(row[h.key])
+        }
+      })
+    })
+    return total
+  }
+
   renderHeader = () => {
     const { header, orderBy, order, classes } = this.props
     return <TableHead>
@@ -84,11 +107,15 @@ class Report extends React.Component {
   }
 
   renderBody = () => {
+    const total = this.calcTotal()
     return <TableBody>
       {
         this.props.data.map((d, i) => {
           return this.renderRow(d, i)
         })
+      }
+      {
+        this.renderRow(total, 0)
       }
     </TableBody>
   }

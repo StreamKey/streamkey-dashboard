@@ -1,36 +1,10 @@
 import '../../../env'
-import _ from 'lodash'
 import moment from 'moment'
 
 import DB from '../../DB/'
 import GetSSPData from './GetSSPData'
 import GetASData from './GetASData'
-
-const mergeByTags = (sspResults, asResults) => {
-  const results = []
-  _.each(sspResults, ssp => {
-    _.each(ssp.data, sspData => {
-      _.each(asResults, as => {
-        _.each(as.data, asData => {
-          if (sspData.tag === asData.tag) {
-            results.push({
-              tag: sspData.tag,
-              ssp: ssp.key,
-              sspOpp: sspData.opp,
-              sspImp: sspData.imp,
-              sspRev: sspData.rev,
-              as: as.key,
-              asOpp: asData.opp,
-              asImp: asData.imp,
-              asCost: asData.cost
-            })
-          }
-        })
-      })
-    })
-  })
-  return results
-}
+import MergeTags from './MergeTags'
 
 const calcProfit = (results, date) => {
   return results.map(r => {
@@ -75,7 +49,7 @@ const main = async () => {
   const asResults = await GetASData(utcTime, errors)
 
   // Match tags
-  const merged = mergeByTags(sspResults, asResults)
+  const merged = MergeTags(sspResults, asResults)
   const itemsToStore = calcProfit(merged, utcTime)
   console.log('itemsToStore', itemsToStore)
 

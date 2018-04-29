@@ -23,7 +23,7 @@ const AdServers = [
   }
 ]
 
-const groupAsResults = (asResults) => {
+const groupAsResults = asResults => {
   const groups = {
     mnl: {},
     auton_wl: {},

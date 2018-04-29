@@ -5,6 +5,7 @@ import DatePicker from 'material-ui-pickers/DatePicker'
 import _orderBy from 'lodash/orderBy'
 
 import IconButton from 'material-ui/IconButton'
+import TextField from 'material-ui/TextField'
 import MdIcon from '../components/MdIcon'
 import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
 import RightSvg from 'mdi-svg/svg/chevron-right.svg'
@@ -36,6 +37,11 @@ const styles = theme => {
       '& [class*="MuiInput-input-"]': {
         textAlign: 'center'
       }
+    },
+    tagFilter: {
+      alignSelf: 'flex-start',
+      width: 240,
+      marginBottom: theme.spacing.double
     }
   }
 }
@@ -47,6 +53,8 @@ class Home extends React.Component {
       date: moment().startOf('day'),
       header: [],
       data: [],
+      filtered: [],
+      tagFilter: '',
       orderBy: null,
       order: 'asc',
       isLoading: false,
@@ -73,6 +81,8 @@ class Home extends React.Component {
         ...this.state,
         header: response.data.report.header,
         data: response.data.report.data,
+        filtered: response.data.report.data,
+        tagFilter: '',
         isLoading: false,
         error: false
       })
@@ -103,7 +113,24 @@ class Home extends React.Component {
       ...this.state,
       orderBy,
       order,
-      data: _orderBy(this.state.data, [orderBy], [order])
+      filtered: _orderBy(this.state.filtered, [orderBy], [order])
+    })
+  }
+
+  onTagFilterChange = e => {
+    this.setState({
+      ...this.state,
+      tagFilter: e.target.value
+    }, this.onFilterChange)
+  }
+
+  onFilterChange = () => {
+    const tagFilter = new RegExp(this.state.tagFilter, 'i')
+    this.setState({
+      ...this.state,
+      filtered: this.state.data.filter(d => {
+        return d.tag.match(tagFilter)
+      })
     })
   }
 
@@ -134,9 +161,15 @@ class Home extends React.Component {
               <MdIcon svg={RightSvg} className={classes.menuIcon} />
             </IconButton>
           </div>
+          <TextField
+            className={classes.tagFilter}
+            label='Tag Filter'
+            value={this.state.tagFilter}
+            onChange={this.onTagFilterChange}
+          />
           <Report
             header={this.state.header}
-            data={this.state.data}
+            data={this.state.filtered}
             orderBy={this.state.orderBy}
             order={this.state.order}
             onChangeOrder={this.onChangeOrder}

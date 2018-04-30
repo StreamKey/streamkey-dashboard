@@ -52,7 +52,8 @@ const normalize = results => {
       tag: r.title,
       opp: r.requests,
       imp: r.impressions,
-      rev: r.revenue
+      rev: r.revenue,
+      sCost: 0 // TODO
     }
   })
 }

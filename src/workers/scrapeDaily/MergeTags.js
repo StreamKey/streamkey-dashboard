@@ -38,11 +38,13 @@ export default (sspResults, asResults) => {
             sspOpp: sspData.opp,
             sspImp: sspData.imp,
             sspRev: sspData.rev,
+            sspScost: sspData.sCost,
             as: as.key,
             asOpp: result.opp,
             asImp: result.imp,
             asRev: result.rev,
-            asCost: result.cost
+            asCost: result.cost,
+            asScost: result.sCost
           })
         }
       })

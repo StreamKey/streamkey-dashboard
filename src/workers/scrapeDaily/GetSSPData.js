@@ -47,7 +47,8 @@ const mergeResults = (a, b) => {
     ...a,
     sspOpp: a.sspOpp + b.sspOpp,
     sspImp: a.sspImp + b.sspImp,
-    sspRev: a.sspRev + b.sspRev
+    sspRev: a.sspRev + b.sspRev,
+    sspScost: a.sspScost + b.sspScost
   }
 }
 
@@ -65,7 +66,7 @@ export default async dateTs => {
       })
     } catch (e) {
       winston.error('SSP getData Error', {
-        message: e.message,
+        error: e.message,
         item
       })
     }

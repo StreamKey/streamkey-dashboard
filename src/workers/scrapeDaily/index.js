@@ -15,19 +15,27 @@ const configLogger = () => {
   if (!fs.existsSync(LOGS_DIR)) {
     fs.mkdirSync(LOGS_DIR)
   }
+  const LAST_LOG_PATH = path.join(LOGS_DIR, 'reports-last-run.log')
+  if (fs.existsSync(LAST_LOG_PATH)) {
+    fs.truncateSync(LAST_LOG_PATH)
+  }
   winston.configure({
-    level: 'info',
+    level: 'silly',
     format: winston.format.combine(
       winston.format.timestamp(),
       winston.format.prettyPrint()
     ),
     transports: [
       new winston.transports.File({
-        filename: path.join(LOGS_DIR, `error.${now}.log`),
+        filename: path.join(LOGS_DIR, `reports-error.${now}.log`),
         level: 'error'
       }),
       new winston.transports.File({
-        filename: path.join(LOGS_DIR, `info.${now}.log`)
+        filename: path.join(LOGS_DIR, `reports-info.${now}.log`),
+        level: 'info'
+      }),
+      new winston.transports.File({
+        filename: LAST_LOG_PATH
       })
     ]
   })
@@ -35,7 +43,7 @@ const configLogger = () => {
 
 const calcProfit = (results, date) => {
   return results.map(r => {
-    const profit = r.sspRev - r.asCost
+    const profit = r.sspRev - r.sspScost - r.asScost - r.asCost
     const margin = r.sspRev === 0 ? 0 : profit / r.sspRev
     const sspCpm = r.sspImp === 0 ? 0 : ((r.sspRev / r.sspImp) * 1000)
     const asCpm = r.asImp === 0 ? 0 : ((r.asCost / r.asImp) * 1000)
@@ -80,6 +88,12 @@ const main = async () => {
   // Match tags
   const merged = MergeTags(sspResults, asResults)
   const itemsToStore = calcProfit(merged, utcTime)
+  winston.verbose('Items to store', {
+    items: itemsToStore
+  })
+  winston.info('Number of items to store', {
+    count: itemsToStore.length
+  })
 
   // Store data
   const storeJobs = itemsToStore.map(async item => {
@@ -89,11 +103,12 @@ const main = async () => {
     await Promise.all(storeJobs)
   } catch (e) {
     winston.error('Store report error', {
-      message: e.message
+      error: e.message
     })
   }
 
   await DB.close()
+  winston.info('Script finish')
 }
 
 main()

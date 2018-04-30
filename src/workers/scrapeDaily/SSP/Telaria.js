@@ -1,4 +1,5 @@
 import moment from 'moment'
+import winston from 'winston'
 
 import GenerateAxiosCookies from '../GenerateAxiosCookies'
 
@@ -104,14 +105,15 @@ const normalize = (results, currencies) => {
       if (currencies[r.currency]) {
         revenue = r.sspNetRevenue * currencies[r.currency]
       } else {
-        console.error('Unknown revenue currency', r)
+        winston.error('Telaria Unknown revenue currency', { result: r })
       }
     }
     return {
       tag: r.adUnit,
       opp: r.requests,
       imp: r.impressions,
-      rev: revenue
+      rev: revenue,
+      sCost: 0
     }
   })
 }

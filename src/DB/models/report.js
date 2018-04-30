@@ -20,10 +20,12 @@ export default sequelize => {
     sspImp: Sequelize.INTEGER,
     sspCpm: Sequelize.DECIMAL,
     sspRev: Sequelize.DECIMAL,
+    sspScost: Sequelize.DECIMAL,
     as: Sequelize.STRING,
     asOpp: Sequelize.INTEGER,
     asImp: Sequelize.INTEGER,
     asCost: Sequelize.DECIMAL,
+    asScost: Sequelize.DECIMAL,
     asRev: Sequelize.DECIMAL,
     asCpm: Sequelize.DECIMAL,
     profit: {

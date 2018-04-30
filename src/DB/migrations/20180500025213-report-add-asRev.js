@@ -1,12 +1,20 @@
 'use strict'
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('Reports', 'asRev', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.addColumn('Reports', 'asRev', {
+      type: Sequelize.DECIMAL
+    })
+    await queryInterface.addColumn('Reports', 'asScost', {
+      type: Sequelize.DECIMAL
+    })
+    await queryInterface.addColumn('Reports', 'sspScost', {
       type: Sequelize.DECIMAL
     })
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Reports', 'asRev')
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeColumn('Reports', 'asRev')
+    await queryInterface.removeColumn('Reports', 'asScost')
+    await queryInterface.removeColumn('Reports', 'sspScost')
   }
 }

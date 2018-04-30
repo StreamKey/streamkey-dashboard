@@ -44,13 +44,13 @@ const groupAsResults = asResults => {
       } else if (r.tag.endsWith('_RON')) {
         group = groups.ron
       } else {
-        winston.error('Tag Error', { tag: r.tag })
+        winston.warn('Tag Error', { tag: r.tag })
         return
       }
       group[tagBase] = mergeAsResults(group[tagBase], r)
     } catch (e) {
       winston.error('AS Group Error', {
-        message: e.message,
+        error: e.message,
         asResult: r
       })
     }
@@ -69,7 +69,8 @@ const mergeAsResults = (a, b) => {
       asOpp: a.asOpp + b.asOpp,
       asImp: a.asImp + b.asImp,
       asRev: a.asRev + b.asRev,
-      asCost: a.asCost + b.asCost
+      asCost: a.asCost + b.asCost,
+      asScost: a.asScost + b.asScost
     }
   }
 }
@@ -88,7 +89,7 @@ export default async dateTs => {
       })
     } catch (e) {
       winston.error('AS getData Error', {
-        message: e.message,
+        error: e.message,
         item
       })
     }

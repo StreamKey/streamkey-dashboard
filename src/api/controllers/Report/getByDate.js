@@ -2,7 +2,6 @@ import Sequelize from 'sequelize'
 import moment from 'moment'
 
 import DB from '../../../DB/'
-import calcServingCosts from './calcServingCosts'
 import calcDiff from './calcDiff'
 
 export default async (fromTs, toTs) => {
@@ -15,11 +14,9 @@ export default async (fromTs, toTs) => {
     }
   })
   const data = reports.map(report => {
-    const servingCosts = calcServingCosts(report.dataValues)
     const diffs = calcDiff(report.dataValues)
     return {
       ...report.dataValues,
-      ...servingCosts,
       ...diffs
     }
   })
@@ -86,6 +83,11 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'asCost',
         title: 'AS Cost',
+        type: 'usd',
+        group: 'as'
+      }, {
+        key: 'asScost',
+        title: 'AS sCost',
         type: 'usd',
         group: 'as'
       }, {

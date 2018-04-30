@@ -47,7 +47,8 @@ const normalize = results => {
       tag: r.channel_name,
       opp: Number(r.queries),
       imp: Number(r.impressions),
-      rev: Number(r.revenue_usd)
+      rev: Number(r.revenue_usd),
+      sCost: 0 // TODO
     }
   })
 }

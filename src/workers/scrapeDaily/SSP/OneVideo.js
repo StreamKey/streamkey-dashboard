@@ -79,7 +79,8 @@ const normalize = (columns, data) => {
       tag: r.row[1],
       opp: Number(r.row[2]),
       imp: Number(r.row[4]),
-      rev: Number(r.row[5])
+      rev: Number(r.row[5]),
+      sCost: 0 // TODO
     }
   })
 }

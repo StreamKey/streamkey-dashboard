@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import winston from 'winston'
 
 import GetTagBase from './GetTagBase'
 
@@ -43,12 +44,15 @@ const groupAsResults = asResults => {
       } else if (r.tag.endsWith('_RON')) {
         group = groups.ron
       } else {
-        console.error('ERR', r.tag)
+        winston.error('Tag Error', { tag: r.tag })
         return
       }
       group[tagBase] = mergeAsResults(group[tagBase], r)
     } catch (e) {
-      console.error('TAG ERR', r.tag)
+      winston.error('AS Group Error', {
+        message: e.message,
+        asResult: r
+      })
     }
   })
   return groups
@@ -70,20 +74,23 @@ const mergeAsResults = (a, b) => {
   }
 }
 
-export default async (dateTs, errors) => {
+export default async dateTs => {
   const results = []
 
   const fetchJobs = AdServers.map(async item => {
     try {
-      console.log(`[${item.key}] Start`)
+      winston.info('AS Start', { as: item.key })
       const data = await item.controller.getData(dateTs)
-      console.log(`[${item.key}] Finish`)
+      winston.info('AS Finish', { as: item.key })
       results.push({
         key: item.key,
         data: groupAsResults(data)
       })
     } catch (e) {
-      errors.push(e)
+      winston.error('AS getData Error', {
+        message: e.message,
+        item
+      })
     }
   })
   await Promise.all(fetchJobs)

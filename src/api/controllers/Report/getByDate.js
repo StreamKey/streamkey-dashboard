@@ -107,6 +107,10 @@ export default async (fromTs, toTs) => {
         title: 'Imp Diff',
         type: 'integer'
       }, {
+        key: 'diffRev',
+        title: 'Rev Diff',
+        type: 'usd'
+      }, {
         key: 'profit',
         title: 'Profit',
         type: 'usd'

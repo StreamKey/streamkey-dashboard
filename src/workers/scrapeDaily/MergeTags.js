@@ -8,7 +8,6 @@ export default (sspResults, asResults) => {
   _.each(sspResults, ssp => {
     _.each(ssp.data, sspData => {
       _.each(asResults, as => {
-        console.log('as', as)
         const asData = as.data
         const tagBase = GetTagBase(sspData.tag)
         let result

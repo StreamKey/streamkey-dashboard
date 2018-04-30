@@ -1,7 +1,8 @@
 export default report => {
-  const costs = {
+  const diffs = {
     diffCpm: report.sspCpm - report.asCpm,
-    diffImp: report.asImp - report.sspImp
+    diffImp: report.asImp - report.sspImp,
+    diffRev: report.asRev - report.sspRev
   }
-  return costs
+  return diffs
 }

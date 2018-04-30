@@ -1,11 +1,12 @@
 import _ from 'lodash'
+import winston from 'winston'
 
 import Telaria from './SSP/Telaria'
-import Freewheel from './SSP/Freewheel'
-import Beachfront from './SSP/Beachfront'
-import Aerserv from './SSP/Aerserv'
-import SpotX from './SSP/SpotX'
-import OneVideo from './SSP/OneVideo'
+// import Freewheel from './SSP/Freewheel'
+// import Beachfront from './SSP/Beachfront'
+// import Aerserv from './SSP/Aerserv'
+// import SpotX from './SSP/SpotX'
+// import OneVideo from './SSP/OneVideo'
 
 const SSPs = [
   {
@@ -50,20 +51,23 @@ const mergeResults = (a, b) => {
   }
 }
 
-export default async (dateTs, errors) => {
+export default async dateTs => {
   const results = []
 
   const fetchJobs = SSPs.map(async item => {
     try {
-      console.log(`[${item.key}] Start`)
+      winston.info('SSP Start', { ssp: item.key })
       const data = await item.controller.getData(dateTs)
-      console.log(`[${item.key}] Finish`)
+      winston.info('SSP Finish', { ssp: item.key })
       results.push({
         key: item.key,
         data: reduceByTag(data)
       })
     } catch (e) {
-      errors.push(e)
+      winston.error('SSP getData Error', {
+        message: e.message,
+        item
+      })
     }
   })
   await Promise.all(fetchJobs)

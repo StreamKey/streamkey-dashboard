@@ -1,10 +1,37 @@
 import '../../../env'
 import moment from 'moment'
+import winston from 'winston'
+import path from 'path'
+import fs from 'fs'
 
 import DB from '../../DB/'
 import GetSSPData from './GetSSPData'
 import GetASData from './GetASData'
 import MergeTags from './MergeTags'
+
+const configLogger = () => {
+  const LOGS_DIR = path.join(__dirname, '..', '..', '..', 'logs')
+  const now = moment().utc().format('YYYY-MM-DD-HH-mm-ss')
+  if (!fs.existsSync(LOGS_DIR)) {
+    fs.mkdirSync(LOGS_DIR)
+  }
+  winston.configure({
+    level: 'info',
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.prettyPrint()
+    ),
+    transports: [
+      new winston.transports.File({
+        filename: path.join(LOGS_DIR, `error.${now}.log`),
+        level: 'error'
+      }),
+      new winston.transports.File({
+        filename: path.join(LOGS_DIR, `info.${now}.log`)
+      })
+    ]
+  })
+}
 
 const calcProfit = (results, date) => {
   return results.map(r => {
@@ -39,19 +66,20 @@ const getScriptDate = () => {
 }
 
 const main = async () => {
-  const errors = []
+  configLogger()
   const utcTime = getScriptDate()
-  console.log('Script time (UTC)', utcTime)
+  winston.info('Script time (UTC)', {
+    time: utcTime.format('YYYY-MM-DD')
+  })
 
   await DB.init()
 
-  const sspResults = await GetSSPData(utcTime, errors)
-  const asResults = await GetASData(utcTime, errors)
+  const sspResults = await GetSSPData(utcTime)
+  const asResults = await GetASData(utcTime)
 
   // Match tags
   const merged = MergeTags(sspResults, asResults)
   const itemsToStore = calcProfit(merged, utcTime)
-  console.log('itemsToStore', itemsToStore)
 
   // Store data
   const storeJobs = itemsToStore.map(async item => {
@@ -60,14 +88,11 @@ const main = async () => {
   try {
     await Promise.all(storeJobs)
   } catch (e) {
-    console.error(e)
+    winston.error('Store report error', {
+      message: e.message
+    })
   }
 
-  if (errors.length > 0) {
-    console.log('[ERRORS]')
-    console.log(errors)
-    errors.map(e => console.log)
-  }
   await DB.close()
 }
 

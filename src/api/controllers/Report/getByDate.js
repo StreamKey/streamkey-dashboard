@@ -89,6 +89,11 @@ export default async (fromTs, toTs) => {
         type: 'usd',
         group: 'as'
       }, {
+        key: 'asRev',
+        title: 'AS Rev',
+        type: 'usd',
+        group: 'as'
+      }, {
         key: 'asScost',
         title: 'AS sCost',
         type: 'usd',

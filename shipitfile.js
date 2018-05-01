@@ -22,8 +22,11 @@ module.exports = shipit => {
   })
 
   shipit.task('install', async () => {
-    await shipit.remote(`cp ${ROOT_DIR}/.env ${ROOT_DIR}/current/.env`)
-    await shipit.remote(`cd ${ROOT_DIR}/current && /usr/bin/yarn install && /usr/bin/yarn build`)
+    const CURRENT_DIR = ROOT_DIR + '/current'
+    await shipit.remote(`cp ${ROOT_DIR}/.env ${CURRENT_DIR}/.env`)
+    await shipit.remote(`cd ${CURRENT_DIR} && /usr/bin/yarn install`)
+    await shipit.remote(`cd ${CURRENT_DIR} && yarn sequelize db:migrate --config src/DB/config.js`)
+    await shipit.remote(`cd ${CURRENT_DIR} && /usr/bin/yarn build`)
   })
 
   shipit.task('restart', async () => {

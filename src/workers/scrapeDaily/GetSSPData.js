@@ -52,6 +52,20 @@ const mergeResults = (a, b) => {
   }
 }
 
+const validateDataStructure = data => {
+  _.each(data, d => {
+    if (
+      !_.isString(d.tag) ||
+      !_.isInteger(d.opp) ||
+      !_.isInteger(d.imp) ||
+      !_.isNumber(d.rev) ||
+      !_.isNumber(d.sCost)
+    ) {
+      winston.error('Invalid SSP Result', { result: d })
+    }
+  })
+}
+
 export default async dateTs => {
   const results = []
 
@@ -59,7 +73,12 @@ export default async dateTs => {
     try {
       winston.info('SSP Start', { ssp: item.key })
       const data = await item.controller.getData(dateTs)
+      validateDataStructure(data)
       winston.info('SSP Finish', { ssp: item.key })
+      winston.verbose('SSP Results', {
+        key: item.key,
+        data
+      })
       results.push({
         key: item.key,
         data: reduceByTag(data)

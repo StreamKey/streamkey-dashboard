@@ -49,11 +49,11 @@ const normalize = results => {
   return results.map(r => {
     return {
       tag: r.fieldName,
-      opp: r.adRequests,
-      imp: r.adImpressions,
-      rev: r.revenue,
-      cost: r.siteCost,
-      sCost: (r.adImpressions / 1000) * 0.24
+      asOpp: r.adRequests,
+      asImp: r.adImpressions,
+      asRev: r.revenue,
+      asCost: r.siteCost,
+      asScost: (r.adImpressions / 1000) * 0.24
     }
   })
 }

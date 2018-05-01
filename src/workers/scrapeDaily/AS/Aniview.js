@@ -109,11 +109,11 @@ const normalize = results => {
   return results.map(r => {
     return {
       tag: r['Ad Source Name'],
-      opp: r['Request'],
-      imp: r['Impression'],
-      rev: r['Revenue'],
-      cost: 0, // TODO
-      sCost: 0 // TODO
+      asOpp: r['Request'],
+      asImp: r['Impression'],
+      asRev: r['Revenue'],
+      asCost: 0, // TODO
+      asScost: 0 // TODO
     }
   })
 }

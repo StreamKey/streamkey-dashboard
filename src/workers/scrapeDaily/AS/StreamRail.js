@@ -56,11 +56,11 @@ const getResults = async dateTs => {
 const normalize = results => {
   return results.map(r => ({
     tag: r.adSource,
-    opp: r.opportunities,
-    imp: r.impressions,
-    rev: r.demandRevenues,
-    cost: 0, // TODO
-    sCost: 0 // TODO
+    asOpp: r.opportunities,
+    asImp: r.impressions,
+    asRev: r.demandRevenues,
+    asCost: 0, // TODO
+    asScost: 0 // TODO
   }))
 }
 

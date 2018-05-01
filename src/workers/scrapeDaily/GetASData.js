@@ -2,6 +2,7 @@ import _ from 'lodash'
 import winston from 'winston'
 
 import GetTagBase from './GetTagBase'
+import MergeAsResults from './MergeAsResults'
 
 // import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
@@ -24,7 +25,7 @@ const AdServers = [
   }
 ]
 
-const groupAsResults = asResults => {
+const groupAsResults = (asResults, asKey) => {
   const groups = {
     mnl: {},
     auton_wl: {},
@@ -47,10 +48,11 @@ const groupAsResults = asResults => {
         winston.warn('Tag Error', { tag: r.tag })
         return
       }
-      group[tagBase] = mergeAsResults(group[tagBase], r)
+      group[tagBase] = MergeAsResults(group[tagBase], r)
     } catch (e) {
       winston.error('AS Group Error', {
         error: e.message,
+        asKey,
         asResult: r
       })
     }
@@ -58,21 +60,19 @@ const groupAsResults = asResults => {
   return groups
 }
 
-const mergeAsResults = (a, b) => {
-  if (!a) {
-    return b
-  } else if (!b) {
-    return a
-  } else {
-    return {
-      ...a,
-      asOpp: a.asOpp + b.asOpp,
-      asImp: a.asImp + b.asImp,
-      asRev: a.asRev + b.asRev,
-      asCost: a.asCost + b.asCost,
-      asScost: a.asScost + b.asScost
+const validateDataStructure = data => {
+  _.each(data, d => {
+    if (
+      !_.isString(d.tag) ||
+      !_.isInteger(d.asOpp) ||
+      !_.isInteger(d.asImp) ||
+      !_.isNumber(d.asRev) ||
+      !_.isNumber(d.asCost) ||
+      !_.isNumber(d.asScost)
+    ) {
+      winston.error('Invalid AS Result', { result: d })
     }
-  }
+  })
 }
 
 export default async dateTs => {
@@ -82,10 +82,15 @@ export default async dateTs => {
     try {
       winston.info('AS Start', { as: item.key })
       const data = await item.controller.getData(dateTs)
+      validateDataStructure(data)
       winston.info('AS Finish', { as: item.key })
+      winston.verbose('AS Results', {
+        key: item.key,
+        data
+      })
       results.push({
         key: item.key,
-        data: groupAsResults(data)
+        data: groupAsResults(data, item.key)
       })
     } catch (e) {
       winston.error('AS getData Error', {

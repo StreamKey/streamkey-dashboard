@@ -84,6 +84,10 @@ const main = async () => {
 
   const sspResults = await GetSSPData(utcTime)
   const asResults = await GetASData(utcTime)
+  winston.verbose('Final Results', {
+    sspResults,
+    asResults
+  })
 
   // Match tags
   const merged = MergeTags(sspResults, asResults)

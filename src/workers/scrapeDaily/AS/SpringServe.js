@@ -51,11 +51,11 @@ const normalize = results => {
   return results.map(r => {
     return {
       tag: r.demand_tag_name,
-      opp: r.opportunities,
-      imp: r.impressions,
-      rev: r.revenue,
-      cost: 0, // TODO
-      sCost: 0 // TODO
+      asOpp: r.opportunities,
+      asImp: r.impressions,
+      asRev: r.revenue,
+      asCost: 0, // TODO
+      asScost: 0 // TODO
     }
   })
 }

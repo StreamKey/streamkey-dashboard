@@ -175,6 +175,7 @@ class Home extends React.Component {
 
   render () {
     const { classes } = this.props
+    console.log(this.state.filtered)
     return (
       <div className={classes.root}>
         <NavBar />

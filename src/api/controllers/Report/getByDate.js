@@ -4,6 +4,22 @@ import moment from 'moment'
 import DB from '../../../DB/'
 import calcDiff from './calcDiff'
 
+const castTypes = data => {
+  return {
+    ...data,
+    sspCpm: Number(data.sspCpm),
+    sspRev: Number(data.sspRev),
+    sspCost: Number(data.sspCost),
+    asImp: Number(data.asImp),
+    asCost: Number(data.asCost),
+    asScost: Number(data.asScost),
+    asRev: Number(data.asRev),
+    asCpm: Number(data.asCpm),
+    profit: Number(data.profit),
+    margin: Number(data.margin)
+  }
+}
+
 export default async (fromTs, toTs) => {
   const reports = await DB.models.Reports.findAll({
     where: {
@@ -16,7 +32,7 @@ export default async (fromTs, toTs) => {
   const data = reports.map(report => {
     const diffs = calcDiff(report.dataValues)
     return {
-      ...report.dataValues,
+      ...castTypes(report.dataValues),
       ...diffs
     }
   })

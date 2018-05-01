@@ -23,7 +23,7 @@ const configLogger = () => {
     level: 'silly',
     format: winston.format.combine(
       winston.format.timestamp(),
-      winston.format.prettyPrint()
+      winston.format.json()
     ),
     transports: [
       new winston.transports.File({

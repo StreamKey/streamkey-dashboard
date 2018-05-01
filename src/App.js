@@ -11,6 +11,7 @@ import { withStyles } from 'material-ui/styles'
 
 import Report from './pages/Report'
 import Login from './pages/Login'
+import Logs from './pages/Logs'
 import Theme from './Theme'
 
 import store from './store'
@@ -42,6 +43,7 @@ class App extends React.Component {
                 <Route exact path='/login' component={Login} />
                 <Route exact path='/admin' component={Report} />
                 <Route exact path='/report' component={Report} />
+                <Route exact path='/logs' component={Logs} />
               </Switch>
             </div>
           </MuiThemeProvider>

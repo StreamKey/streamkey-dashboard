@@ -50,7 +50,8 @@ export default async (fromTs, toTs) => {
         key: 'ssp',
         title: 'SSP',
         type: 'string',
-        group: 'ssp'
+        group: 'ssp',
+        total: false
       }, {
         key: 'sspOpp',
         title: 'SSP Opp',
@@ -65,7 +66,8 @@ export default async (fromTs, toTs) => {
         key: 'sspCpm',
         title: 'SSP CPM',
         type: 'usd',
-        group: 'ssp'
+        group: 'ssp',
+        total: false
       }, {
         key: 'sspRev',
         title: 'SSP Rev',
@@ -95,7 +97,8 @@ export default async (fromTs, toTs) => {
         key: 'asCpm',
         title: 'AS CPM',
         type: 'usd',
-        group: 'as'
+        group: 'as',
+        total: false
       }, {
         key: 'asCost',
         title: 'AS Cost',
@@ -112,14 +115,10 @@ export default async (fromTs, toTs) => {
         type: 'usd',
         group: 'as'
       }, {
-        key: 'asScost',
-        title: 'AS sCost',
-        type: 'usd',
-        group: 'as'
-      }, {
         key: 'diffCpm',
         title: 'CPM Diff',
-        type: 'usd'
+        type: 'usd',
+        total: false
       }, {
         key: 'diffImp',
         title: 'Imp Diff',
@@ -135,7 +134,8 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'margin',
         title: 'Margin',
-        type: 'percent'
+        type: 'percent',
+        total: false
       }
     ],
     data

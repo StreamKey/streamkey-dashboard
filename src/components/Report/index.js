@@ -67,7 +67,7 @@ class Report extends React.Component {
     each(header, (h, n) => {
       if (h.key === 'tag') {
         total[h.key] = 'Total'
-      } else if (h.type === 'string') {
+      } else if (h.total === false) {
         total[h.key] = ''
       } else {
         total[h.key] = 0
@@ -75,7 +75,7 @@ class Report extends React.Component {
     })
     each(data, row => {
       each(header, (h, n) => {
-        if (h.key !== 'tag' && h.type !== 'string') {
+        if (h.key !== 'tag' && h.total !== false && h.type !== 'string') {
           total[h.key] += Number(row[h.key])
         }
       })
@@ -115,12 +115,12 @@ class Report extends React.Component {
         })
       }
       {
-        this.renderRow(total, 0)
+        this.renderRow(total, 0, true)
       }
     </TableBody>
   }
 
-  renderRow = (row, n) => {
+  renderRow = (row, n, isTotal) => {
     const { classes } = this.props
     return <TableRow className={classes.row} key={n}>
       {
@@ -129,7 +129,8 @@ class Report extends React.Component {
           className={i === 0 ? classes.fixedCell : (h.group === 'ssp' ? classes.sspCell : (h.group === 'as' ? classes.asCell : classes.cell))}
           numeric={h.type !== 'string' ? true : undefined}
         >
-          {this.renderValue(h.type, row[h.key])}
+          {isTotal === true && h.total !== false && this.renderValue(h.type, row[h.key])}
+          {isTotal !== true && this.renderValue(h.type, row[h.key])}
         </TableCell>)
       }
     </TableRow>

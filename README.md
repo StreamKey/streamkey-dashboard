@@ -66,7 +66,8 @@ RAZZLE_DB_LOGGING=true
 ## DB
 We use the [Sequelize](http://docs.sequelizejs.com/) ORM over Postgresql.
 
-To run a local DB in a docker container, make sure you're logged in to docker with `docker login` and then run `yarn db:start`. It will launch a pg instance on local port 5444 with the user postgres/mysecretpassword.
+To run a local DB in a docker container, make sure you're logged in to docker with `docker login` and then run `yarn db:install`. It will launch a pg instance on local port 5444 with the user postgres/mysecretpassword.
+Run `yarn db:start` if this container exists and is stopped.
 
 To remove the container run `yarn db:rm`.
 

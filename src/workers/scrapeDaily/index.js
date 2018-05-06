@@ -8,9 +8,10 @@ import DB from '../../DB/'
 import GetSSPData from './GetSSPData'
 import GetASData from './GetASData'
 import MergeTags from './MergeTags'
+import GetLogsDir from '../../components/Log/GetLogsDir'
 
 const configLogger = () => {
-  const LOGS_DIR = path.join(__dirname, '..', '..', '..', 'logs')
+  const LOGS_DIR = GetLogsDir()
   const now = moment().utc().format('YYYY-MM-DD-HH-mm-ss')
   if (!fs.existsSync(LOGS_DIR)) {
     fs.mkdirSync(LOGS_DIR)

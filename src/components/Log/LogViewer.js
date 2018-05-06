@@ -48,8 +48,8 @@ class LogViewer extends React.Component {
         </TableHead>
         <TableBody>
           {
-            rows.map(r => (
-              <TableRow className={classes.row}>
+            rows.map((r, n) => (
+              <TableRow className={classes.row} key={n}>
                 <TableCell>
                   {r.date}
                 </TableCell>

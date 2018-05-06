@@ -11,6 +11,8 @@ import { setUser } from '../store/actions'
 import API from './API'
 import MdIcon from './MdIcon'
 import AccountSvg from 'mdi-svg/svg/account.svg'
+import FinanceSvg from 'mdi-svg/svg/finance.svg'
+import LogsSvg from 'mdi-svg/svg/file-outline.svg'
 import LogoutSvg from 'mdi-svg/svg/logout.svg'
 import Logo from '../assets/streamkey-logo-horizontal.png'
 
@@ -165,6 +167,14 @@ class NavBar extends React.Component {
                 anchorEl={this.state.anchorEl}
                 transitionDuration={0}
               >
+                <MenuItem onClick={this.navTo('/report')}>
+                  <MdIcon svg={FinanceSvg} className={classes.menuItemIcon} />
+                  Reports
+                </MenuItem>
+                <MenuItem onClick={this.navTo('/logs')}>
+                  <MdIcon svg={LogsSvg} className={classes.menuItemIcon} />
+                  Logs
+                </MenuItem>
                 <MenuItem onClick={this.logout}>
                   <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />
                   Logout

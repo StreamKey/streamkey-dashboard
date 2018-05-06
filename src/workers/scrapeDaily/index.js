@@ -111,12 +111,30 @@ const main = async () => {
     count: itemsToStore.length
   })
 
+  // Clear existing records for this day
+  try {
+    const deleted = await DB.models.Reports.destroy({
+      where: {
+        date: utcTime
+      }
+    })
+    winston.info('Clear existing records', {
+      date: utcTime.format('YYYY-MM-DD'),
+      deleted
+    })
+  } catch (e) {
+    winston.error('Clear existing records error', {
+      error: e.message
+    })
+  }
+
   // Store data
   const storeJobs = itemsToStore.map(async item => {
     await DB.models.Reports.upsert(item)
   })
   try {
     await Promise.all(storeJobs)
+    winston.info('Store report done')
   } catch (e) {
     winston.error('Store report error', {
       error: e.message

@@ -9,6 +9,7 @@ import Blob from 'blob'
 
 import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
+import Tooltip from 'material-ui/Tooltip'
 import MdIcon from '../components/MdIcon'
 import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
 import RightSvg from 'mdi-svg/svg/chevron-right.svg'
@@ -219,11 +220,13 @@ class ReportPage extends React.Component {
                 onChange={this.onAsFilterChange}
               />
             </div>
-            <IconButton
-              onClick={this.downloadCsv}
-            >
-              <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
-            </IconButton>
+            <Tooltip title='Download CSV' placement='top' enterDelay={300}>
+              <IconButton
+                onClick={this.downloadCsv}
+              >
+                <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
+              </IconButton>
+            </Tooltip>
           </div>
           <Report
             header={this.state.header}

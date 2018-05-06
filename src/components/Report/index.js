@@ -49,6 +49,9 @@ const styles = theme => {
     },
     asCell: {
       backgroundColor: theme.palette.red[50]
+    },
+    totalCell: {
+      fontWeight: 700
     }
   }
 }
@@ -110,12 +113,12 @@ class Report extends React.Component {
     const total = this.calcTotal()
     return <TableBody>
       {
+        this.renderRow(total, 0, true)
+      }
+      {
         this.props.data.map((d, i) => {
           return this.renderRow(d, i)
         })
-      }
-      {
-        this.renderRow(total, 0, true)
       }
     </TableBody>
   }
@@ -124,14 +127,27 @@ class Report extends React.Component {
     const { classes } = this.props
     return <TableRow className={classes.row} key={n}>
       {
-        this.props.header.map((h, i) => <TableCell
-          key={i}
-          className={i === 0 ? classes.fixedCell : (h.group === 'ssp' ? classes.sspCell : (h.group === 'as' ? classes.asCell : classes.cell))}
-          numeric={h.type !== 'string' ? true : undefined}
-        >
-          {isTotal === true && h.total !== false && this.renderValue(h.type, row[h.key])}
-          {isTotal !== true && this.renderValue(h.type, row[h.key])}
-        </TableCell>)
+        this.props.header.map((h, i) => {
+          let cellClass = classes.cell
+          if (i === 0) {
+            cellClass = classes.fixedCell
+          } else if (h.group === 'ssp') {
+            cellClass = classes.sspCell
+          } else if (h.group === 'as') {
+            cellClass = classes.asCell
+          }
+          if (isTotal === true && h.total !== false) {
+            cellClass += ' ' + classes.totalCell
+          }
+          return <TableCell
+            key={i}
+            className={cellClass}
+            numeric={h.type !== 'string' ? true : undefined}
+          >
+            {isTotal === true && h.total !== false && this.renderValue(h.type, row[h.key])}
+            {isTotal !== true && this.renderValue(h.type, row[h.key])}
+          </TableCell>
+        })
       }
     </TableRow>
   }

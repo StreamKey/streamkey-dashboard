@@ -25,12 +25,20 @@ const AdServers = [
   }
 ]
 
+const KNOWN_INVALID_TAGS = [
+  'LKQD Marketplace - Connected TV',
+  'LKQD Marketplace - Mobile App',
+  'LKQD Marketplace - Desktop',
+  'LKQD Marketplace - Mobile Web'
+]
+
 const groupAsResults = (asResults, asKey) => {
   const groups = {
     mnl: {},
     auton_wl: {},
     auton_for: {},
-    ron: {}
+    ron: {},
+    other: {}
   }
   _.each(asResults, r => {
     try {
@@ -50,11 +58,15 @@ const groupAsResults = (asResults, asKey) => {
       }
       group[tagBase] = MergeAsResults(group[tagBase], r)
     } catch (e) {
-      winston.error('AS Group Error', {
-        error: e.message,
-        asKey,
-        asResult: r
-      })
+      if (e.message === 'invalid-tag' && KNOWN_INVALID_TAGS.includes(r.tag)) {
+        groups.other[r.tag] = MergeAsResults(groups.other[r.tag], r)
+      } else {
+        winston.error('AS Group Error', {
+          error: e.message,
+          asKey,
+          asResult: r
+        })
+      }
     }
   })
   return groups

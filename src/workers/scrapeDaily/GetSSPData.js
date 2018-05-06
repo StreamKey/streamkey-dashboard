@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import winston from 'winston'
 
+import _Empty_ from './SSP/_Empty_'
 import Telaria from './SSP/Telaria'
 // import Freewheel from './SSP/Freewheel'
 // import Beachfront from './SSP/Beachfront'
@@ -10,6 +11,9 @@ import Telaria from './SSP/Telaria'
 
 const SSPs = [
   {
+    key: '_empty_',
+    controller: _Empty_
+  }, {
     key: 'telaria',
     controller: Telaria
   // }, {
@@ -73,7 +77,9 @@ export default async dateTs => {
     try {
       winston.info('SSP Start', { ssp: item.key })
       const data = await item.controller.getData(dateTs)
-      validateDataStructure(data)
+      if (item.key !== '_empty_') {
+        validateDataStructure(data)
+      }
       winston.info('SSP Finish', { ssp: item.key })
       const reducedData = reduceByTag(data)
       winston.verbose('SSP Results', {

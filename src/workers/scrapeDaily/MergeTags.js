@@ -9,6 +9,25 @@ export default (sspResults, asResults) => {
     _.each(ssp.data, sspData => {
       _.each(asResults, as => {
         const asData = as.data
+        if (ssp.key === '_empty_') {
+          _.each(asData.other, result => {
+            results.push({
+              tag: result.tag,
+              ssp: null,
+              sspOpp: null,
+              sspImp: null,
+              sspRev: null,
+              sspScost: null,
+              as: as.key,
+              asOpp: result.asOpp,
+              asImp: result.asImp,
+              asRev: result.asRev,
+              asCost: result.asCost,
+              asScost: result.asScost
+            })
+          })
+          return
+        }
         const tagBase = GetTagBase(sspData.tag)
         let result
         if (ssp.key === 'telaria') {

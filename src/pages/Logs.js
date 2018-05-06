@@ -3,7 +3,7 @@ import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import { omit } from 'lodash'
 
-// import LogViewer from '../components/Logs/LogViewer'
+import LogViewer from '../components/Log/LogViewer'
 import API from '../components/API'
 import NavBar from '../components/NavBar'
 import Footer from '../components/Footer'
@@ -82,7 +82,7 @@ class Logs extends React.Component {
 
   render () {
     const { classes } = this.props
-    // const { currentLog } = this.state
+    const { currentLog } = this.state
     return (
       <div className={classes.root}>
         <NavBar />
@@ -100,7 +100,7 @@ class Logs extends React.Component {
             }
           </ul>
           {
-            // currentLog.length > 0 && <LogViewer rows={currentLog} />
+            currentLog.length > 0 && <LogViewer rows={currentLog} />
           }
         </div>
         <Footer />

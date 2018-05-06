@@ -45,10 +45,10 @@ const reduceByTag = results => {
 const mergeResults = (a, b) => {
   return {
     ...a,
-    sspOpp: a.sspOpp + b.sspOpp,
-    sspImp: a.sspImp + b.sspImp,
-    sspRev: a.sspRev + b.sspRev,
-    sspScost: a.sspScost + b.sspScost
+    opp: a.opp + b.opp,
+    imp: a.imp + b.imp,
+    rev: a.rev + b.rev,
+    sCost: a.sCost + b.sCost
   }
 }
 
@@ -75,13 +75,15 @@ export default async dateTs => {
       const data = await item.controller.getData(dateTs)
       validateDataStructure(data)
       winston.info('SSP Finish', { ssp: item.key })
+      const reducedData = reduceByTag(data)
       winston.verbose('SSP Results', {
         key: item.key,
-        data
+        data,
+        reducedData
       })
       results.push({
         key: item.key,
-        data: reduceByTag(data)
+        data: reducedData
       })
     } catch (e) {
       winston.error('SSP getData Error', {

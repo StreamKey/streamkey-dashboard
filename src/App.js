@@ -13,6 +13,7 @@ import Report from './pages/Report'
 import Login from './pages/Login'
 import Logs from './pages/Logs'
 import Theme from './Theme'
+import ErrorBoundary from './components/ErrorBoundary'
 
 import store from './store'
 import './styles.css'
@@ -38,13 +39,15 @@ class App extends React.Component {
           <MuiThemeProvider theme={Theme}>
             <CssBaseline />
             <div className={classes.root}>
-              <Switch>
-                <Route exact path='/' component={Login} />
-                <Route exact path='/login' component={Login} />
-                <Route exact path='/admin' component={Report} />
-                <Route exact path='/report' component={Report} />
-                <Route exact path='/logs' component={Logs} />
-              </Switch>
+              <ErrorBoundary>
+                <Switch>
+                  <Route exact path='/' component={Login} />
+                  <Route exact path='/login' component={Login} />
+                  <Route exact path='/admin' component={Report} />
+                  <Route exact path='/report' component={Report} />
+                  <Route exact path='/logs' component={Logs} />
+                </Switch>
+              </ErrorBoundary>
             </div>
           </MuiThemeProvider>
         </MuiPickersUtilsProvider>

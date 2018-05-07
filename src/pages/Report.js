@@ -177,6 +177,7 @@ class ReportPage extends React.Component {
   render () {
     const { classes } = this.props
     return (
+      
       <div className={classes.root}>
         <NavBar />
         <div className={classes.container}>

@@ -46,6 +46,10 @@ const styles = theme => {
     logButtonIcon: {
       height: theme.spacing.double,
       width: theme.spacing.double
+    },
+    logContainer: {
+      width: '100%',
+      maxWidth: '100%'
     }
   }
 }
@@ -143,7 +147,7 @@ class Logs extends React.Component {
           <Button size='small' onClick={this.toggleShowAll}>
             { showAll ? 'Show less' : `+ ${logsList.length - 10}` }
           </Button>
-          <div ref={this.setLogRef}>
+          <div className={classes.logContainer} ref={this.setLogRef}>
             <LogViewer rows={currentLog} />
           </div>
         </div>

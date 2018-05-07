@@ -8,6 +8,8 @@ import Table, {
   TableRow
 } from 'material-ui/Table'
 
+import JsonViewer from './JsonViewer'
+
 const styles = theme => {
   return {
     table: {
@@ -63,7 +65,7 @@ class LogViewer extends React.Component {
                   {r.message}
                 </TableCell>
                 <TableCell>
-                  {r.data}
+                  <JsonViewer jsonStr={r.data} />
                 </TableCell>
               </TableRow>
             ))

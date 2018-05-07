@@ -158,9 +158,16 @@ class ReportPage extends React.Component {
     this.setState({
       ...this.state,
       filtered: this.state.data.filter(d => {
-        return d.tag.match(tagFilter) &&
-          d.ssp.match(sspFilter) &&
-          d.as.match(asFilter)
+        if (this.state.tagFilter.length > 0 && !d.tag.match(tagFilter)) {
+          return false
+        }
+        if (this.state.sspFilter.length > 0 && (!d.ssp || !d.ssp.match(sspFilter))) {
+          return false
+        }
+        if (this.state.asFilter.length > 0 && !d.as.match(asFilter)) {
+          return false
+        }
+        return true
       })
     })
   }
@@ -177,7 +184,6 @@ class ReportPage extends React.Component {
   render () {
     const { classes } = this.props
     return (
-      
       <div className={classes.root}>
         <NavBar />
         <div className={classes.container}>

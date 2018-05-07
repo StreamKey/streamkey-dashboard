@@ -13,6 +13,7 @@ import MdIcon from './MdIcon'
 import AccountSvg from 'mdi-svg/svg/account.svg'
 import FinanceSvg from 'mdi-svg/svg/finance.svg'
 import LogsSvg from 'mdi-svg/svg/file-outline.svg'
+import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
 import LogoutSvg from 'mdi-svg/svg/logout.svg'
 import Logo from '../assets/streamkey-logo-horizontal.png'
 
@@ -44,13 +45,19 @@ const styles = theme => {
     buttonsPlaceholder: {
       minHeight: 69
     },
+    menuItem: {
+      fontSize: 14,
+      padding: theme.spacing.unit
+    },
     menuIcon: {
       fill: theme.palette.grey[600],
       marginLeft: theme.spacing.unit
     },
     menuItemIcon: {
       fill: theme.palette.grey[900],
-      marginRight: theme.spacing.unit
+      marginRight: theme.spacing.unit,
+      width: 24,
+      height: 24
     }
   }
 }
@@ -167,15 +174,19 @@ class NavBar extends React.Component {
                 anchorEl={this.state.anchorEl}
                 transitionDuration={0}
               >
-                <MenuItem onClick={this.navTo('/report')}>
+                <MenuItem className={classes.menuItem} onClick={this.navTo('/report')}>
                   <MdIcon svg={FinanceSvg} className={classes.menuItemIcon} />
                   Reports
                 </MenuItem>
-                <MenuItem onClick={this.navTo('/logs')}>
+                <MenuItem className={classes.menuItem} onClick={this.navTo('/logs')}>
                   <MdIcon svg={LogsSvg} className={classes.menuItemIcon} />
                   Logs
                 </MenuItem>
-                <MenuItem onClick={this.logout}>
+                <MenuItem className={classes.menuItem} onClick={this.navTo('/duplicate-lkqd-supply-tremor')}>
+                  <MdIcon svg={DuplicateSvg} className={classes.menuItemIcon} />
+                  LKQD-Tremor Duplicate
+                </MenuItem>
+                <MenuItem className={classes.menuItem} onClick={this.logout}>
                   <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />
                   Logout
                 </MenuItem>

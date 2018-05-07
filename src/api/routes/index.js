@@ -6,6 +6,7 @@ import getProfile from './getProfile'
 import getReport from './getReport'
 import getLogs from './getLogs'
 import getLog from './getLog'
+import postRunLkqdTremorDuplicate from './postRunLkqdTremorDuplicate'
 import { notFound, parseError, serverError } from './Errors'
 
 // const isAdmin = async req => {
@@ -67,6 +68,7 @@ export default app => {
   app.get('/api/report', ensureLoggedIn, asyncMiddleware(getReport))
   app.get('/api/logs', ensureLoggedIn, asyncMiddleware(getLogs))
   app.get('/api/logs/:file', ensureLoggedIn, asyncMiddleware(getLog))
+  app.post('/api/runLkqdTremorDuplicate', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))
 
   app.use('/api/admin/*', ensureAdmin)
 

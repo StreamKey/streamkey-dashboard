@@ -59,8 +59,8 @@ const normalize = results => {
     asOpp: r.opportunities,
     asImp: r.impressions,
     asRev: r.demandRevenues,
-    asCost: 0, // TODO
-    asScost: 0 // TODO
+    asCost: r.cost,
+    asScost: 0
   }))
 }
 

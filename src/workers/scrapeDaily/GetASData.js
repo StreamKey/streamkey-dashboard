@@ -4,16 +4,16 @@ import winston from 'winston'
 import GetTagBase from './GetTagBase'
 import MergeAsResults from './MergeAsResults'
 
-// import StreamRail from './AS/StreamRail'
+import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
 // import Aniview from './AS/Aniview'
 // import SpringServe from './AS/SpringServe'
 
 const AdServers = [
   {
-  //   key: 'streamrail',
-  //   controller: StreamRail
-  // }, {
+    key: 'streamrail',
+    controller: StreamRail
+  }, {
     key: 'lkqd',
     controller: Lkqd
   // }, {

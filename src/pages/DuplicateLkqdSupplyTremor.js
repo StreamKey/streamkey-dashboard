@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
 import Button from 'material-ui/Button'
+import { CircularProgress } from 'material-ui/Progress'
 import SuccessSvg from 'mdi-svg/svg/check.svg'
 import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
 import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
@@ -37,6 +38,10 @@ const styles = theme => {
     },
     icon: {
       marginRight: theme.spacing.unit
+    },
+    progress: {
+      marginRight: theme.spacing.unit,
+      color: theme.palette.grey[500]
     },
     error: {
       display: 'flex',
@@ -102,7 +107,8 @@ class DuplicateLkqdSupplyTremor extends React.Component {
             variant='raised'
             disabled={this.state.isLoading}
           >
-            <MdIcon svg={DuplicateSvg} className={classes.icon} />
+            {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
+            {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
             Run
           </Button>
           {

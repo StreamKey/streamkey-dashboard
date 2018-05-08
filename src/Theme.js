@@ -1,6 +1,7 @@
 import { createMuiTheme } from 'material-ui/styles'
 import red from 'material-ui/colors/red'
 import green from 'material-ui/colors/green'
+import grey from 'material-ui/colors/grey'
 
 const Theme = createMuiTheme({
   palette: {
@@ -16,6 +17,7 @@ const Theme = createMuiTheme({
 
     red,
     green,
+    grey,
     custom: {
       grey: '#BCBCBC',
       greyLight: '#E9E9E9',

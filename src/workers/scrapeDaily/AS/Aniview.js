@@ -85,6 +85,7 @@ const getReportLink = socketAddress => {
     ws.on('message', data => {
       const jsonData = JSON.parse(data)
       const encodedLink = qs.parse(jsonData.text).data
+      ws.terminate()
       resolve(encodedLink)
     })
   })
@@ -109,11 +110,11 @@ const normalize = results => {
   return results.map(r => {
     return {
       tag: r['Ad Source Name'],
-      asOpp: r['Request'],
-      asImp: r['Impression'],
-      asRev: r['Revenue'],
-      asCost: 0, // TODO
-      asScost: 0 // TODO
+      asOpp: Number(r['Request']),
+      asImp: Number(r['Impression']),
+      asRev: Number(r['Revenue']),
+      asCost: Number(r['Total Cost']),
+      asScost: Number(r['Impression']) * 0.00025
     }
   })
 }

@@ -6,7 +6,7 @@ import MergeAsResults from './MergeAsResults'
 
 import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
-// import Aniview from './AS/Aniview'
+import Aniview from './AS/Aniview'
 // import SpringServe from './AS/SpringServe'
 
 const AdServers = [
@@ -16,9 +16,9 @@ const AdServers = [
   }, {
     key: 'lkqd',
     controller: Lkqd
-  // }, {
-  //   key: 'aniview',
-  //   controller: Aniview
+  }, {
+    key: 'aniview',
+    controller: Aniview
   // }, {
   //   key: 'springserve',
   //   controller: SpringServe

@@ -91,7 +91,8 @@ export default async (fromTs, toTs) => {
         key: 'as',
         title: 'AS',
         type: 'string',
-        group: 'as'
+        group: 'as',
+        total: false
       }, {
         key: 'asOpp',
         title: 'AS Opp',

@@ -29,7 +29,8 @@ const KNOWN_INVALID_TAGS = [
   'LKQD Marketplace - Connected TV',
   'LKQD Marketplace - Mobile App',
   'LKQD Marketplace - Desktop',
-  'LKQD Marketplace - Mobile Web'
+  'LKQD Marketplace - Mobile Web',
+  'other'
 ]
 
 const groupAsResults = (asResults, asKey) => {

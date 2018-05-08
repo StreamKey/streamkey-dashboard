@@ -12,7 +12,8 @@ const {
   RAZZLE_LEGACY_SSH_KEY
 } = process.env
 
-const LOCAL_FILE_PATH = path.resolve('.', __dirname, 'run.txt')
+const LOGS_DIR = process.env.RAZZLE_TMP_PATH || path.join(__dirname, '..', '..', '..')
+const LOCAL_FILE_PATH = path.join(LOGS_DIR, 'run.txt')
 const REMOTE_FULL_FILE_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/tremor/run.txt`
 
 export default () => {

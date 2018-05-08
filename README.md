@@ -15,6 +15,7 @@ DEPLOY_SSH_KEY=
 
 RAZZLE_ROOT_URL=http://localhost:3011
 RAZZLE_LOGS_PATH=/absolute/path/to/logs
+RAZZLE_TMP_PATH=/absolute/path/to/tmp
 
 RAZZLE_LEGACY_USER=
 RAZZLE_LEGACY_PASSWORD=

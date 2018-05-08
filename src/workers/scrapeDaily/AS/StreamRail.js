@@ -60,7 +60,7 @@ const normalize = results => {
     asImp: r.impressions,
     asRev: r.demandRevenues,
     asCost: r.cost,
-    asScost: 0
+    asScost: 0.0002 * r.impressions
   }))
 }
 

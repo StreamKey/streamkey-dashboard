@@ -55,6 +55,7 @@
     "redux": "^3.7.2",
     "sequelize": "^4.37.3",
     "sequelize-cli": "^4.0.0",
+    "ssh2": "^0.6.0",
     "tough-cookie": "^2.3.4",
     "uuid": "^3.2.1",
     "validator": "^9.4.1",

@@ -358,7 +358,7 @@ asn1.js@^4.0.0:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
 
-asn1@~0.2.3:
+asn1@~0.2.0, asn1@~0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/asn1/-/asn1-0.2.3.tgz#dac8787713c9966849fc8180777ebe9c1ddf3b86"
 
@@ -8308,6 +8308,20 @@ ssh-pool@^4.0.2:
     tmp "^0.0.33"
     whereis "^0.4.0"
 
+ssh2-streams@~0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ssh2-streams/-/ssh2-streams-0.2.0.tgz#cb4ccb6ead7ff02f013f429646394fda107519b3"
+  dependencies:
+    asn1 "~0.2.0"
+    semver "^5.1.0"
+    streamsearch "~0.1.2"
+
+ssh2@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/ssh2/-/ssh2-0.6.0.tgz#e472f27dfeb1b5ad892d346135bdf7532734bb6a"
+  dependencies:
+    ssh2-streams "~0.2.0"
+
 sshpk@^1.7.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.14.1.tgz#130f5975eddad963f1d56f92b9ac6c51fa9f83eb"
@@ -8417,6 +8431,10 @@ stream-line-wrapper@^0.1.1:
 stream-shift@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.0.tgz#d5c752825e5367e786f78e18e445ea223a155952"
+
+streamsearch@~0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-0.1.2.tgz#808b9d0e56fc273d809ba57338e929919a1a9f1a"
 
 strict-uri-encode@^1.0.0:
   version "1.1.0"

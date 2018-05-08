@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import winston from 'winston'
 
 import GetTagBase from './GetTagBase'
 import MergeAsResults from './MergeAsResults'
@@ -28,7 +29,17 @@ export default (sspResults, asResults) => {
           })
           return
         }
-        const tagBase = GetTagBase(sspData.tag)
+        let tagBase
+        try {
+          tagBase = GetTagBase(sspData.tag)
+        } catch (e) {
+          winston.error('Invalid SSP Tag', {
+            error: e.message,
+            ssp: ssp.key,
+            sspData
+          })
+          return
+        }
         let result
         if (ssp.key === 'telaria') {
           if (sspData.tag.startsWith('MNL_')) {

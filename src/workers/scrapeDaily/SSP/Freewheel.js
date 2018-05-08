@@ -29,18 +29,19 @@ const getResults = async dateTs => {
   const date = moment.utc(dateTs, 'X').format('DD MMMM YYYY')
   const form = {
     start: date,
-    end: date
+    end: date,
+    group: ['zone']
   }
-  const res = await axios.post('/revenue-stats/ajax-revenue-per-advertiser', qs.stringify(form))
-  return res.data.results
+  const res = await axios.post('/advanced-stats/ajax-get-stats', qs.stringify(form))
+  return res.data.datatable.results
 }
 
 const normalize = results => {
   return results.map(r => {
     return {
-      tag: r.advertiser.name, // ?
-      opp: 0, // ?
-      imp: r.impressions,
+      tag: r.zone_name,
+      opp: r.request,
+      imp: r.impression,
       rev: r.revenue,
       sCost: 0 // TODO
     }

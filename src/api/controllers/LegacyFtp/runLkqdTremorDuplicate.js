@@ -12,11 +12,12 @@ const {
   RAZZLE_LEGACY_SSH_KEY
 } = process.env
 
-const LOCAL_FILE_PATH = path.join(__dirname, 'run.txt')
+const LOCAL_FILE_PATH = path.resolve(__dirname, 'run.txt')
 const REMOTE_FULL_FILE_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/tremor/run.txt`
 
 export default () => {
   return new Promise((resolve, reject) => {
+    fs.writeFileSync(LOCAL_FILE_PATH, '', 'utf8')
     const conn = new SshClient()
     conn.on('ready', () => {
       conn.sftp(async (err, sftp) => {
@@ -26,10 +27,12 @@ export default () => {
         const fastPut = promisify(sftp.fastPut.bind(sftp))
         try {
           await fastPut(LOCAL_FILE_PATH, REMOTE_FULL_FILE_PATH)
+          fs.unlinkSync(LOCAL_FILE_PATH)
           conn.end()
           resolve(true)
         } catch (e) {
           conn.end()
+          fs.unlinkSync(LOCAL_FILE_PATH)
           reject(e)
         }
       })

@@ -60,7 +60,11 @@ const normalize = results => {
 
 export default {
   getData: async dateTs => {
-    const results = await getResults(dateTs)
-    return normalize(results)
+    try {
+      const results = await getResults(dateTs)
+      return normalize(results)
+    } catch (e) {
+      throw e
+    }
   }
 }

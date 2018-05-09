@@ -92,17 +92,21 @@ const getReportLink = socketAddress => {
 }
 
 const downloadReport = link => {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     const axiosAws = GenerateAxiosCookies()
-    const res = await axiosAws.get(link)
-    const rawData = res.data
-    const sections = rawData.replace('\r\n', '\n').split('\n\n')
-    const csvStr = sections[sections.length - 1]
-    csv()
-      .fromString(csvStr)
-      .on('end_parsed', jsonArr => {
-        resolve(jsonArr)
-      })
+    try {
+      const res = await axiosAws.get(link)
+      const rawData = res.data
+      const sections = rawData.replace('\r\n', '\n').split('\n\n')
+      const csvStr = sections[sections.length - 1]
+      csv()
+        .fromString(csvStr)
+        .on('end_parsed', jsonArr => {
+          resolve(jsonArr)
+        })
+    } catch (e) {
+      reject(new Error('Aniview downloadReport failed', e))
+    }
   })
 }
 
@@ -121,11 +125,15 @@ const normalize = results => {
 
 export default {
   getData: async dateTs => {
-    const config = await getConfig()
-    await login(config)
-    const socketAddress = await getResultsSocket(dateTs)
-    const reportLink = await getReportLink(socketAddress)
-    const results = await downloadReport(reportLink)
-    return normalize(results)
+    try {
+      const config = await getConfig()
+      await login(config)
+      const socketAddress = await getResultsSocket(dateTs)
+      const reportLink = await getReportLink(socketAddress)
+      const results = await downloadReport(reportLink)
+      return normalize(results)
+    } catch (e) {
+      throw e
+    }
   }
 }

@@ -120,11 +120,15 @@ const normalize = (results, currencies) => {
 
 export default {
   getData: async dateTs => {
-    await login()
-    const queryId = await submitQuery(dateTs)
-    const currencies = await getCurrencies()
-    await waitUntilResultsReady(queryId)
-    const results = await getResults(queryId)
-    return normalize(results, currencies)
+    try {
+      await login()
+      const queryId = await submitQuery(dateTs)
+      const currencies = await getCurrencies()
+      await waitUntilResultsReady(queryId)
+      const results = await getResults(queryId)
+      return normalize(results, currencies)
+    } catch (e) {
+      throw e
+    }
   }
 }

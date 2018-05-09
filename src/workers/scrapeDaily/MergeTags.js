@@ -58,7 +58,13 @@ export default (sspResults, asResults) => {
             result = asData.mnl[tagBase]
           } else {
             // AS auton_wl + auton_for + ron
-            result = MergeAsResults((MergeAsResults(asData.auton_wl[tagBase], asData.auton_for[tagBase]), asData.ron[tagBase]))
+            result = MergeAsResults(
+              MergeAsResults(
+                asData.auton_wl[tagBase],
+                asData.auton_for[tagBase]
+              ),
+              asData.ron[tagBase]
+            )
           }
         }
         if (result) {

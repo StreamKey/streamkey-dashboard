@@ -45,7 +45,7 @@ const auth = async () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`
   } catch (e) {
     console.error(e)
-    throw new Error('AOL login failed', e)
+    throw new Error('OneVideo login failed', e)
   }
 }
 
@@ -61,8 +61,12 @@ const runReport = async dateTs => {
     end_date: endDate,
     timezone: 1 // UTC
   }
-  const res = await axios.get(`${apiUrl}/reporting/run_report`, { params })
-  return res.data
+  try {
+    const res = await axios.get(`${apiUrl}/reporting/run_report`, { params })
+    return res.data
+  } catch (e) {
+    throw new Error('OneVideo get data failed', e)
+  }
 }
 
 const normalize = (columns, data) => {
@@ -87,8 +91,12 @@ const normalize = (columns, data) => {
 
 export default {
   getData: async dateTs => {
-    await auth()
-    const { columns, data } = await runReport(dateTs)
-    return normalize(columns, data)
+    try {
+      await auth()
+      const { columns, data } = await runReport(dateTs)
+      return normalize(columns, data)
+    } catch (e) {
+      throw e
+    }
   }
 }

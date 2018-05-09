@@ -7,7 +7,7 @@ import Freewheel from './SSP/Freewheel'
 // import Beachfront from './SSP/Beachfront'
 // import Aerserv from './SSP/Aerserv'
 // import SpotX from './SSP/SpotX'
-// import OneVideo from './SSP/OneVideo'
+import OneVideo from './SSP/OneVideo'
 
 const SSPs = [
   {
@@ -19,7 +19,7 @@ const SSPs = [
   }, {
     key: 'freewheel',
     controller: Freewheel
-  // }, {
+  }, {
   //   key: 'beachfront',
   //   controller: Beachfront
   // }, {
@@ -29,8 +29,8 @@ const SSPs = [
   //   key: 'spotx',
   //   controller: SpotX
   // }, {
-  //   key: 'onevideo',
-  //   controller: OneVideo
+    key: 'onevideo',
+    controller: OneVideo
   }
 ]
 

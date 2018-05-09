@@ -55,7 +55,7 @@ const runReport = async dateTs => {
   const endDate = date.endOf('day').format('X')
   const params = {
     org_id: credentials.orgId,
-    keys: 'date,ad',
+    keys: 'date,inventory_source',
     metrics: 'seller_market_opportunities,ad_attempts,ad_impressions,ad_revenue,cpm',
     start_date: startDate,
     end_date: endDate,
@@ -71,7 +71,7 @@ const runReport = async dateTs => {
 
 const normalize = (columns, data) => {
   if (columns[0] !== 'date' ||
-      columns[1] !== 'ad' ||
+      columns[1] !== 'inventory_source' ||
       columns[2] !== 'seller_market_opportunities' ||
       columns[3] !== 'ad_attempts' ||
       columns[4] !== 'ad_impressions' ||
@@ -84,7 +84,7 @@ const normalize = (columns, data) => {
       opp: Number(r.row[2]),
       imp: Number(r.row[4]),
       rev: Number(r.row[5]),
-      sCost: 0 // TODO
+      sCost: (Number(r.row[2]) - Number(r.row[4])) * 0.0000007
     }
   })
 }

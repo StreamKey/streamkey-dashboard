@@ -54,7 +54,7 @@ const groupAsResults = (asResults, asKey) => {
       } else if (r.tag.endsWith('_RON')) {
         group = groups.ron
       } else {
-        winston.warn('Tag Error', { tag: r.tag })
+        winston.warn('Tag Error', { tag: r.tag, as: asKey })
         return
       }
       group[tagBase] = MergeAsResults(group[tagBase], r)

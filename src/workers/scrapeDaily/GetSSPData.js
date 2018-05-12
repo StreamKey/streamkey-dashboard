@@ -4,7 +4,7 @@ import winston from 'winston'
 import _Empty_ from './SSP/_Empty_'
 import Telaria from './SSP/Telaria'
 import Freewheel from './SSP/Freewheel'
-// import Beachfront from './SSP/Beachfront'
+import Beachfront from './SSP/Beachfront'
 // import Aerserv from './SSP/Aerserv'
 // import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
@@ -20,9 +20,9 @@ const SSPs = [
     key: 'freewheel',
     controller: Freewheel
   }, {
-  //   key: 'beachfront',
-  //   controller: Beachfront
-  // }, {
+    key: 'beachfront',
+    controller: Beachfront
+  }, {
   //   key: 'aerserv',
   //   controller: Aerserv
   // }, {

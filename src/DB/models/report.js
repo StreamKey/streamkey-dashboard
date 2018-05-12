@@ -28,6 +28,7 @@ export default sequelize => {
     asScost: Sequelize.DECIMAL,
     asRev: Sequelize.DECIMAL,
     asCpm: Sequelize.DECIMAL,
+    asPcpm: Sequelize.DECIMAL,
     profit: {
       // sspRev - asCost
       type: Sequelize.DECIMAL

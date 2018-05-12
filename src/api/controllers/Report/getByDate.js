@@ -15,6 +15,7 @@ const castTypes = data => {
     asScost: Number(data.asScost),
     asRev: Number(data.asRev),
     asCpm: Number(data.asCpm),
+    asPcpm: Number(data.asPcpm),
     profit: Number(data.profit),
     margin: Number(data.margin)
   }
@@ -106,6 +107,12 @@ export default async (fromTs, toTs) => {
       }, {
         key: 'asCpm',
         title: 'AS CPM',
+        type: 'usd',
+        group: 'as',
+        total: false
+      }, {
+        key: 'asPcpm',
+        title: 'AS pCPM',
         type: 'usd',
         group: 'as',
         total: false

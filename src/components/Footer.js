@@ -21,7 +21,8 @@ const styles = theme => {
       paddingLeft: 0
     },
     logo: {
-      maxHeight: 50,
+      opacity: 0.5,
+      maxHeight: 30,
       height: '100%',
       width: 'auto'
     }

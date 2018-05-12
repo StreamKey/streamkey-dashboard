@@ -33,12 +33,14 @@ const styles = theme => {
       },
       ...theme.utils.container
     },
-    title: {
-      ...theme.typography.title,
-      textDecoration: 'none'
+    logoContainer: {
+      ...theme.typography.logoContainer,
+      textDecoration: 'none',
+      display: 'flex',
+      alignItems: 'center'
     },
     logo: {
-      maxHeight: 60,
+      maxHeight: 35,
       height: '100%',
       width: 'auto'
     },
@@ -155,7 +157,7 @@ class NavBar extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.container} with-border={this.props.withBorder ? 'true' : 'false'}>
-          <Link className={classes.title} to='/'>
+          <Link className={classes.logoContainer} to='/'>
             <img className={classes.logo} src={Logo} alt='StreamKey Logo' />
           </Link>
           {

@@ -1,6 +1,20 @@
 import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import tough from 'tough-cookie'
+import axiosRetry from 'axios-retry'
+
+const SAFE_HTTP_METHODS = ['get', 'head', 'options']
+const IDEMPOTENT_HTTP_METHODS = SAFE_HTTP_METHODS.concat(['put', 'delete'])
+const isIdempotentRequestError = error => {
+  if (!error.config) {
+    return false
+  }
+  return isRetryableError(error) && IDEMPOTENT_HTTP_METHODS.indexOf(error.config.method) !== -1
+}
+const isRetryableError = error => {
+  return error.code !== 'ECONNABORTED' &&
+    (!error.response || (error.response.status >= 400 && error.response.status <= 599))
+}
 
 export default (options = {}) => {
   const { returnJar } = options
@@ -17,6 +31,20 @@ export default (options = {}) => {
     return {
       axios: instance,
       jar: cookieJar
+    }
+  }
+  if (options.disableRetries !== true) {
+    if (options.retryOptions) {
+      axiosRetry(axios, options.retryOptions)
+    } else {
+      axiosRetry(axios, {
+        retries: 3,
+        retryDelay: axiosRetry.exponentialDelay,
+        retryCondition: error => {
+          console.log(error)
+          return axiosRetry.isNetworkError(error) || isIdempotentRequestError(error)
+        }
+      })
     }
   }
   return instance

@@ -37,8 +37,9 @@ const getConfig = async () => {
     }
     return config
   } catch (e) {
-    console.error(e)
-    throw new Error('Aniview config parse failed', e)
+    e.prevError = e.message
+    e.message = 'Aniview config parse failed'
+    throw e
   }
 }
 
@@ -57,8 +58,9 @@ const login = async config => {
     })
     axios.jar.setCookieSync(tokenCookie, axios.axios.defaults.baseURL)
   } catch (e) {
-    console.error(e)
-    throw new Error('Aniview login failed', e)
+    e.prevError = e.message
+    e.message = 'Aniview login failed'
+    throw e
   }
 }
 
@@ -74,8 +76,9 @@ const getResultsSocket = async dateTs => {
     const { socketAddress } = res.data.data
     return socketAddress
   } catch (e) {
-    console.error(e)
-    throw new Error('Aniview report failed', e)
+    e.prevError = e.message
+    e.message = 'Aniview report failed'
+    throw e
   }
 }
 
@@ -105,7 +108,9 @@ const downloadReport = link => {
           resolve(jsonArr)
         })
     } catch (e) {
-      reject(new Error('Aniview downloadReport failed', e))
+      e.prevError = e.message
+      e.message = 'Aniview downloadReport failed'
+      reject(e)
     }
   })
 }

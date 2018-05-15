@@ -44,8 +44,9 @@ const auth = async () => {
     const res = await axios.post(authUrl, qs.stringify(form))
     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`
   } catch (e) {
-    console.error(e)
-    throw new Error('OneVideo login failed', e)
+    e.prevError = e.message
+    e.message = 'OneVideo login failed'
+    throw e
   }
 }
 
@@ -65,7 +66,9 @@ const runReport = async dateTs => {
     const res = await axios.get(`${apiUrl}/reporting/run_report`, { params })
     return res.data
   } catch (e) {
-    throw new Error('OneVideo get data failed', e)
+    e.prevError = e.message
+    e.message = 'OneVideo get data failed'
+    throw e
   }
 }
 
@@ -76,7 +79,9 @@ const normalize = (columns, data) => {
       columns[3] !== 'ad_attempts' ||
       columns[4] !== 'ad_impressions' ||
       columns[5] !== 'ad_revenue') {
-    throw new Error('AOL invalid report columns')
+    const e = new Error('OneVideo invalid report columns')
+    e.extra = { columns }
+    throw e
   }
   return data.map(r => {
     return {

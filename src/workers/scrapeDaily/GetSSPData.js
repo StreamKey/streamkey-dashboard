@@ -5,8 +5,8 @@ import _Empty_ from './SSP/_Empty_'
 import Telaria from './SSP/Telaria'
 import Freewheel from './SSP/Freewheel'
 import Beachfront from './SSP/Beachfront'
-// import Aerserv from './SSP/Aerserv'
-// import SpotX from './SSP/SpotX'
+import Aerserv from './SSP/Aerserv'
+import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
 
 const SSPs = [
@@ -23,12 +23,12 @@ const SSPs = [
     key: 'beachfront',
     controller: Beachfront
   }, {
-  //   key: 'aerserv',
-  //   controller: Aerserv
-  // }, {
-  //   key: 'spotx',
-  //   controller: SpotX
-  // }, {
+    key: 'aerserv',
+    controller: Aerserv
+  }, {
+    key: 'spotx',
+    controller: SpotX
+  }, {
     key: 'onevideo',
     controller: OneVideo
   }
@@ -93,8 +93,13 @@ export default async dateTs => {
       })
     } catch (e) {
       winston.error('SSP getData Error', {
+        ssp: item.key,
         error: e.message,
-        item
+        prevError: e.prevError,
+        extra: e.extra,
+        resCode: _.get(e, 'response.status', null),
+        resText: _.get(e, 'response.statusText', null),
+        reqUrl: _.get(e, 'response.config.url', null)
       })
     }
   })

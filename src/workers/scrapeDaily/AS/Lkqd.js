@@ -40,8 +40,9 @@ const getResults = async dateTs => {
     const res = await axios.post('/reports', form)
     return res.data.data.entries
   } catch (e) {
-    console.error(e)
-    throw new Error('Lkqd report failed', e)
+    e.prevError = e.message
+    e.message = 'Lkqd report failed'
+    throw e
   }
 }
 

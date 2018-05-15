@@ -32,8 +32,9 @@ const getResults = dateTs => {
           resolve(jsonArr)
         })
     } catch (e) {
-      console.error(e)
-      reject(new Error('Aerserv report failed', e))
+      e.prevError = e.message
+      e.message = 'Aerserv report failed'
+      reject(e)
     }
   })
 }

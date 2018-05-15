@@ -21,7 +21,9 @@ const login = async () => {
     await axios.post('/auth/ajax-login', qs.stringify(form))
   } catch (e) {
     console.error(e)
-    throw new Error('Freewheel login failed', e)
+    e.prevError = e.message
+    e.message = 'Freewheel login failed'
+    throw e
   }
 }
 
@@ -32,8 +34,14 @@ const getResults = async dateTs => {
     end: date,
     group: ['zone']
   }
-  const res = await axios.post('/advanced-stats/ajax-get-stats', qs.stringify(form))
-  return res.data.datatable.results
+  try {
+    const res = await axios.post('/advanced-stats/ajax-get-stats', qs.stringify(form))
+    return res.data.datatable.results
+  } catch (e) {
+    e.prevError = e.message
+    e.message = 'Freewheel getResults failed'
+    throw e
+  }
 }
 
 const normalize = results => {

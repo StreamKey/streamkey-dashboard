@@ -21,8 +21,9 @@ const login = async () => {
   try {
     await axios.post('/v2/login', qs.stringify(form))
   } catch (e) {
-    console.error(e)
-    throw new Error('StreamRail login failed', e)
+    e.prevError = e.message
+    e.message = 'StreamRail login failed'
+    throw e
   }
 }
 
@@ -48,7 +49,9 @@ const getResults = async dateTs => {
 
   const res = await axios.get('/report/demand', { params })
   if (res.data.data.length !== res.data.meta.total) {
-    throw new Error('StreamRail mismatch number of results')
+    const e = new Error('StreamRail mismatch number of results')
+    e.extra = res.data
+    throw e
   }
   return res.data.data
 }
@@ -66,8 +69,12 @@ const normalize = results => {
 
 export default {
   getData: async dateTs => {
-    await login()
-    const results = await getResults(dateTs)
-    return normalize(results)
+    try {
+      await login()
+      const results = await getResults(dateTs)
+      return normalize(results)
+    } catch (e) {
+      throw e
+    }
   }
 }

@@ -22,8 +22,9 @@ const login = async () => {
   try {
     await axios.axios.post('/Publisher/Login', form)
   } catch (e) {
-    console.error(e)
-    throw new Error('SpotX login failed', e)
+    e.prevError = e.message
+    e.message = 'SpotX login failed'
+    throw e
   }
 }
 
@@ -36,8 +37,9 @@ const getResults = async dateTs => {
     const res = await axios.axios.get(`/Publisher(${credentials.publisherId})/Channels/RevenueReport`, { params: form })
     return res.data.value.data
   } catch (e) {
-    console.error(e)
-    throw new Error('SpotX report failed', e)
+    e.prevError = e.message
+    e.message = 'SpotX report failed'
+    throw e
   }
 }
 
@@ -48,7 +50,7 @@ const normalize = results => {
       opp: Number(r.queries),
       imp: Number(r.impressions),
       rev: Number(r.revenue_usd),
-      sCost: 0 // TODO
+      sCost: (Number(r.queries) - Number(r.impressions)) * 0.0000007
     }
   })
 }

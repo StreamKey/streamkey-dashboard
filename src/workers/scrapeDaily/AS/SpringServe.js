@@ -20,8 +20,9 @@ const login = async () => {
     const res = await axios.post('/api/v0/auth', form)
     axios.defaults.headers.common['Authorization'] = res.data.token
   } catch (e) {
-    console.error(e)
-    throw new Error('SpringServe login failed', e)
+    e.prevError = e.message
+    e.message = 'SpringServe login failed'
+    throw e
   }
 }
 
@@ -42,8 +43,9 @@ const getResults = async dateTs => {
     const res = await axios.post('/api/v0/report', form)
     return res.data
   } catch (e) {
-    console.error(e)
-    throw new Error('SpringServe report failed', e)
+    e.prevError = e.message
+    e.message = 'SpringServe report failed'
+    throw e
   }
 }
 

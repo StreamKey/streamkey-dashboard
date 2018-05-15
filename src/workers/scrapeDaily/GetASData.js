@@ -7,7 +7,7 @@ import MergeAsResults from './MergeAsResults'
 import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
 import Aniview from './AS/Aniview'
-// import SpringServe from './AS/SpringServe'
+import SpringServe from './AS/SpringServe'
 
 const AdServers = [
   {
@@ -19,9 +19,9 @@ const AdServers = [
   }, {
     key: 'aniview',
     controller: Aniview
-  // }, {
-  //   key: 'springserve',
-  //   controller: SpringServe
+  }, {
+    key: 'springserve',
+    controller: SpringServe
   }
 ]
 
@@ -107,8 +107,13 @@ export default async dateTs => {
       })
     } catch (e) {
       winston.error('AS getData Error', {
+        as: item.key,
         error: e.message,
-        item
+        prevError: e.prevError,
+        extra: e.extra,
+        resCode: _.get(e, 'response.status', null),
+        resText: _.get(e, 'response.statusText', null),
+        reqUrl: _.get(e, 'response.config.url', null)
       })
     }
   })

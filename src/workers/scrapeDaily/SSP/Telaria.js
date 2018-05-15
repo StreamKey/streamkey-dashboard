@@ -25,8 +25,9 @@ const login = async () => {
       password: credentials.password
     })
   } catch (e) {
-    console.error(e)
-    throw new Error('Telaria login failed', e)
+    e.prevError = e.message
+    e.message = 'Telaria login failed'
+    throw e
   }
 }
 
@@ -82,8 +83,10 @@ const waitUntilResultsReady = async queryId => {
     await waitAsync(1000)
     const res = await axios.get(`/queries/${queryId}`)
     if (res.data.error) {
-      console.error(res)
-      throw new Error('Telaria error', res.data.error)
+      const e = new Error('Telaria error')
+      e.prevError = res.data.error
+      e.message = 'Telaria error'
+      throw e
     }
     resultsReady = res.data.status === 3
     retries--

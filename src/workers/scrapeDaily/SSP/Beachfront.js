@@ -21,8 +21,9 @@ const login = async () => {
   try {
     await axios.post('/en/login', qs.stringify(form))
   } catch (e) {
-    console.error(e)
-    throw new Error('Beachfront login failed', e)
+    e.prevError = e.message
+    e.message = 'Beachfront login failed'
+    throw e
   }
 }
 
@@ -41,8 +42,9 @@ const getResults = async dateTs => {
     const res = await axios.post('/restful/users/dashboard/inventory/stats', qs.stringify(form))
     return res.data.data.grid.data
   } catch (e) {
-    console.error(e)
-    throw new Error('Beachfront report failed', e)
+    e.prevError = e.message
+    e.message = 'Beachfront report failed'
+    throw e
   }
 }
 

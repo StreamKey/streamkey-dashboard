@@ -1,6 +1,6 @@
 import '../../../../env'
 
-import Axios from 'axios'
+import axios from 'axios'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import uuid from 'uuid/v4'
@@ -14,7 +14,8 @@ const credentials = {
 
 const authUrl = 'https://id.corp.aol.com/identity/oauth2/access_token'
 const apiUrl = 'https://onevideo.aol.com'
-const axios = Axios.create()
+
+const axiosInstance = axios.create()
 
 const generateJwtToken = () => {
   const now = Number(moment().utc().format('X'))
@@ -41,8 +42,8 @@ const auth = async () => {
     realm: 'aolcorporate/aolexternals'
   }
   try {
-    const res = await axios.post(authUrl, qs.stringify(form))
-    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`
+    const res = await axiosInstance.post(authUrl, qs.stringify(form))
+    return res.data.access_token
   } catch (e) {
     e.prevError = e.message
     e.message = 'OneVideo login failed'
@@ -50,7 +51,7 @@ const auth = async () => {
   }
 }
 
-const runReport = async dateTs => {
+const runReport = async (dateTs, authHeader) => {
   const date = moment.utc(dateTs, 'X')
   const startDate = date.startOf('day').format('X')
   const endDate = date.endOf('day').format('X')
@@ -63,7 +64,12 @@ const runReport = async dateTs => {
     timezone: 1 // UTC
   }
   try {
-    const res = await axios.get(`${apiUrl}/reporting/run_report`, { params })
+    const res = await axiosInstance.get(`${apiUrl}/reporting/run_report`, {
+      params,
+      headers: {
+        'Authorization': `Bearer ${authHeader}`
+      }
+    })
     return res.data
   } catch (e) {
     e.prevError = e.message
@@ -97,8 +103,8 @@ const normalize = (columns, data) => {
 export default {
   getData: async dateTs => {
     try {
-      await auth()
-      const { columns, data } = await runReport(dateTs)
+      const authHeader = await auth()
+      const { columns, data } = await runReport(dateTs, authHeader)
       return normalize(columns, data)
     } catch (e) {
       throw e

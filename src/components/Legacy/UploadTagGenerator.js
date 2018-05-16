@@ -1,5 +1,6 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
+import FormData from 'form-data'
 
 import Button from 'material-ui/Button'
 import { CircularProgress } from 'material-ui/Progress'
@@ -59,7 +60,7 @@ const styles = theme => {
   }
 }
 
-class DuplicateTremorLkqd extends React.Component {
+class UploadTagManager extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -69,13 +70,17 @@ class DuplicateTremorLkqd extends React.Component {
     }
   }
 
-  run = () => {
+  upload = e => {
+    e.preventDefault()
     this.setState({
       ...this.state,
       isLoading: true,
       isDone: false
     }, async () => {
-      const res = await API.post('/runLkqdTremorDuplicate')
+      const uploadedFile = this.fileInput.files[0]
+      const data = new FormData()
+      data.append('fileToUpload', uploadedFile)
+      const res = await API.put('/uploadTagGenerator', data)
       if (res.data.success !== true) {
         console.error(res)
       }
@@ -92,33 +97,42 @@ class DuplicateTremorLkqd extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <h3 className={classes.title}>Duplicate LKQD Supply Tremor</h3>
-        <Button
-          className={classes.button}
-          onClick={this.run}
-          size='small'
-          variant='raised'
-          disabled={this.state.isLoading}
-        >
-          {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
-          {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
-          Run
-        </Button>
-        {
-          this.state.isDone && this.state.hasError &&
-          <div className={classes.error}>
-            <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
-          </div>
-        }
-        {
-          this.state.isDone && !this.state.hasError &&
-          <div className={classes.success}>
-            <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
-          </div>
-        }
+        <h3 className={classes.title}>Upload Tag Manager</h3>
+        <form onSubmit={this.upload}>
+          <input
+            type='file'
+            name='fileToUpload'
+            ref={input => {
+              this.fileInput = input
+            }}
+          />
+          <Button
+            className={classes.button}
+            onClick={this.upload}
+            size='small'
+            variant='raised'
+            disabled={this.state.isLoading}
+          >
+            {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
+            {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
+            Run
+          </Button>
+          {
+            this.state.isDone && this.state.hasError &&
+            <div className={classes.error}>
+              <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
+            </div>
+          }
+          {
+            this.state.isDone && !this.state.hasError &&
+            <div className={classes.success}>
+              <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
+            </div>
+          }
+        </form>
       </div>
     )
   }
 }
 
-export default withStyles(styles)(DuplicateTremorLkqd)
+export default withStyles(styles)(UploadTagManager)

@@ -16,8 +16,9 @@
 // const LOCAL_FILE_PATH = path.join(LOGS_DIR, 'run.txt')
 // const REMOTE_FULL_FILE_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/tremor/run.txt`
 
-export default () => {
+export default fileToUpload => {
   return new Promise((resolve, reject) => {
+    console.log(fileToUpload)
     return resolve(true)
     // fs.writeFileSync(LOCAL_FILE_PATH, '', 'utf8')
     // const conn = new SshClient()

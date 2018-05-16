@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
 import DuplicateTremorLkqd from '../components/Legacy/DuplicateTremorLkqd'
+import UploadTagGenerator from '../components/Legacy/UploadTagGenerator'
 
 import API from '../components/API'
 import NavBar from '../components/NavBar'
@@ -95,6 +96,7 @@ class Legacy extends React.Component {
         <NavBar />
         <div className={classes.container}>
           <DuplicateTremorLkqd />
+          <UploadTagGenerator />
         </div>
         <Footer />
       </div>

@@ -7,7 +7,11 @@ import getReport from './getReport'
 import getLogs from './getLogs'
 import getLog from './getLog'
 import postRunLkqdTremorDuplicate from './postRunLkqdTremorDuplicate'
+import uploadTagGenerator from './uploadTagGenerator'
 import { notFound, parseError, serverError } from './Errors'
+
+const multipart = require('connect-multiparty')
+const multipartMiddleware = multipart()
 
 // const isAdmin = async req => {
 //   throw new Error('not-authorized')
@@ -69,6 +73,7 @@ export default app => {
   app.get('/api/logs', ensureLoggedIn, asyncMiddleware(getLogs))
   app.get('/api/logs/:file', ensureLoggedIn, asyncMiddleware(getLog))
   app.post('/api/runLkqdTremorDuplicate', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))
+  app.put('/api/uploadTagGenerator', ensureLoggedIn, multipartMiddleware, asyncMiddleware(uploadTagGenerator))
 
   app.use('/api/admin/*', ensureAdmin)
 

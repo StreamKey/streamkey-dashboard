@@ -26,6 +26,11 @@ const styles = theme => {
       paddingTop: theme.spacing.quad,
       paddingBottom: theme.spacing.double
     },
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
     button: {
       paddingTop: theme.spacing.unit,
       paddingBottom: theme.spacing.unit,
@@ -98,7 +103,7 @@ class UploadTagManager extends React.Component {
     return (
       <div className={classes.root}>
         <h3 className={classes.title}>Upload Tag Manager</h3>
-        <form onSubmit={this.upload}>
+        <form className={classes.form} onSubmit={this.upload}>
           <input
             type='file'
             name='fileToUpload'
@@ -115,7 +120,7 @@ class UploadTagManager extends React.Component {
           >
             {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
             {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
-            Run
+            Upload
           </Button>
           {
             this.state.isDone && this.state.hasError &&

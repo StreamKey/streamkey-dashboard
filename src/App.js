@@ -12,7 +12,7 @@ import { withStyles } from 'material-ui/styles'
 import Report from './pages/Report'
 import Login from './pages/Login'
 import Logs from './pages/Logs'
-import DuplicateLkqdSupplyTremor from './pages/DuplicateLkqdSupplyTremor'
+import Legacy from './pages/Legacy'
 import Theme from './Theme'
 import ErrorBoundary from './components/ErrorBoundary'
 
@@ -47,7 +47,7 @@ class App extends React.Component {
                   <Route exact path='/admin' component={Report} />
                   <Route exact path='/report' component={Report} />
                   <Route exact path='/logs' component={Logs} />
-                  <Route exact path='/duplicate-lkqd-supply-tremor' component={DuplicateLkqdSupplyTremor} />
+                  <Route exact path='/legacy' component={Legacy} />
                 </Switch>
               </ErrorBoundary>
             </div>

@@ -184,9 +184,9 @@ class NavBar extends React.Component {
                   <MdIcon svg={LogsSvg} className={classes.menuItemIcon} />
                   Logs
                 </MenuItem>
-                <MenuItem className={classes.menuItem} onClick={this.navTo('/duplicate-lkqd-supply-tremor')}>
+                <MenuItem className={classes.menuItem} onClick={this.navTo('/legacy')}>
                   <MdIcon svg={DuplicateSvg} className={classes.menuItemIcon} />
-                  LKQD-Tremor Duplicate
+                  Legacy
                 </MenuItem>
                 <MenuItem className={classes.menuItem} onClick={this.logout}>
                   <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />

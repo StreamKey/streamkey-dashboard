@@ -18,31 +18,32 @@ const REMOTE_FULL_FILE_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/tremor/run.txt`
 
 export default () => {
   return new Promise((resolve, reject) => {
-    fs.writeFileSync(LOCAL_FILE_PATH, '', 'utf8')
-    const conn = new SshClient()
-    conn.on('ready', () => {
-      conn.sftp(async (err, sftp) => {
-        if (err) {
-          reject(err)
-        }
-        const fastPut = promisify(sftp.fastPut.bind(sftp))
-        try {
-          await fastPut(LOCAL_FILE_PATH, REMOTE_FULL_FILE_PATH)
-          fs.unlinkSync(LOCAL_FILE_PATH)
-          conn.end()
-          resolve(true)
-        } catch (e) {
-          conn.end()
-          fs.unlinkSync(LOCAL_FILE_PATH)
-          reject(e)
-        }
-      })
-    }).connect({
-      host: RAZZLE_LEGACY_HOST,
-      port: 22,
-      username: RAZZLE_LEGACY_USER,
-      password: RAZZLE_LEGACY_PASSWORD,
-      privateKey: fs.readFileSync(RAZZLE_LEGACY_SSH_KEY)
-    })
+    return resolve(true)
+    // fs.writeFileSync(LOCAL_FILE_PATH, '', 'utf8')
+    // const conn = new SshClient()
+    // conn.on('ready', () => {
+    //   conn.sftp(async (err, sftp) => {
+    //     if (err) {
+    //       reject(err)
+    //     }
+    //     const fastPut = promisify(sftp.fastPut.bind(sftp))
+    //     try {
+    //       await fastPut(LOCAL_FILE_PATH, REMOTE_FULL_FILE_PATH)
+    //       fs.unlinkSync(LOCAL_FILE_PATH)
+    //       conn.end()
+    //       resolve(true)
+    //     } catch (e) {
+    //       conn.end()
+    //       fs.unlinkSync(LOCAL_FILE_PATH)
+    //       reject(e)
+    //     }
+    //   })
+    // }).connect({
+    //   host: RAZZLE_LEGACY_HOST,
+    //   port: 22,
+    //   username: RAZZLE_LEGACY_USER,
+    //   password: RAZZLE_LEGACY_PASSWORD,
+    //   privateKey: fs.readFileSync(RAZZLE_LEGACY_SSH_KEY)
+    // })
   })
 }

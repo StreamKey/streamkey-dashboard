@@ -1,13 +1,8 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
-import Button from 'material-ui/Button'
-import { CircularProgress } from 'material-ui/Progress'
-import SuccessSvg from 'mdi-svg/svg/check.svg'
-import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
-import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
+import DuplicateTremorLkqd from '../components/Legacy/DuplicateTremorLkqd'
 
-import MdIcon from '../components/MdIcon'
 import API from '../components/API'
 import NavBar from '../components/NavBar'
 import Footer from '../components/Footer'
@@ -64,7 +59,7 @@ const styles = theme => {
   }
 }
 
-class DuplicateLkqdSupplyTremor extends React.Component {
+class Legacy extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -99,30 +94,7 @@ class DuplicateLkqdSupplyTremor extends React.Component {
       <div className={classes.root}>
         <NavBar />
         <div className={classes.container}>
-          <h3 className={classes.title}>Duplicate LKQD Supply Tremor</h3>
-          <Button
-            className={classes.button}
-            onClick={this.run}
-            size='small'
-            variant='raised'
-            disabled={this.state.isLoading}
-          >
-            {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
-            {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
-            Run
-          </Button>
-          {
-            this.state.isDone && this.state.hasError &&
-            <div className={classes.error}>
-              <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
-            </div>
-          }
-          {
-            this.state.isDone && !this.state.hasError &&
-            <div className={classes.success}>
-              <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
-            </div>
-          }
+          <DuplicateTremorLkqd />
         </div>
         <Footer />
       </div>
@@ -130,4 +102,4 @@ class DuplicateLkqdSupplyTremor extends React.Component {
   }
 }
 
-export default withStyles(styles)(DuplicateLkqdSupplyTremor)
+export default withStyles(styles)(Legacy)

@@ -65,7 +65,7 @@ const styles = theme => {
   }
 }
 
-class UploadTagManager extends React.Component {
+class UploadTagGenerator extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -102,7 +102,7 @@ class UploadTagManager extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <h3 className={classes.title}>Upload Tag Manager</h3>
+        <h3 className={classes.title}>Upload Tag Generator</h3>
         <form className={classes.form} onSubmit={this.upload}>
           <input
             type='file'
@@ -140,4 +140,4 @@ class UploadTagManager extends React.Component {
   }
 }
 
-export default withStyles(styles)(UploadTagManager)
+export default withStyles(styles)(UploadTagGenerator)

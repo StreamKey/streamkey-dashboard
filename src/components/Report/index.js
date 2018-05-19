@@ -153,6 +153,9 @@ class Report extends React.Component {
   }
 
   renderValue = (type, val) => {
+    if (val === null) {
+      return ''
+    }
     switch (type) {
       case 'integer':
         return numeral(val).format('0,')

@@ -4,32 +4,60 @@ import winston from 'winston'
 import GetTagBase from './GetTagBase'
 import MergeAsResults from './MergeAsResults'
 
-const addEmptySspResult = (asKey, result, emptySspResults) => {
+const addEmptySspResult = (asKey, asResult, results) => {
   const SSP_KEYS = [
     '_TRM_',
     '_LKD_',
     '_STR_'
   ]
-  if (SSP_KEYS.contains(result.tag)) {
+  if (SSP_KEYS.includes(asResult.tag)) {
     winston.error('Wrong empty SSP tag', {
       as: asKey,
-      result
+      result: asResult
     })
     return
   }
-  if (!emptySspResults[asKey]) {
-    emptySspResults[asKey] = []
-  }
-  emptySspResults[asKey].push(result)
+  results.push({
+    tag: asResult.tag,
+    ssp: null,
+    sspOpp: null,
+    sspImp: null,
+    sspRev: null,
+    sspScost: null,
+    as: asKey,
+    asOpp: asResult.asOpp,
+    asImp: asResult.asImp,
+    asRev: asResult.asRev,
+    asCost: asResult.asCost,
+    asScost: asResult.asScost
+  })
+}
+
+const addEmptySspResults = (asKey, asData, results) => {
+  _.each(asData.mnl, d => {
+    addEmptySspResult(asKey, d, results)
+  })
+  _.each(asData.auton_wl, d => {
+    addEmptySspResult(asKey, d, results)
+  })
+  _.each(asData.auton_for, d => {
+    addEmptySspResult(asKey, d, results)
+  })
+  _.each(asData.ron, d => {
+    addEmptySspResult(asKey, d, results)
+  })
 }
 
 export default (sspResults, asResults) => {
   const results = []
-  const emptySspResults = {}
+  const allAsResults = {}
   _.each(sspResults, ssp => {
     _.each(ssp.data, sspData => {
       _.each(asResults, as => {
         const asData = as.data
+        if (!allAsResults[as.key]) {
+          allAsResults[as.key] = asData
+        }
         if (ssp.key === '_empty_') {
           _.each(asData.other, result => {
             results.push({
@@ -72,8 +100,10 @@ export default (sspResults, asResults) => {
             // AS auton_for + ron
             result = MergeAsResults(asData.auton_for[tagBase], asData.ron[tagBase])
           } else {
-            // Empty SSP
-            return addEmptySspResult(as.key, result, emptySspResults)
+            winston.error('Invalid Tag Group', {
+              ssp: ssp.key,
+              tag: sspData.tag
+            })
           }
         } else {
           if (sspData.tag.startsWith('MNL_')) {
@@ -89,11 +119,17 @@ export default (sspResults, asResults) => {
               asData.ron[tagBase]
             )
           } else {
-            // Empty SSP
-            return addEmptySspResult(as.key, result, emptySspResults)
+            winston.error('Invalid Tag Group', {
+              ssp: ssp.key,
+              tag: sspData.tag
+            })
           }
         }
         if (result) {
+          delete allAsResults[as.key].mnl[tagBase]
+          delete allAsResults[as.key].auton_wl[tagBase]
+          delete allAsResults[as.key].auton_for[tagBase]
+          delete allAsResults[as.key].ron[tagBase]
           results.push({
             tag: sspData.tag,
             ssp: ssp.key,
@@ -112,6 +148,8 @@ export default (sspResults, asResults) => {
       })
     })
   })
-  console.log(emptySspResults)
+  _.each(allAsResults, (asData, asKey) => {
+    addEmptySspResults(asKey, asData, results)
+  })
   return results
 }

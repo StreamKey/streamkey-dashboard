@@ -19,7 +19,7 @@ const AdServers = [
   }, {
     key: 'aniview',
     controller: Aniview
-  // }, {
+  }, {
   //   key: 'springserve',
   //   controller: SpringServe
   }
@@ -54,6 +54,7 @@ const groupAsResults = (asResults, asKey) => {
       } else if (r.tag.endsWith('_RON')) {
         group = groups.ron
       } else {
+        group = groups.other
         winston.warn('Tag Error', { tag: r.tag, as: asKey })
         return
       }

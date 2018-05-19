@@ -19,7 +19,7 @@ const AdServers = [
   }, {
     key: 'aniview',
     controller: Aniview
-  }, {
+  // }, {
   //   key: 'springserve',
   //   controller: SpringServe
   }

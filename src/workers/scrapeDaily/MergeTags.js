@@ -5,6 +5,9 @@ import GetTagBase from './GetTagBase'
 import MergeAsResults from './MergeAsResults'
 
 const addEmptySspResult = (asKey, asResult, results) => {
+  if (!asResult || !asResult.tag) {
+    return
+  }
   const SSP_KEYS = [
     '_TRM_',
     '_LKD_',
@@ -33,18 +36,18 @@ const addEmptySspResult = (asKey, asResult, results) => {
   })
 }
 
-const addEmptySspResults = (asKey, asData, results) => {
-  _.each(asData.mnl, d => {
-    addEmptySspResult(asKey, d, results)
+const addEmptySspResults = (asKey, asGroups, results) => {
+  _.each(asGroups.mnl, r => {
+    addEmptySspResult(asKey, r, results)
   })
-  _.each(asData.auton_wl, d => {
-    addEmptySspResult(asKey, d, results)
+  _.each(asGroups.auton_wl, r => {
+    addEmptySspResult(asKey, r, results)
   })
-  _.each(asData.auton_for, d => {
-    addEmptySspResult(asKey, d, results)
+  _.each(asGroups.auton_for, r => {
+    addEmptySspResult(asKey, r, results)
   })
-  _.each(asData.ron, d => {
-    addEmptySspResult(asKey, d, results)
+  _.each(asGroups.ron, r => {
+    addEmptySspResult(asKey, r, results)
   })
 }
 
@@ -54,12 +57,12 @@ export default (sspResults, asResults) => {
   _.each(sspResults, ssp => {
     _.each(ssp.data, sspData => {
       _.each(asResults, as => {
-        const asData = as.data
+        const asGroups = as.data
         if (!allAsResults[as.key]) {
-          allAsResults[as.key] = asData
+          allAsResults[as.key] = _.cloneDeep(asGroups)
         }
         if (ssp.key === '_empty_') {
-          _.each(asData.other, result => {
+          _.each(asGroups.other, result => {
             results.push({
               tag: result.tag,
               ssp: null,
@@ -92,13 +95,13 @@ export default (sspResults, asResults) => {
         if (ssp.key === 'telaria') {
           if (sspData.tag.startsWith('MNL_')) {
             // AS mnl
-            result = asData.mnl[tagBase]
+            result = asGroups.mnl[tagBase]
           } else if (sspData.tag.startsWith('AUTON_') && sspData.tag.endsWith('_WL')) {
             // AS auton_wl
-            result = asData.auton_wl[tagBase]
+            result = asGroups.auton_wl[tagBase]
           } else if (sspData.tag.endsWith('_RON')) {
             // AS auton_for + ron
-            result = MergeAsResults(asData.auton_for[tagBase], asData.ron[tagBase])
+            result = MergeAsResults(asGroups.auton_for[tagBase], asGroups.ron[tagBase])
           } else {
             winston.error('Invalid Tag Group', {
               ssp: ssp.key,
@@ -108,15 +111,15 @@ export default (sspResults, asResults) => {
         } else {
           if (sspData.tag.startsWith('MNL_')) {
             // AS mnl
-            result = asData.mnl[tagBase]
+            result = asGroups.mnl[tagBase]
           } else if (sspData.tag.startsWith('AUTON_')) {
             // AS auton_wl + auton_for + ron
             result = MergeAsResults(
               MergeAsResults(
-                asData.auton_wl[tagBase],
-                asData.auton_for[tagBase]
+                asGroups.auton_wl[tagBase],
+                asGroups.auton_for[tagBase]
               ),
-              asData.ron[tagBase]
+              asGroups.ron[tagBase]
             )
           } else {
             winston.error('Invalid Tag Group', {
@@ -126,10 +129,10 @@ export default (sspResults, asResults) => {
           }
         }
         if (result) {
-          delete allAsResults[as.key].mnl[tagBase]
-          delete allAsResults[as.key].auton_wl[tagBase]
-          delete allAsResults[as.key].auton_for[tagBase]
-          delete allAsResults[as.key].ron[tagBase]
+          allAsResults[as.key].mnl[tagBase] = undefined
+          allAsResults[as.key].auton_wl[tagBase] = undefined
+          allAsResults[as.key].auton_for[tagBase] = undefined
+          allAsResults[as.key].ron[tagBase] = undefined
           results.push({
             tag: sspData.tag,
             ssp: ssp.key,
@@ -148,8 +151,8 @@ export default (sspResults, asResults) => {
       })
     })
   })
-  _.each(allAsResults, (asData, asKey) => {
-    addEmptySspResults(asKey, asData, results)
+  _.each(allAsResults, (asGroups, asKey) => {
+    addEmptySspResults(asKey, asGroups, results)
   })
   return results
 }

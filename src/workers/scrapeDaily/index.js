@@ -9,6 +9,7 @@ import GetSSPData from './GetSSPData'
 import GetASData from './GetASData'
 import MergeTags from './MergeTags'
 import CalcProfit from './CalcProfit'
+import EmailResults from './EmailResults'
 import GetLogsDir from '../../components/Log/GetLogsDir'
 
 const configLogger = () => {
@@ -64,6 +65,7 @@ const main = async () => {
   winston.info('Script time (UTC)', {
     time: utcTime.format('YYYY-MM-DD')
   })
+  const results = {}
 
   await DB.init()
 
@@ -116,6 +118,7 @@ const main = async () => {
 
   await DB.close()
   winston.info('Script finish')
+  await EmailResults.send(results)
 }
 
 main()

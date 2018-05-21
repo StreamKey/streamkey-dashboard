@@ -61,11 +61,11 @@ const getScriptDate = () => {
 
 const main = async () => {
   configLogger()
+  winston.profile('run-duration')
   const utcTime = getScriptDate()
   winston.info('Script time (UTC)', {
     time: utcTime.format('YYYY-MM-DD')
   })
-  const results = {}
 
   await DB.init()
 
@@ -118,7 +118,15 @@ const main = async () => {
 
   await DB.close()
   winston.info('Script finish')
-  await EmailResults.send(results)
+  winston.profile('run-duration')
+  try {
+    await EmailResults.send({ utcTime })
+    winston.info('Email sent')
+  } catch (e) {
+    winston.error('Send email failed', {
+      error: e.message
+    })
+  }
 }
 
 main()

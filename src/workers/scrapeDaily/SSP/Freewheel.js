@@ -50,7 +50,7 @@ const normalize = results => {
       tag: r.zone_name,
       opp: r.request,
       imp: r.impression,
-      rev: r.revenue,
+      rev: r.revenue * 0.7,
       sCost: r.revenue * 0.3
     }
   })

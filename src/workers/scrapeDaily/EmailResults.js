@@ -7,7 +7,7 @@ const { RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS } = process.env
 
 const getLoggerData = () => {
   return new Promise((resolve, reject) => {
-    winston.query({}, function (err, results) {
+    winston.query({ limit: 999 }, function (err, results) {
       if (err) {
         reject(err)
       }
@@ -69,10 +69,7 @@ Total profit: ${numeral(profits.total).format('$0,0.0')}
 Total records: ${loggerData.items.length}
 Errors: ${loggerData.errors.length}
 Warnings: ${loggerData.warns.length}
-Execution time: ${executionTime}
-
-Profit breakdown:
-`
+Execution time: ${executionTime}`
   html = `<p>The report for ${date} is ready.</p>
 <table>
 <tr><td>Total profit</td><td>${numeral(profits.total).format('$0,0.0')}</td></tr>
@@ -80,19 +77,29 @@ Profit breakdown:
 <tr><td>Errors</td><td>${loggerData.errors.length}</td></tr>
 <tr><td>Warnings</td><td>${loggerData.warns.length}</td></tr>
 <tr><td>Execution time</td><td>${executionTime}</td></tr>
-</table>
+</table>`
 
-<p>Profit breakdown:</p>
-<table>
-`
+  text += '\nProfit breakdown:\n'
+  html += '<p>Profit breakdown:</p><table>'
   for (let ssp in profits.ssp) {
     for (let as in profits.ssp[ssp]) {
       const profit = numeral(profits.ssp[ssp][as]).format('$0,0.0')
       text += `${ssp === '_empty_' ? as : ssp} - ${as}: ${profit}` + '\n'
-      html += `<tr><td>${ssp === '_empty_' ? '' : ssp}</td><td>${as}</td>${profit}<td></tr>`
+      html += `<tr><td>${ssp === '_empty_' ? '' : ssp}</td><td>${as}</td><td>${profit}<td></tr>`
     }
   }
   html += '</table>'
+
+  if (loggerData.errors.length > 0) {
+    text += '\nErrors:\n'
+    html += '<p>Errors:</p><table>'
+    for (let e of loggerData.errors) {
+      text += `${e.error}, ${e.message}` + '\n'
+      html += `<tr><td>${e.error}</td><td>${e.message}</td></tr>`
+    }
+    html += '</table>'
+  }
+
   console.log(text)
   console.log(html)
   return {

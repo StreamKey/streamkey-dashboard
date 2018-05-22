@@ -51,7 +51,7 @@ const normalize = results => {
       opp: r.request,
       imp: r.impression,
       rev: r.revenue * 0.7,
-      sCost: r.revenue * 0.3
+      sCost: 0
     }
   })
 }

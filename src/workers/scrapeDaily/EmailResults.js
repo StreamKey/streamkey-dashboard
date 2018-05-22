@@ -1,5 +1,6 @@
 import numeral from 'numeral'
 import winston from 'winston'
+import get from 'lodash/get'
 
 import Email from '../../api/controllers/Email/'
 
@@ -58,21 +59,31 @@ const sumProfit = items => {
   }
 }
 
+const getErrorData = error => {
+  switch (error.error) {
+    case 'invalid-tag':
+      return error.asKey
+        ? error.asKey + ': ' + get(error, 'asResult.tag')
+        : error.ssp + ': ' + get(error, 'sspData.tag')
+    default:
+      return ''
+  }
+}
+
 const getEmailBody = (utcTime, loggerData) => {
   const date = utcTime.format('YYYY-MM-DD')
   const executionTime = numeral(loggerData.runDuration).format('00:00:00')
   const profits = sumProfit(loggerData.items)
   let text, html
-  text = `The report for ${date} is ready.
-
-Total profit: ${numeral(profits.total).format('$0,0.0')}
+  text = `Date: ${date}
+Total profit: ${numeral(profits.total).format('$0,0')}
 Total records: ${loggerData.items.length}
 Errors: ${loggerData.errors.length}
 Warnings: ${loggerData.warns.length}
 Execution time: ${executionTime}`
-  html = `<p>The report for ${date} is ready.</p>
-<table>
-<tr><td>Total profit</td><td>${numeral(profits.total).format('$0,0.0')}</td></tr>
+  html = `<table>
+<tr><td>Date</td><td>${date}</td></tr>
+<tr><td>Total profit</td><td>${numeral(profits.total).format('$0,0')}</td></tr>
 <tr><td>Total records</td><td>${loggerData.items.length}</td></tr>
 <tr><td>Errors</td><td>${loggerData.errors.length}</td></tr>
 <tr><td>Warnings</td><td>${loggerData.warns.length}</td></tr>
@@ -80,28 +91,37 @@ Execution time: ${executionTime}`
 </table>`
 
   text += '\nProfit breakdown:\n'
-  html += '<p>Profit breakdown:</p><table>'
+  html += '<br/><b>Profit breakdown:</b><table>'
   for (let ssp in profits.ssp) {
     for (let as in profits.ssp[ssp]) {
       const profit = numeral(profits.ssp[ssp][as]).format('$0,0.0')
-      text += `${ssp === '_empty_' ? as : ssp} - ${as}: ${profit}` + '\n'
-      html += `<tr><td>${ssp === '_empty_' ? '' : ssp}</td><td>${as}</td><td>${profit}<td></tr>`
+      text += `${ssp === '_empty_' ? 'v2v ' + as : ssp} - ${as}: ${profit}` + '\n'
+      html += `<tr><td>${ssp === '_empty_' ? 'v2v ' + as : ssp}</td><td>${as}</td><td>${profit}<td></tr>`
     }
   }
   html += '</table>'
 
   if (loggerData.errors.length > 0) {
     text += '\nErrors:\n'
-    html += '<p>Errors:</p><table>'
+    html += '<br/><b>Errors:</b><table>'
     for (let e of loggerData.errors) {
+      const errorData = getErrorData(e)
+      text += `${e.error}, ${e.message}` + '\n'
+      html += `<tr><td>${e.error}</td><td>${e.message}</td><td>${errorData}</td></tr>`
+    }
+    html += '</table>'
+  }
+
+  if (loggerData.warns.length > 0) {
+    text += '\nWarnings:\n'
+    html += '<br/><b>Warnings:</b><table>'
+    for (let e of loggerData.warns) {
       text += `${e.error}, ${e.message}` + '\n'
       html += `<tr><td>${e.error}</td><td>${e.message}</td></tr>`
     }
     html += '</table>'
   }
 
-  console.log(text)
-  console.log(html)
   return {
     text,
     html
@@ -111,16 +131,16 @@ Execution time: ${executionTime}`
 const send = async ({ utcTime }) => {
   const loggerData = await getLoggerData()
   const emailBody = getEmailBody(utcTime, loggerData)
-  // try {
-  //   await Email.send({
-  //     to: RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS,
-  //     subject: 'Report is ready - ' + utcTime.format('YYYY-MM-DD'),
-  //     text: emailBody.text,
-  //     html: emailBody.html
-  //   })
-  // } catch (e) {
-  //   throw e
-  // }
+  try {
+    await Email.send({
+      to: RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS,
+      subject: 'Daily Report - ' + utcTime.format('YYYY-MM-DD'),
+      text: emailBody.text,
+      html: emailBody.html
+    })
+  } catch (e) {
+    throw e
+  }
 }
 
 export default {

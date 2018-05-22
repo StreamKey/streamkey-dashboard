@@ -60,8 +60,10 @@ const groupAsResults = (asResults, asKey) => {
       }
       group[tagBase] = MergeAsResults(group[tagBase], r)
     } catch (e) {
-      if (e.message === 'invalid-tag' && KNOWN_INVALID_TAGS.includes(r.tag)) {
-        groups.other[r.tag] = MergeAsResults(groups.other[r.tag], r)
+      if (e.message === 'invalid-tag') {
+        if (KNOWN_INVALID_TAGS.includes(r.tag)) {
+          groups.other[r.tag] = MergeAsResults(groups.other[r.tag], r)
+        }
       } else {
         winston.error('AS Group Error', {
           error: e.message,

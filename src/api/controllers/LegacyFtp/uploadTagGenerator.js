@@ -18,7 +18,6 @@ export default fileToUpload => {
     const LOCAL_FILE_PATH = fileToUpload.path
     const REMOTE_FULL_FILE_PATH = REMOTE_DESTINATION_PATH + fileToUpload.originalFilename
 
-    fs.writeFileSync(LOCAL_FILE_PATH, '', 'utf8')
     const conn = new SshClient()
     conn.on('ready', () => {
       conn.sftp(async (err, sftp) => {

@@ -5,14 +5,10 @@ import DuplicateTremorLkqd from '../components/Legacy/DuplicateTremorLkqd'
 import UploadTagGenerator from '../components/Legacy/UploadTagGenerator'
 
 import API from '../components/API'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
 
 const styles = theme => {
   return {
     root: {
-    },
-    container: {
       padding: theme.spacing.double,
       display: 'flex',
       flexDirection: 'column',
@@ -93,12 +89,8 @@ class Legacy extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <NavBar />
-        <div className={classes.container}>
-          <DuplicateTremorLkqd />
-          <UploadTagGenerator />
-        </div>
-        <Footer />
+        <DuplicateTremorLkqd />
+        <UploadTagGenerator />
       </div>
     )
   }

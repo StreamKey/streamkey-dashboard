@@ -5,47 +5,33 @@ import { withRouter } from 'react-router'
 
 import { Link } from 'react-router-dom'
 import Button from 'material-ui/Button'
-import Menu, { MenuItem } from 'material-ui/Menu'
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
 
 import { setUser } from '../store/actions'
 import API from './API'
 import MdIcon from './MdIcon'
-import AccountSvg from 'mdi-svg/svg/account.svg'
 import FinanceSvg from 'mdi-svg/svg/finance.svg'
 import LogsSvg from 'mdi-svg/svg/file-outline.svg'
 import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
 import LogoutSvg from 'mdi-svg/svg/logout.svg'
-import Logo from '../assets/streamkey-logo-horizontal.png'
 
 const styles = theme => {
   return {
     root: {
-      backgroundColor: theme.palette.custom.greyDark
+      backgroundColor: theme.palette.custom.greyLight,
+      overflowX: 'hidden'
     },
-    container: {
-      paddingLeft: theme.spacing.triple,
+    nav: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'space-between',
-      alignItems: 'center',
-      '&[with-border=true]': {
-        borderBottom: '1px solid ' + theme.palette.divider
-      },
-      ...theme.utils.container
-    },
-    logoContainer: {
-      ...theme.typography.logoContainer,
-      textDecoration: 'none',
-      display: 'flex',
-      alignItems: 'center'
-    },
-    logo: {
-      maxHeight: 35,
+      alignItems: 'flex-start',
       height: '100%',
-      width: 'auto'
+      width: '100%',
+      padding: 0
     },
-    buttonsPlaceholder: {
-      minHeight: 69
+    list: {
+      width: '100%'
     },
     menuItem: {
       fontSize: 14,
@@ -67,10 +53,9 @@ const styles = theme => {
 const buttonStyles = theme => {
   return {
     root: {
+      height: '100%',
       color: theme.palette.custom.greyLight,
       padding: theme.spacing.unit,
-      paddingTop: theme.spacing.triple,
-      paddingBottom: theme.spacing.triple,
       textTransform: 'none',
       borderBottom: '2px solid transparent',
       borderRadius: 0,
@@ -118,22 +103,6 @@ class NavBar extends React.Component {
     })
   }
 
-  openMenu = e => {
-    this.setState({
-      ...this.state,
-      isMenuOpen: true,
-      anchorEl: e.currentTarget
-    })
-  }
-
-  closeMenu = () => {
-    this.setState({
-      ...this.state,
-      isMenuOpen: false,
-      anchorEl: null
-    })
-  }
-
   navTo = path => () => {
     this.props.history.push(path)
   }
@@ -149,61 +118,57 @@ class NavBar extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { classes, className } = this.props
     let userName = this.props.user.name || this.props.user.email || ''
     if (userName.length > 20) {
       userName = userName.slice(0, 20) + '…'
     }
     return (
-      <div className={classes.root}>
-        <div className={classes.container} with-border={this.props.withBorder ? 'true' : 'false'}>
-          <Link className={classes.logoContainer} to='/'>
-            <img className={classes.logo} src={Logo} alt='StreamKey Logo' />
-          </Link>
-          {
-            this.state.isLoading && <div className={classes.buttonsPlaceholder}>&nbsp;</div>
-          }
-          {
-            !this.state.isLoading && this.props.user.id &&
-            <div className={classes.user}>
-              <StyledButton onClick={this.openMenu}>
-                {userName}
-                <MdIcon svg={AccountSvg} className={classes.menuIcon} />
-              </StyledButton>
-              <Menu
-                open={this.state.isMenuOpen}
-                onClose={this.closeMenu}
-                anchorEl={this.state.anchorEl}
-                transitionDuration={0}
-              >
-                <MenuItem className={classes.menuItem} onClick={this.navTo('/report')}>
+      <div className={`${classes.root} ${className}`}>
+        {
+          this.state.isLoading && <div />
+        }
+        {
+          !this.state.isLoading && this.props.user.id &&
+          <div className={classes.nav}>
+            <List className={classes.list} component='nav' dense>
+              <ListItem button onClick={this.navTo('/report')}>
+                <ListItemIcon>
                   <MdIcon svg={FinanceSvg} className={classes.menuItemIcon} />
-                  Reports
-                </MenuItem>
-                <MenuItem className={classes.menuItem} onClick={this.navTo('/logs')}>
+                </ListItemIcon>
+                <ListItemText primary='Reports' />
+              </ListItem>
+              <ListItem button onClick={this.navTo('/logs')}>
+                <ListItemIcon>
                   <MdIcon svg={LogsSvg} className={classes.menuItemIcon} />
-                  Logs
-                </MenuItem>
-                <MenuItem className={classes.menuItem} onClick={this.navTo('/legacy')}>
+                </ListItemIcon>
+                <ListItemText primary='Logs' />
+              </ListItem>
+              <ListItem button onClick={this.navTo('/legacy')}>
+                <ListItemIcon>
                   <MdIcon svg={DuplicateSvg} className={classes.menuItemIcon} />
-                  Legacy
-                </MenuItem>
-                <MenuItem className={classes.menuItem} onClick={this.logout}>
+                </ListItemIcon>
+                <ListItemText primary='Legacy' />
+              </ListItem>
+            </List>
+            <List className={classes.list} component='nav' dense>
+              <ListItem button onClick={this.logout}>
+                <ListItemIcon>
                   <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />
-                  Logout
-                </MenuItem>
-              </Menu>
-            </div>
-          }
-          {
-            !this.state.isLoading && !this.props.user.id &&
-            <div>
-              <StyledButton to='/login' component={Link}>
-                Login
-              </StyledButton>
-            </div>
-          }
-        </div>
+                </ListItemIcon>
+                <ListItemText primary='Logout' />
+              </ListItem>
+            </List>
+          </div>
+        }
+        {
+          !this.state.isLoading && !this.props.user.id &&
+          <div>
+            <StyledButton to='/login' component={Link}>
+              Login
+            </StyledButton>
+          </div>
+        }
       </div>
     )
   }

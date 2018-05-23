@@ -15,14 +15,10 @@ import FileSvg from 'mdi-svg/svg/file-outline.svg'
 import LogViewer from '../components/Log/LogViewer'
 import MdIcon from '../components/MdIcon'
 import API from '../components/API'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
 
 const styles = theme => {
   return {
     root: {
-    },
-    container: {
       padding: theme.spacing.double,
       display: 'flex',
       flexDirection: 'column',
@@ -124,34 +120,30 @@ class Logs extends React.Component {
     const { currentLog, logsList, showAll } = this.state
     return (
       <div className={classes.root}>
-        <NavBar />
-        <div className={classes.container}>
-          <h3 className={classes.title}>Logs</h3>
-          <List dense>
-            {
-              (showAll ? logsList : take(logsList, 10)).map(l => (
-                <ListItem key={l} className={classes.logItem}>
-                  <ListItemIcon>
-                    <IconButton
-                      onClick={this.getLogData(l)}
-                      className={classes.logButton}
-                    >
-                      <MdIcon svg={FileSvg} className={classes.logButtonIcon} />
-                    </IconButton>
-                  </ListItemIcon>
-                  <ListItemText primary={l} />
-                </ListItem>
-              ))
-            }
-          </List>
-          <Button size='small' onClick={this.toggleShowAll}>
-            { showAll ? 'Show less' : `+ ${logsList.length - 10}` }
-          </Button>
-          <div className={classes.logContainer} ref={this.setLogRef}>
-            <LogViewer rows={currentLog} />
-          </div>
+        <h3 className={classes.title}>Logs</h3>
+        <List dense>
+          {
+            (showAll ? logsList : take(logsList, 10)).map(l => (
+              <ListItem key={l} className={classes.logItem}>
+                <ListItemIcon>
+                  <IconButton
+                    onClick={this.getLogData(l)}
+                    className={classes.logButton}
+                  >
+                    <MdIcon svg={FileSvg} className={classes.logButtonIcon} />
+                  </IconButton>
+                </ListItemIcon>
+                <ListItemText primary={l} />
+              </ListItem>
+            ))
+          }
+        </List>
+        <Button size='small' onClick={this.toggleShowAll}>
+          { showAll ? 'Show less' : `+ ${logsList.length - 10}` }
+        </Button>
+        <div className={classes.logContainer} ref={this.setLogRef}>
+          <LogViewer rows={currentLog} />
         </div>
-        <Footer />
       </div>
     )
   }

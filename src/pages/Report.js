@@ -17,14 +17,10 @@ import DownloadSvg from 'mdi-svg/svg/download.svg'
 
 import Report from '../components/Report/'
 import API from '../components/API'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
 
 const styles = theme => {
   return {
     root: {
-    },
-    container: {
       padding: theme.spacing.double,
       display: 'flex',
       flexDirection: 'column',
@@ -185,65 +181,61 @@ class ReportPage extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <NavBar />
-        <div className={classes.container}>
-          <h3 className={classes.title}>Daily Report</h3>
-          <div className={classes.datepickerContainer}>
-            <IconButton
-              className={classes.button}
-              onClick={this.prevDay}
-            >
-              <MdIcon svg={LeftSvg} className={classes.menuIcon} />
-            </IconButton>
-            <DatePicker
-              className={classes.datepicker}
-              value={this.state.date}
-              onChange={this.onDateChange}
-              labelFunc={this.renderDate}
-            />
-            <IconButton
-              className={classes.button}
-              onClick={this.nextDay}
-            >
-              <MdIcon svg={RightSvg} className={classes.menuIcon} />
-            </IconButton>
-          </div>
-          <div className={classes.toolsContainer}>
-            <div>
-              <TextField
-                className={classes.tagFilter}
-                label='Tag Filter'
-                value={this.state.tagFilter}
-                onChange={this.onTagFilterChange}
-              />
-              <TextField
-                label='SSP Filter'
-                value={this.state.sspFilter}
-                onChange={this.onSspFilterChange}
-              />
-              <TextField
-                label='AS Filter'
-                value={this.state.asFilter}
-                onChange={this.onAsFilterChange}
-              />
-            </div>
-            <Tooltip title='Download CSV' placement='top' enterDelay={300}>
-              <IconButton
-                onClick={this.downloadCsv}
-              >
-                <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <Report
-            header={this.state.header}
-            data={this.state.filtered}
-            orderBy={this.state.orderBy}
-            order={this.state.order}
-            onChangeOrder={this.onChangeOrder}
+        <h3 className={classes.title}>Daily Report</h3>
+        <div className={classes.datepickerContainer}>
+          <IconButton
+            className={classes.button}
+            onClick={this.prevDay}
+          >
+            <MdIcon svg={LeftSvg} className={classes.menuIcon} />
+          </IconButton>
+          <DatePicker
+            className={classes.datepicker}
+            value={this.state.date}
+            onChange={this.onDateChange}
+            labelFunc={this.renderDate}
           />
+          <IconButton
+            className={classes.button}
+            onClick={this.nextDay}
+          >
+            <MdIcon svg={RightSvg} className={classes.menuIcon} />
+          </IconButton>
         </div>
-        <Footer />
+        <div className={classes.toolsContainer}>
+          <div>
+            <TextField
+              className={classes.tagFilter}
+              label='Tag Filter'
+              value={this.state.tagFilter}
+              onChange={this.onTagFilterChange}
+            />
+            <TextField
+              label='SSP Filter'
+              value={this.state.sspFilter}
+              onChange={this.onSspFilterChange}
+            />
+            <TextField
+              label='AS Filter'
+              value={this.state.asFilter}
+              onChange={this.onAsFilterChange}
+            />
+          </div>
+          <Tooltip title='Download CSV' placement='top' enterDelay={300}>
+            <IconButton
+              onClick={this.downloadCsv}
+            >
+              <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <Report
+          header={this.state.header}
+          data={this.state.filtered}
+          orderBy={this.state.orderBy}
+          order={this.state.order}
+          onChangeOrder={this.onChangeOrder}
+        />
       </div>
     )
   }

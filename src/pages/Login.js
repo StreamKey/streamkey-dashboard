@@ -8,14 +8,10 @@ import TextField from 'material-ui/TextField'
 
 import { setUser } from '../store/actions'
 import API from '../components/API'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
 
 const styles = theme => {
   return {
     root: {
-    },
-    container: {
       ...theme.utils.container,
       maxWidth: theme.breakpoints.values.sm,
       padding: theme.spacing.double
@@ -132,45 +128,41 @@ class Login extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <NavBar withBorder />
-        <div className={classes.container}>
-          <h3 className={classes.title}>Log into StreamKey</h3>
-          <form className={classes.form} onSubmit={this.submit}>
-            <TextField
-              label='Email'
-              type='email'
-              className={classes.textField}
-              value={this.state.email}
-              onChange={this.handleChange('email')}
-              disabled={this.state.isLoading}
-            />
-            <TextField
-              label='Password'
-              type='password'
-              className={classes.textField}
-              value={this.state.password}
-              onChange={this.handleChange('password')}
-              disabled={this.state.isLoading}
-            />
-            {
-              this.state.error &&
-              <div className={classes.error}>
-                {this.state.error}
-              </div>
-            }
-            <Button
-              variant='raised'
-              color='primary'
-              type='submit'
-              className={classes.button}
-              onClick={this.submit}
-              disabled={this.state.isLoading}
-            >
-              Log in
-            </Button>
-          </form>
-        </div>
-        <Footer />
+        <h3 className={classes.title}>Log into StreamKey</h3>
+        <form className={classes.form} onSubmit={this.submit}>
+          <TextField
+            label='Email'
+            type='email'
+            className={classes.textField}
+            value={this.state.email}
+            onChange={this.handleChange('email')}
+            disabled={this.state.isLoading}
+          />
+          <TextField
+            label='Password'
+            type='password'
+            className={classes.textField}
+            value={this.state.password}
+            onChange={this.handleChange('password')}
+            disabled={this.state.isLoading}
+          />
+          {
+            this.state.error &&
+            <div className={classes.error}>
+              {this.state.error}
+            </div>
+          }
+          <Button
+            variant='raised'
+            color='primary'
+            type='submit'
+            className={classes.button}
+            onClick={this.submit}
+            disabled={this.state.isLoading}
+          >
+            Log in
+          </Button>
+        </form>
       </div>
     )
   }

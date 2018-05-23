@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 import { withRouter } from 'react-router'
 
-import { Link } from 'react-router-dom'
-import Button from 'material-ui/Button'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
 
 import { setUser } from '../store/actions'
@@ -14,6 +12,7 @@ import FinanceSvg from 'mdi-svg/svg/finance.svg'
 import LogsSvg from 'mdi-svg/svg/file-outline.svg'
 import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
 import LogoutSvg from 'mdi-svg/svg/logout.svg'
+import LoginSvg from 'mdi-svg/svg/login.svg'
 
 const styles = theme => {
   return {
@@ -33,52 +32,17 @@ const styles = theme => {
     list: {
       width: '100%'
     },
-    menuItem: {
-      fontSize: 14,
-      padding: theme.spacing.unit
-    },
-    menuIcon: {
-      fill: theme.palette.grey[600],
-      marginLeft: theme.spacing.unit
-    },
-    menuItemIcon: {
-      fill: theme.palette.grey[900],
-      marginRight: theme.spacing.unit,
-      width: 24,
-      height: 24
+    listIcon: {
+      marginRight: 0
     }
   }
 }
-
-const buttonStyles = theme => {
-  return {
-    root: {
-      height: '100%',
-      color: theme.palette.custom.greyLight,
-      padding: theme.spacing.unit,
-      textTransform: 'none',
-      borderBottom: '2px solid transparent',
-      borderRadius: 0,
-      '&:hover': {
-        color: theme.palette.common.white,
-        borderBottom: '2px solid ' + theme.palette.custom.greyLight,
-        backgroundColor: 'transparent'
-      },
-      '&:hover svg': {
-        fill: theme.palette.grey[900]
-      }
-    }
-  }
-}
-const StyledButton = withStyles(buttonStyles)(Button)
 
 class NavBar extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isLoading: true,
-      isMenuOpen: false,
-      anchorEl: null
+      isLoading: true
     }
   }
 
@@ -108,7 +72,6 @@ class NavBar extends React.Component {
   }
 
   logout = async () => {
-    this.closeMenu()
     try {
       await API.get('/logout')
     } catch (e) {
@@ -134,19 +97,19 @@ class NavBar extends React.Component {
             <List className={classes.list} component='nav' dense>
               <ListItem button onClick={this.navTo('/report')}>
                 <ListItemIcon>
-                  <MdIcon svg={FinanceSvg} className={classes.menuItemIcon} />
+                  <MdIcon svg={FinanceSvg} className={classes.listIcon} />
                 </ListItemIcon>
                 <ListItemText primary='Reports' />
               </ListItem>
               <ListItem button onClick={this.navTo('/logs')}>
                 <ListItemIcon>
-                  <MdIcon svg={LogsSvg} className={classes.menuItemIcon} />
+                  <MdIcon svg={LogsSvg} className={classes.listIcon} />
                 </ListItemIcon>
                 <ListItemText primary='Logs' />
               </ListItem>
               <ListItem button onClick={this.navTo('/legacy')}>
                 <ListItemIcon>
-                  <MdIcon svg={DuplicateSvg} className={classes.menuItemIcon} />
+                  <MdIcon svg={DuplicateSvg} className={classes.listIcon} />
                 </ListItemIcon>
                 <ListItemText primary='Legacy' />
               </ListItem>
@@ -154,7 +117,7 @@ class NavBar extends React.Component {
             <List className={classes.list} component='nav' dense>
               <ListItem button onClick={this.logout}>
                 <ListItemIcon>
-                  <MdIcon svg={LogoutSvg} className={classes.menuItemIcon} />
+                  <MdIcon svg={LogoutSvg} className={classes.listIcon} />
                 </ListItemIcon>
                 <ListItemText primary='Logout' />
               </ListItem>
@@ -164,9 +127,14 @@ class NavBar extends React.Component {
         {
           !this.state.isLoading && !this.props.user.id &&
           <div>
-            <StyledButton to='/login' component={Link}>
-              Login
-            </StyledButton>
+            <List className={classes.list} component='nav' dense>
+              <ListItem button onClick={this.navTo('/login')}>
+                <ListItemIcon>
+                  <MdIcon svg={LoginSvg} className={classes.listIcon} />
+                </ListItemIcon>
+                <ListItemText primary='Login' />
+              </ListItem>
+            </List>
           </div>
         }
       </div>

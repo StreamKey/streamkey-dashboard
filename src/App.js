@@ -32,7 +32,7 @@ const styles = () => {
         "header header"
         "navbar page"
       `,
-      '&[navClosed]': {
+      '&[navclosed]': {
         gridTemplateAreas: `
           "header header"
           "page page"
@@ -81,7 +81,7 @@ class App extends React.Component {
           <MuiThemeProvider theme={Theme}>
             <CssBaseline />
             <ErrorBoundary>
-              <div className={classes.root} navClosed={hideNavbar ? 'true' : false}>
+              <div className={classes.root} navclosed={hideNavbar ? 'true' : false}>
                 <Header
                   className={classes.header}
                   hideNavbar={hideNavbar}

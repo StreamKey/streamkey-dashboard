@@ -1,20 +1,23 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
-import DuplicateTremorLkqd from '../components/Legacy/DuplicateTremorLkqd'
-import UploadTagGenerator from '../components/Legacy/UploadTagGenerator'
+import Button from 'material-ui/Button'
+import { CircularProgress } from 'material-ui/Progress'
+import SuccessSvg from 'mdi-svg/svg/check.svg'
+import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
+import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
 
+import MdIcon from '../components/MdIcon'
 import API from '../components/API'
 
 const styles = theme => {
   return {
     root: {
-      padding: theme.spacing.double,
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      maxWidth: '100%',
-      minHeight: 400
+      marginBottom: theme.spacing.quad
     },
     title: {
       textAlign: 'center',
@@ -56,7 +59,7 @@ const styles = theme => {
   }
 }
 
-class Legacy extends React.Component {
+class DuplicateTremorLkqd extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -89,11 +92,33 @@ class Legacy extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <DuplicateTremorLkqd />
-        <UploadTagGenerator />
+        <h3 className={classes.title}>Duplicate LKQD Supply Tremor</h3>
+        <Button
+          className={classes.button}
+          onClick={this.run}
+          size='small'
+          variant='raised'
+          disabled={this.state.isLoading}
+        >
+          {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
+          {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
+          Run
+        </Button>
+        {
+          this.state.isDone && this.state.hasError &&
+          <div className={classes.error}>
+            <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
+          </div>
+        }
+        {
+          this.state.isDone && !this.state.hasError &&
+          <div className={classes.success}>
+            <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
+          </div>
+        }
       </div>
     )
   }
 }
 
-export default withStyles(styles)(Legacy)
+export default withStyles(styles)(DuplicateTremorLkqd)

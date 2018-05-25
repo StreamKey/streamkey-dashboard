@@ -56,7 +56,7 @@ const styles = theme => {
   }
 }
 
-class Report extends React.Component {
+class TagReport extends React.Component {
   changeOrderBy = key => {
     this.props.onChangeOrder && this.props.onChangeOrder({
       orderBy: key,
@@ -185,4 +185,4 @@ class Report extends React.Component {
   }
 }
 
-export default withStyles(styles)(Report)
+export default withStyles(styles)(TagReport)

@@ -15,7 +15,7 @@ import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
 import RightSvg from 'mdi-svg/svg/chevron-right.svg'
 import DownloadSvg from 'mdi-svg/svg/download.svg'
 
-import Report from '../components/Report/'
+import TagReport from '../components/TagReport/'
 import API from '../components/API'
 
 const styles = theme => {
@@ -53,7 +53,7 @@ const styles = theme => {
   }
 }
 
-class ReportPage extends React.Component {
+class TagReportPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -229,7 +229,7 @@ class ReportPage extends React.Component {
             </IconButton>
           </Tooltip>
         </div>
-        <Report
+        <TagReport
           header={this.state.header}
           data={this.state.filtered}
           orderBy={this.state.orderBy}
@@ -241,4 +241,4 @@ class ReportPage extends React.Component {
   }
 }
 
-export default withStyles(styles)(ReportPage)
+export default withStyles(styles)(TagReportPage)

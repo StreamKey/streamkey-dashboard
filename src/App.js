@@ -9,10 +9,12 @@ import moment from 'moment'
 import CssBaseline from 'material-ui/CssBaseline'
 import { withStyles } from 'material-ui/styles'
 
-import Report from './pages/Report'
+import TagReport from './pages/TagReport'
 import Login from './pages/Login'
 import Logs from './pages/Logs'
-import Legacy from './pages/Legacy'
+import TagGenerator from './pages/TagGenerator'
+import DuplicateTremorLkqd from './pages/DuplicateTremorLkqd'
+import ComingSoon from './pages/ComingSoon'
 import Theme from './Theme'
 import Header from './components/Header'
 import NavBar from './components/NavBar'
@@ -94,10 +96,15 @@ class App extends React.Component {
                   <Switch>
                     <Route exact path='/' component={Login} />
                     <Route exact path='/login' component={Login} />
-                    <Route exact path='/admin' component={Report} />
-                    <Route exact path='/report' component={Report} />
+                    <Route exact path='/admin' component={TagReport} />
+                    <Route exact path='/ssp-adserver' component={ComingSoon} />
+                    <Route exact path='/tag-report' component={TagReport} />
+                    <Route exact path='/discrepancy' component={ComingSoon} />
+                    <Route exact path='/tag-generator' component={TagGenerator} />
+                    <Route exact path='/duplicate-tremor-lkqd' component={DuplicateTremorLkqd} />
                     <Route exact path='/logs' component={Logs} />
-                    <Route exact path='/legacy' component={Legacy} />
+                    <Route exact path='/logs/errors' component={Logs} />
+                    <Route exact path='/logs/activity' component={ComingSoon} />
                   </Switch>
                 </div>
               </div>

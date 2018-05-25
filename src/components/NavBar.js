@@ -127,27 +127,27 @@ class NavBar extends React.Component {
           <div className={classes.nav}>
             <List className={classes.list} component='nav' dense>
               <ListHeader text='Reports' svg={FinanceSvg} />
-              <ListItem button>
+              <ListItem button onClick={this.navTo('/ssp-adserver')}>
                 <ListItemText primary='SSP - Ad Server' />
               </ListItem>
-              <ListItem button onClick={this.navTo('/report')}>
+              <ListItem button onClick={this.navTo('/tag-report')}>
                 <ListItemText primary='Tag Report' />
               </ListItem>
-              <ListItem button>
+              <ListItem button onClick={this.navTo('/discrepancy')}>
                 <ListItemText primary='Discrepancy' />
               </ListItem>
               <ListHeader text='Legacy' svg={DuplicateSvg} />
-              <ListItem button onClick={this.navTo('/legacy')}>
+              <ListItem button onClick={this.navTo('/tag-generator')}>
                 <ListItemText primary='Tag Generator' />
               </ListItem>
-              <ListItem button onClick={this.navTo('/legacy')}>
+              <ListItem button onClick={this.navTo('/duplicate-tremor-lkqd')}>
                 <ListItemText primary='Duplicate' />
               </ListItem>
               <ListHeader text='Logs' svg={LogsSvg} />
-              <ListItem button>
+              <ListItem button onClick={this.navTo('/logs/activity')}>
                 <ListItemText primary='Activity' />
               </ListItem>
-              <ListItem button onClick={this.navTo('/logs')}>
+              <ListItem button onClick={this.navTo('/logs/errors')}>
                 <ListItemText primary='Errors' />
               </ListItem>
             </List>

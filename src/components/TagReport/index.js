@@ -1,15 +1,12 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
+
+import ReactTable from 'react-table'
 import numeral from 'numeral'
 import each from 'lodash/each'
 
-import Table, {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel
-} from 'material-ui/Table'
+import 'react-table/react-table.css'
+
 import Paper from 'material-ui/Paper'
 
 const styles = theme => {
@@ -18,50 +15,29 @@ const styles = theme => {
       maxWidth: '100%',
       overflowX: 'scroll',
       position: 'relative'
-    },
-    inner: {
-      overflowX: 'scroll',
-      overflowY: 'visible',
-      marginLeft: 260
-    },
-    table: {
-      width: 'auto',
-      tableLayout: 'fixed'
-    },
-    row: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default
-      }
-    },
-    fixedCell: {
-      height: 'inherit',
-      position: 'absolute',
-      marginLeft: -260,
-      width: 260,
-      overflowX: 'hidden',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      transform: 'translateY(1px)'
-    },
-    sspCell: {
-      backgroundColor: theme.palette.green[50]
-    },
-    asCell: {
-      backgroundColor: theme.palette.red[50]
-    },
-    totalCell: {
-      fontWeight: 700
     }
   }
 }
 
 class TagReport extends React.Component {
-  changeOrderBy = key => {
-    this.props.onChangeOrder && this.props.onChangeOrder({
-      orderBy: key,
-      order: this.props.orderBy === key && this.props.order === 'asc' ? 'desc' : 'asc'
-    })
+  cellTypes = {
+    profit: 'usd',
+    margin: 'percent',
+    sspOpp: 'integer',
+    sspImp: 'integer',
+    sspCpm: 'usd',
+    sspRev: 'usd',
+    sspScost: 'usd',
+    asImp: 'integer',
+    asOpp: 'integer',
+    asCpm: 'usd',
+    asPcpm: 'usd',
+    asRev: 'usd',
+    asCost: 'usd',
+    asScost: 'usd',
+    diffCpm: 'usd',
+    diffImp: 'integer',
+    diffRev: 'usd'
   }
 
   calcTotal = () => {
@@ -86,73 +62,9 @@ class TagReport extends React.Component {
     return total
   }
 
-  renderHeader = () => {
-    const { header, orderBy, order, classes } = this.props
-    return <TableHead>
-      <TableRow>
-        {
-          header.map((h, n) => <TableCell
-            key={h.key}
-            numeric={h.type === 'string' ? undefined : true}
-            className={n === 0 ? classes.fixedCell : classes.cell}
-          >
-            <TableSortLabel
-              active={orderBy === h.key}
-              direction={order}
-              onClick={() => this.changeOrderBy(h.key)}
-            >
-              {h.title}
-            </TableSortLabel>
-          </TableCell>)
-        }
-      </TableRow>
-    </TableHead>
-  }
-
-  renderBody = () => {
-    const total = this.calcTotal()
-    return <TableBody>
-      {
-        this.renderRow(total, 0, true)
-      }
-      {
-        this.props.data.map((d, i) => {
-          return this.renderRow(d, i)
-        })
-      }
-    </TableBody>
-  }
-
-  renderRow = (row, n, isTotal) => {
-    const { classes } = this.props
-    return <TableRow className={classes.row} key={n}>
-      {
-        this.props.header.map((h, i) => {
-          let cellClass = classes.cell
-          if (i === 0) {
-            cellClass = classes.fixedCell
-          } else if (h.group === 'ssp') {
-            cellClass = classes.sspCell
-          } else if (h.group === 'as') {
-            cellClass = classes.asCell
-          }
-          if (isTotal === true && h.total !== false) {
-            cellClass += ' ' + classes.totalCell
-          }
-          return <TableCell
-            key={i}
-            className={cellClass}
-            numeric={h.type !== 'string' ? true : undefined}
-          >
-            {isTotal === true && h.total !== false && this.renderValue(h.type, row[h.key])}
-            {isTotal !== true && this.renderValue(h.type, row[h.key])}
-          </TableCell>
-        })
-      }
-    </TableRow>
-  }
-
-  renderValue = (type, val) => {
+  renderValue = cell => {
+    const val = cell.value
+    const type = this.cellTypes[cell.column.id]
     if (val === null) {
       return ''
     }
@@ -171,15 +83,118 @@ class TagReport extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { classes, data } = this.props
+    const columns = [{
+      Header: 'Tag',
+      accessor: 'tag',
+      minWidth: 240
+    }, {
+      Header: 'Profit',
+      accessor: 'profit',
+      Cell: this.renderValue
+    },
+    {
+      Header: 'Margin',
+      accessor: 'margin',
+      Cell: this.renderValue
+    },
+    {
+      Header: 'SSP',
+      columns: [
+        {
+          Header: 'ID',
+          accessor: 'ssp'
+        }, {
+          Header: 'Opp',
+          accessor: 'sspOpp',
+          Cell: this.renderValue
+        }, {
+          Header: 'Imp',
+          accessor: 'sspImp',
+          Cell: this.renderValue
+        }, {
+          Header: 'CPM',
+          accessor: 'sspCpm',
+          Cell: this.renderValue
+        }, {
+          Header: 'Revenue',
+          accessor: 'sspRev',
+          Cell: this.renderValue
+        }, {
+          Header: 'sCost',
+          accessor: 'sspScost',
+          Cell: this.renderValue
+        }
+      ]
+    }, {
+      Header: 'AS',
+      columns: [
+        {
+          Header: 'ID',
+          accessor: 'as'
+        }, {
+          Header: 'Opp',
+          accessor: 'asOpp',
+          Cell: this.renderValue
+        }, {
+          Header: 'Imp',
+          accessor: 'asImp',
+          Cell: this.renderValue
+        }, {
+          Header: 'CPM',
+          accessor: 'asCpm',
+          Cell: this.renderValue
+        }, {
+          Header: 'pCPM',
+          accessor: 'asPcpm',
+          Cell: this.renderValue
+        }, {
+          Header: 'Revenue',
+          accessor: 'asRev',
+          Cell: this.renderValue
+        }, {
+          Header: 'Cost',
+          accessor: 'asCost',
+          Cell: this.renderValue
+        }, {
+          Header: 'sCost',
+          accessor: 'asScost',
+          Cell: this.renderValue
+        }
+      ]
+    }, {
+      Header: 'Diff',
+      columns: [
+        {
+          Header: 'CPM',
+          accessor: 'diffCpm',
+          Cell: this.renderValue
+        }, {
+          Header: 'Imp',
+          accessor: 'diffImp',
+          Cell: this.renderValue
+        }, {
+          Header: 'Revenue',
+          accessor: 'diffRev',
+          Cell: this.renderValue
+        }
+      ]
+    }]
     return (
       <Paper className={classes.root}>
-        <div className={classes.inner}>
-          <Table className={classes.table}>
-            {this.renderHeader()}
-            {this.renderBody()}
-          </Table>
-        </div>
+        <ReactTable
+          data={data}
+          columns={columns}
+          showPageJump={false}
+          freezeWhenExpanded
+          filterable
+          defaultPageSize={100}
+          pageSizeOptions={[50, 100, 500, 1000]}
+          style={{
+            height: '80vh'
+          }}
+          className='-striped -highlight'
+        />
       </Paper>
     )
   }

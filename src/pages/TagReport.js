@@ -117,64 +117,13 @@ class TagReportPage extends React.Component {
     return date.format('YYYY-MM-DD')
   }
 
-  onChangeOrder = ({ orderBy, order }) => {
-    this.setState({
-      ...this.state,
-      orderBy,
-      order,
-      filtered: _orderBy(this.state.filtered, [orderBy], [order])
-    })
-  }
-
-  onTagFilterChange = e => {
-    this.setState({
-      ...this.state,
-      tagFilter: e.target.value
-    }, this.onFilterChange)
-  }
-
-  onSspFilterChange = e => {
-    this.setState({
-      ...this.state,
-      sspFilter: e.target.value
-    }, this.onFilterChange)
-  }
-
-  onAsFilterChange = e => {
-    this.setState({
-      ...this.state,
-      asFilter: e.target.value
-    }, this.onFilterChange)
-  }
-
-  onFilterChange = () => {
-    const tagFilter = new RegExp(this.state.tagFilter, 'i')
-    const sspFilter = new RegExp(this.state.sspFilter, 'i')
-    const asFilter = new RegExp(this.state.asFilter, 'i')
-    this.setState({
-      ...this.state,
-      filtered: this.state.data.filter(d => {
-        if (this.state.tagFilter.length > 0 && !d.tag.match(tagFilter)) {
-          return false
-        }
-        if (this.state.sspFilter.length > 0 && (!d.ssp || !d.ssp.match(sspFilter))) {
-          return false
-        }
-        if (this.state.asFilter.length > 0 && !d.as.match(asFilter)) {
-          return false
-        }
-        return true
-      })
-    })
-  }
-
   downloadCsv = () => {
-    const csv = csvStringify(this.state.filtered, {
-      columns: this.state.header.map(h => h.key),
-      header: true
-    })
-    const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'})
-    FileSaver.saveAs(blob, `streamkey-report-${this.state.date.format('YYYY-MM-DD')}.csv`)
+    // const csv = csvStringify(this.state.filtered, {
+    //   columns: this.state.header.map(h => h.key),
+    //   header: true
+    // })
+    // const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'})
+    // FileSaver.saveAs(blob, `streamkey-report-${this.state.date.format('YYYY-MM-DD')}.csv`)
   }
 
   render () {
@@ -202,39 +151,22 @@ class TagReportPage extends React.Component {
             <MdIcon svg={RightSvg} className={classes.menuIcon} />
           </IconButton>
         </div>
-        <div className={classes.toolsContainer}>
-          <div>
-            <TextField
-              className={classes.tagFilter}
-              label='Tag Filter'
-              value={this.state.tagFilter}
-              onChange={this.onTagFilterChange}
-            />
-            <TextField
-              label='SSP Filter'
-              value={this.state.sspFilter}
-              onChange={this.onSspFilterChange}
-            />
-            <TextField
-              label='AS Filter'
-              value={this.state.asFilter}
-              onChange={this.onAsFilterChange}
-            />
+        {
+          /*
+          <div className={classes.toolsContainer}>
+            <Tooltip title='Download CSV' placement='top' enterDelay={300}>
+              <IconButton
+                onClick={this.downloadCsv}
+              >
+                <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
+              </IconButton>
+            </Tooltip>
           </div>
-          <Tooltip title='Download CSV' placement='top' enterDelay={300}>
-            <IconButton
-              onClick={this.downloadCsv}
-            >
-              <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
-            </IconButton>
-          </Tooltip>
-        </div>
+          */
+        }
         <TagReport
           header={this.state.header}
           data={this.state.filtered}
-          orderBy={this.state.orderBy}
-          order={this.state.order}
-          onChangeOrder={this.onChangeOrder}
         />
       </div>
     )

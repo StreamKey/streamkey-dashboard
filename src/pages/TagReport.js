@@ -164,10 +164,7 @@ class TagReportPage extends React.Component {
           </div>
           */
         }
-        <TagReport
-          header={this.state.header}
-          data={this.state.filtered}
-        />
+        <TagReport data={this.state.filtered} />
       </div>
     )
   }

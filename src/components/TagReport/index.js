@@ -15,6 +15,10 @@ const styles = theme => {
       maxWidth: '100%',
       overflowX: 'scroll',
       position: 'relative'
+    },
+    table: {
+      fontSize: 14,
+      height: '80vh'
     }
   }
 }
@@ -40,26 +44,91 @@ class TagReport extends React.Component {
     diffRev: 'usd'
   }
 
-  calcTotal = () => {
-    const { header, data } = this.props
-    const total = {}
-    each(header, (h, n) => {
-      if (h.key === 'tag') {
-        total[h.key] = 'Total'
-      } else if (h.total === false) {
-        total[h.key] = ''
-      } else {
-        total[h.key] = 0
+  totals = {
+    tag: {
+      type: 'text',
+      value: 'Total'
+    },
+    profit: {
+      type: 'sum'
+    },
+    margin: {
+      type: 'sum'
+    },
+    sspOpp: {
+      type: 'sum'
+    },
+    sspImp: {
+      type: 'sum'
+    },
+    sspRev: {
+      type: 'sum'
+    },
+    sspScost: {
+      type: 'sum'
+    },
+    asImp: {
+      type: 'sum'
+    },
+    asOpp: {
+      type: 'sum'
+    },
+    asRev: {
+      type: 'sum'
+    },
+    asCpm: {
+      type: 'sum'
+    },
+    asPcpm: {
+      type: 'sum'
+    },
+    asCost: {
+      type: 'sum'
+    },
+    asScost: {
+      type: 'sum'
+    },
+    diffCpm: {
+      type: 'sum'
+    },
+    diffImp: {
+      type: 'sum'
+    },
+    diffRev: {
+      type: 'sum'
+    }
+  }
+
+  calcTotal = (data, column) => {
+    let total
+    if (!this.totals[column]) {
+      return ''
+    }
+    const type = this.totals[column].type
+    if (type === 'text') {
+      return this.totals[column].value
+    } else if (type === 'sum') {
+      total = 0
+    } else {
+      return ''
+    }
+    each(data, row => {
+      if (type === 'sum') {
+        total += Number(row[column])
       }
     })
-    each(data, row => {
-      each(header, (h, n) => {
-        if (h.key !== 'tag' && h.total !== false && h.type !== 'string') {
-          total[h.key] += Number(row[h.key])
-        }
-      })
-    })
     return total
+  }
+
+  renderFooter = column => ({ data }) => {
+    const total = this.calcTotal(data, column)
+    const cell = {
+      value: total,
+      column: {
+        id: column
+      }
+    }
+    return <strong>{this.renderValue(cell)}</strong>
   }
 
   renderValue = cell => {
@@ -87,16 +156,19 @@ class TagReport extends React.Component {
     const columns = [{
       Header: 'Tag',
       accessor: 'tag',
-      minWidth: 240
+      minWidth: 240,
+      Footer: this.renderFooter('tag')
     }, {
       Header: 'Profit',
       accessor: 'profit',
-      Cell: this.renderValue
+      Cell: this.renderValue,
+      Footer: this.renderFooter('profit')
     },
     {
       Header: 'Margin',
       accessor: 'margin',
-      Cell: this.renderValue
+      Cell: this.renderValue,
+      Footer: this.renderFooter('margin')
     },
     {
       Header: 'SSP',
@@ -107,23 +179,28 @@ class TagReport extends React.Component {
         }, {
           Header: 'Opp',
           accessor: 'sspOpp',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('sspOpp')
         }, {
           Header: 'Imp',
           accessor: 'sspImp',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('sspImp')
         }, {
           Header: 'CPM',
           accessor: 'sspCpm',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('sspCpm')
         }, {
           Header: 'Revenue',
           accessor: 'sspRev',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('sspRev')
         }, {
           Header: 'sCost',
           accessor: 'sspScost',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('sCost')
         }
       ]
     }, {
@@ -135,31 +212,38 @@ class TagReport extends React.Component {
         }, {
           Header: 'Opp',
           accessor: 'asOpp',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asOpp')
         }, {
           Header: 'Imp',
           accessor: 'asImp',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asImp')
         }, {
           Header: 'CPM',
           accessor: 'asCpm',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asCpm')
         }, {
           Header: 'pCPM',
           accessor: 'asPcpm',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asPcpm')
         }, {
           Header: 'Revenue',
           accessor: 'asRev',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asRev')
         }, {
           Header: 'Cost',
           accessor: 'asCost',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asCost')
         }, {
           Header: 'sCost',
           accessor: 'asScost',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('asScost')
         }
       ]
     }, {
@@ -168,21 +252,25 @@ class TagReport extends React.Component {
         {
           Header: 'CPM',
           accessor: 'diffCpm',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('diffCpm')
         }, {
           Header: 'Imp',
           accessor: 'diffImp',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('diffImp')
         }, {
           Header: 'Revenue',
           accessor: 'diffRev',
-          Cell: this.renderValue
+          Cell: this.renderValue,
+          Footer: this.renderFooter('diffRev')
         }
       ]
     }]
     return (
       <Paper className={classes.root}>
         <ReactTable
+          className={`${classes.table} -striped -highlight`}
           data={data}
           columns={columns}
           showPageJump={false}
@@ -190,10 +278,6 @@ class TagReport extends React.Component {
           filterable
           defaultPageSize={100}
           pageSizeOptions={[50, 100, 500, 1000]}
-          style={{
-            height: '80vh'
-          }}
-          className='-striped -highlight'
         />
       </Paper>
     )

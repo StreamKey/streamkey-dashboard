@@ -8,9 +8,6 @@ import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'mater
 import { setUser } from '../store/actions'
 import API from './API'
 import MdIcon from './MdIcon'
-import FinanceSvg from 'mdi-svg/svg/finance.svg'
-import LogsSvg from 'mdi-svg/svg/file-outline.svg'
-import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
 import LoginSvg from 'mdi-svg/svg/login.svg'
 
 const styles = theme => {
@@ -58,10 +55,9 @@ const listHeaderStyles = theme => {
 }
 class BaseListHeader extends React.PureComponent {
   render () {
-    const { classes, svg, text } = this.props
+    const { classes, text } = this.props
     return (
       <ListSubheader className={classes.root}>
-        <MdIcon svg={svg} className={classes.icon} />
         {text}
       </ListSubheader>
     )
@@ -126,7 +122,7 @@ class NavBar extends React.Component {
           !this.state.isLoading && this.props.user.id &&
           <div className={classes.nav}>
             <List className={classes.list} component='nav' dense>
-              <ListHeader text='Reports' svg={FinanceSvg} />
+              <ListHeader text='Reports' />
               <ListItem button onClick={this.navTo('/ssp-adserver')}>
                 <ListItemText primary='SSP - Ad Server' />
               </ListItem>
@@ -136,14 +132,14 @@ class NavBar extends React.Component {
               <ListItem button onClick={this.navTo('/discrepancy')}>
                 <ListItemText primary='Discrepancy' />
               </ListItem>
-              <ListHeader text='Legacy' svg={DuplicateSvg} />
+              <ListHeader text='Legacy' />
               <ListItem button onClick={this.navTo('/tag-generator')}>
                 <ListItemText primary='Tag Generator' />
               </ListItem>
               <ListItem button onClick={this.navTo('/duplicate-tremor-lkqd')}>
                 <ListItemText primary='Duplicate' />
               </ListItem>
-              <ListHeader text='Logs' svg={LogsSvg} />
+              <ListHeader text='Logs' />
               <ListItem button onClick={this.navTo('/logs/activity')}>
                 <ListItemText primary='Activity' />
               </ListItem>

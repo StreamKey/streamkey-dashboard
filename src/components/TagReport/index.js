@@ -18,7 +18,18 @@ const styles = theme => {
     },
     table: {
       fontSize: 14,
-      height: '80vh'
+      height: '80vh',
+      fontWeight: 300
+    },
+    numericCell: {
+      fontFamily: `'Roboto Mono', monospace`,
+      textAlign: 'right'
+    },
+    sspCell: {
+      backgroundColor: theme.palette.green[100]
+    },
+    asCell: {
+      backgroundColor: theme.palette.red[100]
     }
   }
 }
@@ -188,12 +199,14 @@ class TagReport extends React.Component {
       Header: 'Profit',
       accessor: 'profit',
       Cell: this.renderValue,
+      className: classes.numericCell,
       Footer: this.renderFooter('profit')
     },
     {
       Header: 'Margin',
       accessor: 'margin',
       Cell: this.renderValue,
+      className: classes.numericCell,
       Footer: this.renderFooter('margin')
     },
     {
@@ -201,31 +214,37 @@ class TagReport extends React.Component {
       columns: [
         {
           Header: 'ID',
-          accessor: 'ssp'
+          accessor: 'ssp',
+          className: classes.sspCell
         }, {
           Header: 'Opp',
           accessor: 'sspOpp',
           Cell: this.renderValue,
+          className: `${classes.sspCell} ${classes.numericCell}`,
           Footer: this.renderFooter('sspOpp')
         }, {
           Header: 'Imp',
           accessor: 'sspImp',
           Cell: this.renderValue,
+          className: `${classes.sspCell} ${classes.numericCell}`,
           Footer: this.renderFooter('sspImp')
         }, {
           Header: 'CPM',
           accessor: 'sspCpm',
           Cell: this.renderValue,
+          className: `${classes.sspCell} ${classes.numericCell}`,
           Footer: this.renderFooter('sspCpm')
         }, {
           Header: 'Revenue',
           accessor: 'sspRev',
           Cell: this.renderValue,
+          className: `${classes.sspCell} ${classes.numericCell}`,
           Footer: this.renderFooter('sspRev')
         }, {
           Header: 'sCost',
           accessor: 'sspScost',
           Cell: this.renderValue,
+          className: `${classes.sspCell} ${classes.numericCell}`,
           Footer: this.renderFooter('sspScost')
         }
       ]
@@ -234,41 +253,49 @@ class TagReport extends React.Component {
       columns: [
         {
           Header: 'ID',
-          accessor: 'as'
+          accessor: 'as',
+          className: classes.asCell
         }, {
           Header: 'Opp',
           accessor: 'asOpp',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asOpp')
         }, {
           Header: 'Imp',
           accessor: 'asImp',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asImp')
         }, {
           Header: 'CPM',
           accessor: 'asCpm',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asCpm')
         }, {
           Header: 'pCPM',
           accessor: 'asPcpm',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asPcpm')
         }, {
           Header: 'Revenue',
           accessor: 'asRev',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asRev')
         }, {
           Header: 'Cost',
           accessor: 'asCost',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asCost')
         }, {
           Header: 'sCost',
           accessor: 'asScost',
           Cell: this.renderValue,
+          className: `${classes.asCell} ${classes.numericCell}`,
           Footer: this.renderFooter('asScost')
         }
       ]
@@ -279,16 +306,19 @@ class TagReport extends React.Component {
           Header: 'CPM',
           accessor: 'diffCpm',
           Cell: this.renderValue,
+          className: classes.numericCell,
           Footer: this.renderFooter('diffCpm')
         }, {
           Header: 'Imp',
           accessor: 'diffImp',
           Cell: this.renderValue,
+          className: classes.numericCell,
           Footer: this.renderFooter('diffImp')
         }, {
           Header: 'Revenue',
           accessor: 'diffRev',
           Cell: this.renderValue,
+          className: classes.numericCell,
           Footer: this.renderFooter('diffRev')
         }
       ]

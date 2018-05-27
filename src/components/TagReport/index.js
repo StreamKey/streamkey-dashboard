@@ -50,10 +50,35 @@ class TagReport extends React.Component {
       value: 'Total'
     },
     profit: {
-      type: 'sum'
+      type: 'function',
+      fn: (data, column) => {
+        let total = 0
+        each(data, row => {
+          if (row.ssp) {
+            total += row.sspRev - row.sspScost - row.asScost - row.asCost
+          } else {
+            total += row.asRev - row.asCost - row.asScost
+          }
+        })
+        return total
+      }
     },
     margin: {
-      type: 'sum'
+      type: 'function',
+      fn: (data, column) => {
+        let profit = 0
+        let revenue = 0
+        each(data, row => {
+          if (row.ssp) {
+            profit += row.sspRev - row.sspScost - row.asScost - row.asCost
+            revenue += row.sspRev
+          } else {
+            profit += row.asRev - row.asCost - row.asScost
+            revenue += row.asRev
+          }
+        })
+        return revenue === 0 ? 0 : profit / revenue
+      }
     },
     sspOpp: {
       type: 'sum'
@@ -100,7 +125,6 @@ class TagReport extends React.Component {
   }
 
   calcTotal = (data, column) => {
-    let total
     if (!this.totals[column]) {
       return ''
     }
@@ -108,16 +132,18 @@ class TagReport extends React.Component {
     if (type === 'text') {
       return this.totals[column].value
     } else if (type === 'sum') {
-      total = 0
+      let total = 0
+      each(data, row => {
+        if (type === 'sum') {
+          total += Number(row[column])
+        }
+      })
+      return total
+    } else if (type === 'function') {
+      return this.totals[column].fn(data, column)
     } else {
       return ''
     }
-    each(data, row => {
-      if (type === 'sum') {
-        total += Number(row[column])
-      }
-    })
-    return total
   }
 
   renderFooter = column => ({ data }) => {
@@ -200,7 +226,7 @@ class TagReport extends React.Component {
           Header: 'sCost',
           accessor: 'sspScost',
           Cell: this.renderValue,
-          Footer: this.renderFooter('sCost')
+          Footer: this.renderFooter('sspScost')
         }
       ]
     }, {

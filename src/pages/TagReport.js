@@ -2,18 +2,11 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
-// import _orderBy from 'lodash/orderBy'
-// import csvStringify from 'csv-stringify/lib/sync'
-// import FileSaver from 'file-saver'
-// import Blob from 'blob'
 
 import IconButton from 'material-ui/IconButton'
-// import TextField from 'material-ui/TextField'
-// import Tooltip from 'material-ui/Tooltip'
 import MdIcon from '../components/MdIcon'
 import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
 import RightSvg from 'mdi-svg/svg/chevron-right.svg'
-// import DownloadSvg from 'mdi-svg/svg/download.svg'
 
 import TagReport from '../components/TagReport/'
 import API from '../components/API'
@@ -38,17 +31,6 @@ const styles = theme => {
       '& [class*="MuiInput-input-"]': {
         textAlign: 'center'
       }
-    },
-    toolsContainer: {
-      ...theme.utils.container,
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: theme.spacing.double
-    },
-    tagFilter: {
-      width: 240
     }
   }
 }
@@ -58,14 +40,7 @@ class TagReportPage extends React.Component {
     super(props)
     this.state = {
       date: moment().startOf('day'),
-      header: [],
       data: [],
-      filtered: [],
-      tagFilter: '',
-      sspFilter: '',
-      asFilter: '',
-      orderBy: null,
-      order: 'asc',
       isLoading: false,
       error: false
     }
@@ -88,10 +63,7 @@ class TagReportPage extends React.Component {
       const response = await API.get('/report', { params: form })
       this.setState({
         ...this.state,
-        header: response.data.report.header,
         data: response.data.report.data,
-        filtered: response.data.report.data,
-        tagFilter: '',
         isLoading: false,
         error: false
       })
@@ -115,15 +87,6 @@ class TagReportPage extends React.Component {
 
   renderDate = date => {
     return date.format('YYYY-MM-DD')
-  }
-
-  downloadCsv = () => {
-    // const csv = csvStringify(this.state.filtered, {
-    //   columns: this.state.header.map(h => h.key),
-    //   header: true
-    // })
-    // const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'})
-    // FileSaver.saveAs(blob, `streamkey-report-${this.state.date.format('YYYY-MM-DD')}.csv`)
   }
 
   render () {
@@ -151,20 +114,7 @@ class TagReportPage extends React.Component {
             <MdIcon svg={RightSvg} className={classes.menuIcon} />
           </IconButton>
         </div>
-        {
-          /*
-          <div className={classes.toolsContainer}>
-            <Tooltip title='Download CSV' placement='top' enterDelay={300}>
-              <IconButton
-                onClick={this.downloadCsv}
-              >
-                <MdIcon svg={DownloadSvg} className={classes.menuIcon} />
-              </IconButton>
-            </Tooltip>
-          </div>
-          */
-        }
-        <TagReport data={this.state.filtered} />
+        <TagReport data={this.state.data} date={this.state.date} />
       </div>
     )
   }

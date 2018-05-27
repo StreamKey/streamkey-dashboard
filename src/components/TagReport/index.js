@@ -4,22 +4,51 @@ import { withStyles } from 'material-ui/styles'
 import ReactTable from 'react-table'
 import numeral from 'numeral'
 import each from 'lodash/each'
-
-import 'react-table/react-table.css'
+import csvStringify from 'csv-stringify/lib/sync'
+import FileSaver from 'file-saver'
+import Blob from 'blob'
 
 import Paper from 'material-ui/Paper'
+import Tooltip from 'material-ui/Tooltip'
+import IconButton from 'material-ui/IconButton'
+
+import MdIcon from '../MdIcon'
+import DownloadSvg from 'mdi-svg/svg/download.svg'
+
+import 'react-table/react-table.css'
 
 const styles = theme => {
   return {
     root: {
+      width: '100%'
+    },
+    downloadContainer: {
+      display: 'flex',
+      flexDirection: 'row-reverse'
+    },
+    downloadButton: {
+      height: theme.spacing.quad,
+      width: theme.spacing.quad,
+      '&:hover svg': {
+        fill: theme.palette.grey[800]
+      }
+    },
+    downloadIcon: {
+      height: theme.spacing.double,
+      width: theme.spacing.double,
+      fill: theme.palette.grey[500]
+    },
+    tableContainer: {
       maxWidth: '100%',
-      overflowX: 'scroll',
-      position: 'relative'
+      overflowX: 'scroll'
     },
     table: {
       fontSize: 14,
       height: '80vh',
-      fontWeight: 300
+      fontWeight: 300,
+      '& .rt-th:focus': {
+        outline: 'none'
+      }
     },
     numericCell: {
       fontFamily: `'Roboto Mono', monospace`,
@@ -35,6 +64,13 @@ const styles = theme => {
 }
 
 class TagReport extends React.Component {
+  constructor (props) {
+    super(props)
+    this.reactTableRef = React.createRef()
+  }
+
+  // TODO consolidate all column definitions to a single place
+
   cellTypes = {
     profit: 'usd',
     margin: 'percent',
@@ -188,6 +224,36 @@ class TagReport extends React.Component {
     }
   }
 
+  downloadCsv = () => {
+    const data = this.reactTableRef.getResolvedState().sortedData
+    const columns = [
+      'tag',
+      'ssp',
+      'profit',
+      'margin',
+      'sspOpp',
+      'sspImp',
+      'sspRev',
+      'sspScost',
+      'asImp',
+      'asOpp',
+      'asRev',
+      'asCpm',
+      'asPcpm',
+      'asCost',
+      'asScost',
+      'diffCpm',
+      'diffImp',
+      'diffRev'
+    ]
+    const csv = csvStringify(data, {
+      columns,
+      header: true
+    })
+    const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'})
+    FileSaver.saveAs(blob, `streamkey-report-${this.props.date.format('YYYY-MM-DD')}.csv`)
+  }
+
   render () {
     const { classes, data } = this.props
     const columns = [{
@@ -324,18 +390,31 @@ class TagReport extends React.Component {
       ]
     }]
     return (
-      <Paper className={classes.root}>
-        <ReactTable
-          className={`${classes.table} -striped -highlight`}
-          data={data}
-          columns={columns}
-          showPageJump={false}
-          freezeWhenExpanded
-          filterable
-          defaultPageSize={100}
-          pageSizeOptions={[50, 100, 500, 1000]}
-        />
-      </Paper>
+      <div className={classes.root}>
+        <div className={classes.downloadContainer}>
+          <Tooltip title='Download CSV' placement='top' enterDelay={300}>
+            <IconButton
+              onClick={this.downloadCsv}
+              className={classes.downloadButton}
+            >
+              <MdIcon svg={DownloadSvg} className={classes.downloadIcon} />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <Paper className={classes.tableContainer}>
+          <ReactTable
+            className={`${classes.table} -striped -highlight`}
+            data={data}
+            columns={columns}
+            showPageJump={false}
+            freezeWhenExpanded
+            filterable
+            defaultPageSize={100}
+            pageSizeOptions={[50, 100, 500, 1000]}
+            ref={r => { this.reactTableRef = r }}
+          />
+        </Paper>
+      </div>
     )
   }
 }

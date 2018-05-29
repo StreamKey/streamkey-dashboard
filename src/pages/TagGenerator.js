@@ -85,7 +85,7 @@ class TagGenerator extends React.Component {
       const uploadedFile = this.fileInput.files[0]
       const data = new FormData()
       data.append('fileToUpload', uploadedFile)
-      const res = await API.put('/TagGenerator', data)
+      const res = await API.put('/uploadTagGenerator', data)
       if (res.data.success !== true) {
         console.error(res)
       }

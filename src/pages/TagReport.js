@@ -8,7 +8,7 @@ import MdIcon from '../components/MdIcon'
 import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
 import RightSvg from 'mdi-svg/svg/chevron-right.svg'
 
-import TagReport from '../components/TagReport/'
+import TagReport from '../components/reports/TagReport'
 import API from '../components/API'
 
 const styles = theme => {

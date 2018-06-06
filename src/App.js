@@ -10,6 +10,7 @@ import CssBaseline from 'material-ui/CssBaseline'
 import { withStyles } from 'material-ui/styles'
 
 import TagReport from './pages/TagReport'
+import SspAsReport from './pages/SspAsReport'
 import Login from './pages/Login'
 import Logs from './pages/Logs'
 import TagGenerator from './pages/TagGenerator'
@@ -97,7 +98,7 @@ class App extends React.Component {
                     <Route exact path='/' component={Login} />
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/admin' component={TagReport} />
-                    <Route exact path='/ssp-adserver' component={ComingSoon} />
+                    <Route exact path='/ssp-adserver' component={SspAsReport} />
                     <Route exact path='/tag-report' component={TagReport} />
                     <Route exact path='/discrepancy' component={ComingSoon} />
                     <Route exact path='/tag-generator' component={TagGenerator} />

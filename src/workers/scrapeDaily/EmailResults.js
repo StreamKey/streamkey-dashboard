@@ -1,6 +1,7 @@
 import numeral from 'numeral'
 import winston from 'winston'
 import get from 'lodash/get'
+import pick from 'lodash/pick'
 
 import Email from '../../api/controllers/Email/'
 
@@ -116,8 +117,10 @@ Execution time: ${executionTime}`
     text += '\nWarnings:\n'
     html += '<br/><b>Warnings:</b><table>'
     for (let e of loggerData.warns) {
-      text += `${e.error}, ${e.message}` + '\n'
-      html += `<tr><td>${e.error}</td><td>${e.message}</td></tr>`
+      const jsonStr = JSON.stringify(pick(e.data, ['tag', 'as', 'ssp']))
+      const jsonMsg = jsonStr.length > 20 ? jsonStr.substring(0, 20) + '...' : jsonStr
+      text += `${e.message}, ${jsonMsg}` + '\n'
+      html += `<tr><td>${e.message}</td><td>${jsonMsg}</td></tr>`
     }
     html += '</table>'
   }

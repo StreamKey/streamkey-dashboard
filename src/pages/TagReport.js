@@ -60,7 +60,7 @@ class TagReportPage extends React.Component {
         from: moment(this.state.date).format('X'),
         to: moment(this.state.date).add(1, 'day').format('X')
       }
-      const response = await API.get('/report', { params: form })
+      const response = await API.get('/reports/tag', { params: form })
       this.setState({
         ...this.state,
         data: response.data.report.data,

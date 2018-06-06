@@ -112,7 +112,7 @@ class SspAsReport extends React.Component {
             data={data}
             columns={columns}
             showPageJump={false}
-            defaultPageSize={8}
+            defaultPageSize={6}
             PaginationComponent={() => <div />}
           />
         </Paper>

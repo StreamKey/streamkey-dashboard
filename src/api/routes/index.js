@@ -69,7 +69,7 @@ export default app => {
   app.get('/api/logout', asyncMiddleware(getLogout))
 
   app.get('/api/profile', ensureLoggedIn, asyncMiddleware(getProfile))
-  app.get('/api/report', ensureLoggedIn, asyncMiddleware(getReport))
+  app.get('/api/reports/:report', ensureLoggedIn, asyncMiddleware(getReport))
   app.get('/api/logs', ensureLoggedIn, asyncMiddleware(getLogs))
   app.get('/api/logs/:file', ensureLoggedIn, asyncMiddleware(getLog))
   app.post('/api/runLkqdTremorDuplicate', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))

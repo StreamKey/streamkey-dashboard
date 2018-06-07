@@ -41,6 +41,7 @@ class SspAsReportPage extends React.Component {
     this.state = {
       date: moment().startOf('day'),
       data: [],
+      total: {},
       isLoading: false,
       error: false
     }
@@ -64,6 +65,7 @@ class SspAsReportPage extends React.Component {
       this.setState({
         ...this.state,
         data: response.data.report.bySsp,
+        total: response.data.report.total,
         isLoading: false,
         error: false
       })
@@ -114,7 +116,7 @@ class SspAsReportPage extends React.Component {
             <MdIcon svg={RightSvg} className={classes.menuIcon} />
           </IconButton>
         </div>
-        <SspAsReport data={this.state.data} date={this.state.date} />
+        <SspAsReport data={this.state.data} total={this.state.total} date={this.state.date} />
       </div>
     )
   }

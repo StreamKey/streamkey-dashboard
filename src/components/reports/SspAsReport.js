@@ -30,12 +30,7 @@ const styles = theme => {
 
 class SspAsReport extends React.Component {
   render () {
-    const { classes, data } = this.props
-    const total = {
-      revenue: 1234.1234,
-      profit: 1234.1234,
-      margin: 34.1234
-    }
+    const { classes, data, total } = this.props
     const columns = [{
       Header: 'Demand',
       accessor: 'ssp'

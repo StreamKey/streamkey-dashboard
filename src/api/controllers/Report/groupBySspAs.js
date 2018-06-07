@@ -2,218 +2,6 @@ import each from 'lodash/each'
 
 import getByDate from './getByDate'
 
-const mockData = [
-  {
-    ssp: 'Telaria',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'FreeWheel',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'AOL',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'BeachFront',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'V2V LKQD',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'V2V StreamRail',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'V2V SpringServe',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }, {
-    ssp: 'V2V Aniview',
-    lkqd: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    streamrail: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    springserve: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    },
-    aniview: {
-      profit: 1234.1234,
-      profitDiff: 10.9876,
-      margin: 34.34,
-      marginDiff: 5.555
-    }
-  }
-]
-
 const groupBySsp = results => {
   const asList = ['aniview', 'lkqd', 'springserve', 'streamrail']
   const sspGroups = {
@@ -271,11 +59,30 @@ const groupsToArray = sspGroups => {
   return res
 }
 
+const calcTotal = bySsp => {
+  const total = {
+    revenue: 0,
+    profit: 0,
+    margin: 0
+  }
+  each(bySsp, ssp => {
+    each(ssp, as => {
+      if (as.revenue) {
+        total.revenue += as.revenue
+      }
+      if (as.profit) {
+        total.profit += as.profit
+      }
+    })
+  })
+  total.margin = total.revenue === 0 ? 0 : total.profit / total.revenue
+  return total
+}
+
 export default async (fromTs, toTs) => {
   const results = await getByDate(fromTs, toTs)
-  const reports = {
-    summary: {},
-    bySsp: groupBySsp(results.data)
-  }
+  const reports = {}
+  reports.bySsp = groupBySsp(results.data)
+  reports.total = calcTotal(reports.bySsp)
   return reports
 }

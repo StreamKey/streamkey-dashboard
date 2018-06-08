@@ -91,7 +91,7 @@ class Login extends React.Component {
 
   onLoginSuccess = user => {
     this.props.setUser(user)
-    this.props.history.push('/admin')
+    this.props.history.push('/tag-report')
   }
 
   submit = e => {

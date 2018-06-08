@@ -98,7 +98,6 @@ class App extends React.Component {
                   <Switch>
                     <Route exact path='/' component={Login} />
                     <Route exact path='/login' component={Login} />
-                    <Route exact path='/admin' component={TagReport} />
                     <Route exact path='/ssp-adserver' component={SspAsReport} />
                     <Route exact path='/tag-report' component={TagReport} />
                     <Route exact path='/discrepancy' component={DiscrepancyReport} />

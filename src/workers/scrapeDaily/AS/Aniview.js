@@ -3,6 +3,7 @@ import WebSocket from 'ws'
 import Tough from 'tough-cookie'
 import qs from 'querystring'
 import csv from 'csvtojson'
+import winston from 'winston'
 
 import GenerateAxiosCookies from '../GenerateAxiosCookies'
 
@@ -94,11 +95,22 @@ const getReportLink = socketAddress => {
   })
 }
 
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const downloadReport = link => {
   return new Promise(async (resolve, reject) => {
     const axiosAws = GenerateAxiosCookies()
     try {
-      const res = await axiosAws.get(link)
+      let res
+      try {
+        res = await axiosAws.get(link)
+      } catch (e) {
+        winston.warn('Aniview downloadReport failed once')
+        await sleep(15000)
+        res = await axiosAws.get(link)
+      }
       const rawData = res.data
       const sections = rawData.replace('\r\n', '\n').split('\n\n')
       const csvStr = sections[sections.length - 1]
@@ -109,7 +121,7 @@ const downloadReport = link => {
         })
     } catch (e) {
       e.prevError = e.message
-      e.message = 'Aniview downloadReport failed'
+      e.message = 'Aniview downloadReport failed twice'
       reject(e)
     }
   })

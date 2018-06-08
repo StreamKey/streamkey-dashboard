@@ -26,6 +26,9 @@ const getResults = dateTs => {
     try {
       const res = await axios.get('/', { params: form })
       const csvStr = res.data
+      if (csvStr.startsWith('Error')) {
+        throw new Error(csvStr)
+      }
       csv()
         .fromString(csvStr)
         .on('end_parsed', jsonArr => {

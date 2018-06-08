@@ -10,6 +10,7 @@ const credentials = {
 }
 
 axios.defaults.baseURL = 'https://video.springserve.com'
+let authHeader
 
 const login = async () => {
   const form = {
@@ -18,7 +19,7 @@ const login = async () => {
   }
   try {
     const res = await axios.post('/api/v0/auth', form)
-    axios.defaults.headers.common['Authorization'] = res.data.token
+    authHeader = res.data.token
   } catch (e) {
     e.prevError = e.message
     e.message = 'SpringServe login failed'
@@ -40,8 +41,11 @@ const getResults = async dateTs => {
     ]
   }
   try {
-    const res = await axios.post('/api/v0/report', form)
-    console.log(JSON.stringify(res.data, null, 2))
+    const res = await axios.post('/api/v0/report', form, {
+      headers: {
+        'Authorization': authHeader
+      }
+    })
     return res.data
   } catch (e) {
     e.prevError = e.message
@@ -50,14 +54,17 @@ const getResults = async dateTs => {
   }
 }
 
-const normalize = results => {
-  return results.map(r => {
+const normalize = (results, dateTs) => {
+  const dateToMatch = moment(dateTs).format('YYYY-MM-DD ')
+  return results.filter(r => {
+    return r.date.startsWith(dateToMatch)
+  }).map(r => {
     return {
       tag: r.demand_tag_name,
       asOpp: r.opportunities,
       asImp: r.impressions,
       asRev: r.revenue,
-      asCost: 0, // TODO
+      asCost: 0,
       asScost: (r.impressions / 1000) * 0.2
     }
   })
@@ -68,7 +75,7 @@ export default {
     try {
       await login()
       const results = await getResults(dateTs)
-      return normalize(results)
+      return normalize(results, dateTs)
     } catch (e) {
       throw e
     }

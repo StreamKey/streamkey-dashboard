@@ -2,6 +2,7 @@ import numeral from 'numeral'
 import winston from 'winston'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
+import uniqBy from 'lodash/uniqBy'
 
 import Email from '../../api/controllers/Email/'
 
@@ -28,8 +29,8 @@ const getLoggerData = () => {
         }
       }
       resolve({
-        errors,
-        warns,
+        errors: uniqBy(errors, e => '' + e.error + e.message),
+        warns: uniqBy(warns, e => '' + e.message + JSON.stringify(e.data)),
         runDuration,
         items
       })

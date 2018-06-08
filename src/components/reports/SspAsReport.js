@@ -3,7 +3,6 @@ import { withStyles } from 'material-ui/styles'
 import numeral from 'numeral'
 import ReactTable from 'react-table'
 
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 import Paper from 'material-ui/Paper'
 
 import 'react-table/react-table.css'
@@ -29,8 +28,45 @@ const styles = theme => {
 }
 
 class SspAsReport extends React.Component {
+  renderValue = type => cell => {
+    const val = cell.value
+    if (val === null) {
+      return ''
+    }
+    switch (type) {
+      case 'integer':
+        return numeral(val).format('0,')
+      case 'float':
+        return numeral(val).format('0,0.0')
+      case 'percent':
+        return numeral(val).format('0a%')
+      case 'usd':
+        return numeral(val).format('$0,0.0')
+      default:
+        return val
+    }
+  }
+
   render () {
     const { classes, data, total } = this.props
+    const totalColumns = [
+      {
+        Header: '',
+        Cell: 'Total'
+      }, {
+        Header: 'Revenue',
+        accessor: 'revenue',
+        Cell: this.renderValue('usd')
+      }, {
+        Header: 'Profit',
+        accessor: 'profit',
+        Cell: this.renderValue('usd')
+      }, {
+        Header: 'Margin',
+        accessor: 'margin',
+        Cell: this.renderValue('percent')
+      }
+    ]
     const columns = [{
       Header: 'Demand',
       accessor: 'ssp'
@@ -39,10 +75,12 @@ class SspAsReport extends React.Component {
       columns: [
         {
           Header: 'Profit',
-          accessor: 'lkqd.profit'
+          accessor: 'lkqd.profit',
+          Cell: this.renderValue('usd')
         }, {
           Header: 'Margin',
-          accessor: 'lkqd.margin'
+          accessor: 'lkqd.margin',
+          Cell: this.renderValue('percent')
         }
       ]
     }, {
@@ -50,10 +88,12 @@ class SspAsReport extends React.Component {
       columns: [
         {
           Header: 'Profit',
-          accessor: 'streamrail.profit'
+          accessor: 'streamrail.profit',
+          Cell: this.renderValue('usd')
         }, {
           Header: 'Margin',
-          accessor: 'streamrail.margin'
+          accessor: 'streamrail.margin',
+          Cell: this.renderValue('percent')
         }
       ]
     }, {
@@ -61,10 +101,12 @@ class SspAsReport extends React.Component {
       columns: [
         {
           Header: 'Profit',
-          accessor: 'springserve.profit'
+          accessor: 'springserve.profit',
+          Cell: this.renderValue('usd')
         }, {
           Header: 'Margin',
-          accessor: 'springserve.margin'
+          accessor: 'springserve.margin',
+          Cell: this.renderValue('percent')
         }
       ]
     }, {
@@ -72,34 +114,26 @@ class SspAsReport extends React.Component {
       columns: [
         {
           Header: 'Profit',
-          accessor: 'aniview.profit'
+          accessor: 'aniview.profit',
+          Cell: this.renderValue('usd')
         }, {
           Header: 'Margin',
-          accessor: 'aniview.margin'
+          accessor: 'aniview.margin',
+          Cell: this.renderValue('percent')
         }
       ]
     }]
     return (
       <div className={classes.root}>
         <Paper className={classes.tableContainer}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Revenue</TableCell>
-                <TableCell>Profit</TableCell>
-                <TableCell>Margin</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>Total</TableCell>
-                <TableCell>{numeral(total.revenue).format('$0,0.0')}</TableCell>
-                <TableCell>{numeral(total.profit).format('$0,0.0')}</TableCell>
-                <TableCell>{numeral(total.margin).format('0a%')}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <ReactTable
+            className={classes.table}
+            data={[total]}
+            columns={totalColumns}
+            showPageJump={false}
+            defaultPageSize={1}
+            PaginationComponent={() => <div />}
+          />
         </Paper>
         <Paper className={classes.tableContainer}>
           <ReactTable

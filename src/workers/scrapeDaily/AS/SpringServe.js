@@ -41,6 +41,7 @@ const getResults = async dateTs => {
   }
   try {
     const res = await axios.post('/api/v0/report', form)
+    console.log(JSON.stringify(res.data, null, 2))
     return res.data
   } catch (e) {
     e.prevError = e.message

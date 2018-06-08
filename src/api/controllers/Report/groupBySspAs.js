@@ -16,7 +16,9 @@ const groupBySsp = results => {
     each(asList, as => {
       sspGroups[sspKey][as] = {
         revenue: 0,
-        profit: 0
+        profit: 0,
+        revenueDiff: 0,
+        profitDiff: 0
       }
     })
   })

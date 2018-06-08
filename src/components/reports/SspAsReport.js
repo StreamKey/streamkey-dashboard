@@ -22,7 +22,10 @@ const styles = theme => {
     },
     table: {
       fontSize: 14,
-      fontWeight: 300
+      fontWeight: 300,
+      '& .rt-th:focus': {
+        outline: 'none'
+      }
     }
   }
 }
@@ -130,6 +133,7 @@ class SspAsReport extends React.Component {
             className={classes.table}
             data={[total]}
             columns={totalColumns}
+            sortable={false}
             showPageJump={false}
             defaultPageSize={1}
             PaginationComponent={() => <div />}

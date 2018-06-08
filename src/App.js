@@ -11,6 +11,7 @@ import { withStyles } from 'material-ui/styles'
 
 import TagReport from './pages/TagReport'
 import SspAsReport from './pages/SspAsReport'
+import DiscrepancyReport from './pages/DiscrepancyReport'
 import Login from './pages/Login'
 import Logs from './pages/Logs'
 import TagGenerator from './pages/TagGenerator'
@@ -84,7 +85,7 @@ class App extends React.Component {
           <MuiThemeProvider theme={Theme}>
             <CssBaseline />
             <ErrorBoundary>
-              <div className={classes.root} navclosed={hideNavbar ? 'true' : false}>
+              <div className={classes.root} navclosed={hideNavbar === true ? 'true' : undefined}>
                 <Header
                   className={classes.header}
                   hideNavbar={hideNavbar}
@@ -100,7 +101,7 @@ class App extends React.Component {
                     <Route exact path='/admin' component={TagReport} />
                     <Route exact path='/ssp-adserver' component={SspAsReport} />
                     <Route exact path='/tag-report' component={TagReport} />
-                    <Route exact path='/discrepancy' component={ComingSoon} />
+                    <Route exact path='/discrepancy' component={DiscrepancyReport} />
                     <Route exact path='/tag-generator' component={TagGenerator} />
                     <Route exact path='/duplicate-tremor-lkqd' component={DuplicateTremorLkqd} />
                     <Route exact path='/logs' component={Logs} />

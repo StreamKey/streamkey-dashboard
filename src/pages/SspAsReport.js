@@ -40,7 +40,7 @@ class SspAsReportPage extends React.Component {
     super(props)
     this.state = {
       date: moment().startOf('day'),
-      data: [],
+      data: {},
       total: {},
       isLoading: false,
       error: false
@@ -61,11 +61,18 @@ class SspAsReportPage extends React.Component {
         from: moment(this.state.date).format('X'),
         to: moment(this.state.date).add(1, 'day').format('X')
       }
+      const form2 = {
+        from: moment(this.state.date).subtract(1, 'day').format('X'),
+        to: moment(this.state.date).add(1, 'day').subtract(1, 'day').format('X')
+      }
       const response = await API.get('/reports/ssp-as', { params: form })
+      const response2 = await API.get('/reports/ssp-as', { params: form2 })
       this.setState({
         ...this.state,
-        data: response.data.report.bySsp,
-        total: response.data.report.total,
+        data: {
+          current: response.data.report.bySsp,
+          previous: response2.data.report.bySsp
+        },
         isLoading: false,
         error: false
       })
@@ -116,7 +123,7 @@ class SspAsReportPage extends React.Component {
             <MdIcon svg={RightSvg} className={classes.menuIcon} />
           </IconButton>
         </div>
-        <SspAsReport data={this.state.data} total={this.state.total} date={this.state.date} />
+        <SspAsReport data={this.state.data} date={this.state.date} />
       </div>
     )
   }

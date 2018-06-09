@@ -40,7 +40,7 @@ class DiscrepancyReportPage extends React.Component {
     super(props)
     this.state = {
       date: moment().startOf('day'),
-      data: {},
+      data: [],
       isLoading: false,
       error: false
     }
@@ -60,18 +60,11 @@ class DiscrepancyReportPage extends React.Component {
         from: moment(this.state.date).format('X'),
         to: moment(this.state.date).add(1, 'day').format('X')
       }
-      const form2 = {
-        from: moment(this.state.date).subtract(1, 'day').format('X'),
-        to: moment(this.state.date).add(1, 'day').subtract(1, 'day').format('X')
-      }
       const response = await API.get('/reports/ssp-as', { params: form })
-      const response2 = await API.get('/reports/ssp-as', { params: form2 })
       this.setState({
         ...this.state,
-        data: {
-          current: response.data.report.bySsp,
-          previous: response2.data.report.bySsp
-        },
+        data: response.data.report.bySsp,
+        total: response.data.report.total,
         isLoading: false,
         error: false
       })

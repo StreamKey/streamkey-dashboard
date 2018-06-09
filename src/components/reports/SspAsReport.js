@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import numeral from 'numeral'
 import ReactTable from 'react-table'
+import each from 'lodash/each'
 
 import Paper from 'material-ui/Paper'
 
@@ -26,6 +27,27 @@ const styles = theme => {
       '& .rt-th:focus': {
         outline: 'none'
       }
+    },
+    cellContainer: {
+      textAlign: 'center'
+    },
+    positiveDiff: {
+      fontSize: 11,
+      fontStyle: 'italic',
+      marginLeft: theme.spacing.unit,
+      color: theme.palette.green[700]
+    },
+    negativeDiff: {
+      fontSize: 11,
+      fontStyle: 'italic',
+      marginLeft: theme.spacing.unit,
+      color: theme.palette.red[700]
+    },
+    neutralDiff: {
+      fontSize: 11,
+      fontStyle: 'italic',
+      marginLeft: theme.spacing.unit,
+      color: theme.palette.grey[500]
     }
   }
 }
@@ -33,41 +55,152 @@ const styles = theme => {
 class SspAsReport extends React.Component {
   renderValue = type => cell => {
     const val = cell.value
-    if (val === null) {
+    if (!val) {
       return ''
     }
+    const {
+      current,
+      diff
+      // diffPercent
+    } = val
+    let currentVal
+    let diffVal
     switch (type) {
       case 'integer':
-        return numeral(val).format('0,')
+        currentVal = numeral(current).format('0,')
+        diffVal = numeral(diff).format('0,')
+        break
       case 'float':
-        return numeral(val).format('0,0.0')
+        currentVal = numeral(current).format('0,0.0')
+        diffVal = numeral(diff).format('0,0.0')
+        break
       case 'percent':
-        return numeral(val).format('0a%')
+        currentVal = numeral(current).format('0a%')
+        diffVal = numeral(diff).format('0a%')
+        break
       case 'usd':
-        return numeral(val).format('$0,0.0')
+        currentVal = numeral(current).format('$0,0.0')
+        diffVal = numeral(diff).format('$0,0.0')
+        break
       default:
-        return val
+        currentVal = current
+        diffVal = ''
     }
+    return (
+      <div className={this.props.classes.cellContainer}>
+        <span>
+          {currentVal}
+        </span>
+        <span className={this.props.classes[diff > 0 ? 'positiveDiff' : (diff < 0 ? 'negativeDiff' : 'neutralDiff')]}>
+          {(diff > 0 ? '+' : '') + diffVal}
+        </span>
+      </div>
+    )
+  }
+
+  calcDiffItem = (current, previous) => {
+    const res = {}
+    for (let k in current) {
+      if (k === 'ssp') {
+        continue
+      }
+      res[k] = {
+        profit: {
+          current: current[k].profit,
+          previous: previous[k].profit,
+          diff: current[k].profit - previous[k].profit,
+          diffPercent: previous[k].profit === 0 ? 0 : (current[k].profit / previous[k].profit) - 1
+        },
+        margin: {
+          current: current[k].margin,
+          previous: previous[k].margin,
+          diff: current[k].margin - previous[k].margin,
+          diffPercent: previous[k].margin === 0 ? 0 : (current[k].margin / previous[k].margin) - 1
+        }
+      }
+    }
+    return res
+  }
+
+  calcDiff = data => {
+    const { current, previous } = data
+    if (!current || !previous) {
+      return []
+    }
+    // Assumes the same SSP order in current/previous
+    return current.map((c, i) => {
+      return {
+        ...c,
+        ...this.calcDiffItem(c, previous[i])
+      }
+    })
+  }
+
+  calcTotal = data => {
+    const { current, previous } = data
+    const total = {
+      revenue: {
+        current: 0,
+        previous: 0,
+        diff: 0
+      },
+      profit: {
+        current: 0,
+        previous: 0,
+        diff: 0
+      },
+      margin: {
+        current: 0,
+        previous: 0,
+        diff: 0
+      }
+    }
+    if (!current || !previous) {
+      return total
+    }
+    // Assumes the same SSP order in current/previous
+    each(current, (row, i) => {
+      each(row, (v, k) => {
+        if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
+          total.revenue.current += v.revenue
+          total.revenue.previous += previous[i][k].revenue
+          total.profit.current += v.profit
+          total.profit.previous += previous[i][k].profit
+        }
+      })
+    })
+    total.margin.current += total.profit.current === 0 ? 0 : total.profit.current / total.revenue.current
+    total.margin.previous += total.profit.previous === 0 ? 0 : total.profit.previous / total.revenue.previous
+    total.margin.diff += total.margin.current - total.margin.previous
+    total.revenue.diff = total.revenue.current - total.revenue.previous
+    total.profit.diff = total.profit.current - total.profit.previous
+    return total
   }
 
   render () {
-    const { classes, data, total } = this.props
+    const { classes, data } = this.props
+    const total = this.calcTotal(data)
+    const diffWithYesterday = this.calcDiff(data)
     const totalColumns = [
       {
         Header: '',
-        Cell: 'Total'
+        Cell: 'Total',
+        minWidth: 80
       }, {
         Header: 'Revenue',
         accessor: 'revenue',
-        Cell: this.renderValue('usd')
+        Cell: this.renderValue('usd'),
+        minWidth: 180
       }, {
         Header: 'Profit',
         accessor: 'profit',
-        Cell: this.renderValue('usd')
+        Cell: this.renderValue('usd'),
+        minWidth: 180
       }, {
         Header: 'Margin',
         accessor: 'margin',
-        Cell: this.renderValue('percent')
+        Cell: this.renderValue('percent'),
+        minWidth: 120
       }
     ]
     const columns = [{
@@ -79,7 +212,8 @@ class SspAsReport extends React.Component {
         {
           Header: 'Profit',
           accessor: 'lkqd.profit',
-          Cell: this.renderValue('usd')
+          Cell: this.renderValue('usd'),
+          minWidth: 120
         }, {
           Header: 'Margin',
           accessor: 'lkqd.margin',
@@ -92,7 +226,8 @@ class SspAsReport extends React.Component {
         {
           Header: 'Profit',
           accessor: 'streamrail.profit',
-          Cell: this.renderValue('usd')
+          Cell: this.renderValue('usd'),
+          minWidth: 120
         }, {
           Header: 'Margin',
           accessor: 'streamrail.margin',
@@ -105,7 +240,8 @@ class SspAsReport extends React.Component {
         {
           Header: 'Profit',
           accessor: 'springserve.profit',
-          Cell: this.renderValue('usd')
+          Cell: this.renderValue('usd'),
+          minWidth: 120
         }, {
           Header: 'Margin',
           accessor: 'springserve.margin',
@@ -118,7 +254,8 @@ class SspAsReport extends React.Component {
         {
           Header: 'Profit',
           accessor: 'aniview.profit',
-          Cell: this.renderValue('usd')
+          Cell: this.renderValue('usd'),
+          minWidth: 120
         }, {
           Header: 'Margin',
           accessor: 'aniview.margin',
@@ -142,7 +279,7 @@ class SspAsReport extends React.Component {
         <Paper className={classes.tableContainer}>
           <ReactTable
             className={classes.table}
-            data={data}
+            data={diffWithYesterday}
             columns={columns}
             showPageJump={false}
             defaultPageSize={6}

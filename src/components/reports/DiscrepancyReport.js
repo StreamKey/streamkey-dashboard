@@ -2,7 +2,6 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import numeral from 'numeral'
 import ReactTable from 'react-table'
-import each from 'lodash/each'
 
 import Paper from 'material-ui/Paper'
 
@@ -27,12 +26,6 @@ const styles = theme => {
       '& .rt-th:focus': {
         outline: 'none'
       }
-    },
-    positiveCell: {
-      color: theme.palette.green[700]
-    },
-    negativeCell: {
-      color: theme.palette.red[700]
     }
   }
 }
@@ -61,46 +54,14 @@ class DiscrepancyReport extends React.Component {
         formattedVal = val
     }
     if (color) {
-      const { classes } = this.props
-      const cls = !val ? '' : (val > 0 ? classes.positiveCell : classes.negativeCell)
-      return <span className={cls}>{formattedVal}</span>
+      return <span>{formattedVal}</span>
     } else {
       return formattedVal
     }
   }
 
-  calcTotalRevenue = row => {
-    let total = 0
-    each(row, (v, k) => {
-      if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
-        total += v.revenue
-      }
-    })
-    return total
-  }
-
-  calcDiscrepancy = data => {
-    const { current, previous } = data
-    if (!current || !previous) {
-      return []
-    }
-    // Assumes the same SSP order in current/previous
-    return current.map((c, i) => {
-      const totalRevenue = this.calcTotalRevenue(c)
-      const totalPreviousRevenue = this.calcTotalRevenue(previous[i])
-      return {
-        ...c,
-        diff: {
-          usd: totalRevenue - totalPreviousRevenue,
-          percent: (totalRevenue / totalPreviousRevenue) - 1
-        }
-      }
-    })
-  }
-
   render () {
     const { classes, data } = this.props
-    const discrepancy = this.calcDiscrepancy(data)
     const columns = [{
       Header: 'SSP',
       columns: [{
@@ -146,7 +107,7 @@ class DiscrepancyReport extends React.Component {
         <Paper className={classes.tableContainer}>
           <ReactTable
             className={classes.table}
-            data={discrepancy}
+            data={data}
             columns={columns}
             showPageJump={false}
             defaultPageSize={6}

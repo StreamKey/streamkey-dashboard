@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
+import each from 'lodash/each'
 
 import IconButton from 'material-ui/IconButton'
 import MdIcon from '../components/MdIcon'
@@ -50,6 +51,27 @@ class DiscrepancyReportPage extends React.Component {
     this.getReport()
   }
 
+  mapData (bySsp) {
+    return bySsp.map(ssp => {
+      const as = {}
+      console.log('ssp', ssp)
+      each(ssp, (v, k) => {
+        if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
+          as[k] = {
+            revenue: {
+              value: v.revenue,
+              diff: v.revenue - v.asRevenue
+            }
+          }
+        }
+      })
+      return {
+        ssp: ssp.ssp,
+        ...as
+      }
+    })
+  }
+
   getReport () {
     this.setState({
       ...this.state,
@@ -63,8 +85,7 @@ class DiscrepancyReportPage extends React.Component {
       const response = await API.get('/reports/ssp-as', { params: form })
       this.setState({
         ...this.state,
-        data: response.data.report.bySsp,
-        total: response.data.report.total,
+        data: this.mapData(response.data.report.bySsp),
         isLoading: false,
         error: false
       })

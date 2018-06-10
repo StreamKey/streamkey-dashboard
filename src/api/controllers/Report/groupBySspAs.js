@@ -17,8 +17,7 @@ const groupBySsp = results => {
       sspGroups[sspKey][as] = {
         revenue: 0,
         profit: 0,
-        revenueDiff: 0,
-        profitDiff: 0
+        asRevenue: 0
       }
     })
   })
@@ -29,6 +28,7 @@ const groupBySsp = results => {
     }
     const bucket = sspGroups[ssp][r.as]
     bucket.profit += r.profit
+    bucket.asRevenue += r.asRev
     if (r.ssp) {
       bucket.revenue += r.sspRev
     } else {

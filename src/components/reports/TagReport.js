@@ -133,6 +133,9 @@ class TagReport extends React.Component {
     sspImp: {
       type: 'sum'
     },
+    sspCpm: {
+      type: 'sum'
+    },
     sspRev: {
       type: 'sum'
     },

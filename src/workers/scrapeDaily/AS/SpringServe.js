@@ -36,7 +36,6 @@ const getResults = async dateTs => {
     interval: 'day',
     timezone: 'UTC',
     dimensions: [
-      // 'supply_tag_id',
       'demand_tag_id'
     ]
   }
@@ -61,10 +60,10 @@ const normalize = (results, dateTs) => {
   }).map(r => {
     return {
       tag: r.demand_tag_name,
-      asOpp: r.opportunities,
+      asOpp: r.demand_requests,
       asImp: r.impressions,
       asRev: r.revenue,
-      asCost: 0,
+      asCost: r.cost,
       asScost: (r.impressions / 1000) * 0.2
     }
   })

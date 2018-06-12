@@ -50,8 +50,7 @@ const submitQuery = async dateTs => {
       'adUnit',
       'requests',
       'impressions',
-      // 'seatMarginsspNetRevenueseatMargin',
-      'seatMargin', // Programmatic Margin
+      'sspNetRevenue',
       'currency',
       'netCpm'
     ],
@@ -104,12 +103,10 @@ const getResults = async queryId => {
 
 const normalize = (results, currencies) => {
   return results.map(r => {
-    // let revenue = r.sspNetRevenue
-    let revenue = r.seatMargin
+    let revenue = r.sspNetRevenue
     if (r.currency !== 'USD') {
       if (currencies[r.currency]) {
-        // revenue = r.sspNetRevenue * currencies[r.currency]
-        revenue = r.seatMargin * currencies[r.currency]
+        revenue = r.sspNetRevenue * currencies[r.currency]
       } else {
         winston.error('Telaria Unknown revenue currency', { result: r })
       }

@@ -54,7 +54,6 @@ class DiscrepancyReportPage extends React.Component {
   mapData (bySsp) {
     return bySsp.map(ssp => {
       const as = {}
-      console.log('ssp', ssp)
       each(ssp, (v, k) => {
         if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
           as[k] = {

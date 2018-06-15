@@ -65,6 +65,9 @@ class DuplicateTremorLkqd extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      isLoadingRun: false,
+      isDoneRun: false,
+      hasErrorRun: false,
       isLoadingTremor: false,
       isDoneTremor: false,
       hasErrorTremor: false,
@@ -72,6 +75,25 @@ class DuplicateTremorLkqd extends React.Component {
       isDoneLkqd: false,
       hasErrorLkqd: false
     }
+  }
+
+  run = () => {
+    this.setState({
+      ...this.state,
+      isLoadingRun: true,
+      isDoneRun: false
+    }, async () => {
+      const res = await API.post('/runLkqdTremorDuplicate/run')
+      if (res.data.success !== true) {
+        console.error(res)
+      }
+      this.setState({
+        ...this.state,
+        isLoadingRun: false,
+        isDoneRun: true,
+        hasErrorRun: res.data.success !== true
+      })
+    })
   }
 
   runTremor = () => {
@@ -116,6 +138,31 @@ class DuplicateTremorLkqd extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
+        <h3 className={classes.title}>Duplicate LKQD Supply Tremor</h3>
+        <Button
+          className={classes.button}
+          onClick={this.run}
+          size='small'
+          variant='raised'
+          disabled={this.state.isLoadingRun}
+        >
+          {this.state.isLoadingRun && <CircularProgress size={24} className={classes.progress} />}
+          {!this.state.isLoadingRun && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
+          Run
+        </Button>
+        {
+          this.state.isDoneRun && this.state.hasErrorRun &&
+          <div className={classes.error}>
+            <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
+          </div>
+        }
+        {
+          this.state.isDoneRun && !this.state.hasErrorRun &&
+          <div className={classes.success}>
+            <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
+          </div>
+        }
+
         <h3 className={classes.title}>Duplicate On Tremor Only</h3>
         <Button
           className={classes.button}

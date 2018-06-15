@@ -21,6 +21,8 @@ export default action => {
       fileName = 'run_tremor.txt'
     } else if (action === 'copy-lkqd') {
       fileName = 'run_lkqd.txt'
+    } else if (action === 'run') {
+      fileName = 'run.txt'
     } else {
       return reject(new Error('invalid-tremor-lkqd-action'))
     }

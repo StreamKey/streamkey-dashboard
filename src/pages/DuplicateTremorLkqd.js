@@ -22,6 +22,8 @@ const styles = theme => {
     title: {
       textAlign: 'center',
       fontWeight: 300,
+      marginTop: theme.spacing.quad,
+      marginBottom: 0,
       paddingTop: theme.spacing.quad,
       paddingBottom: theme.spacing.double
     },
@@ -63,27 +65,49 @@ class DuplicateTremorLkqd extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isLoading: false,
-      isDone: false,
-      hasError: false
+      isLoadingTremor: false,
+      isDoneTremor: false,
+      hasErrorTremor: false,
+      isLoadingLkqd: false,
+      isDoneLkqd: false,
+      hasErrorLkqd: false
     }
   }
 
-  run = () => {
+  runTremor = () => {
     this.setState({
       ...this.state,
-      isLoading: true,
-      isDone: false
+      isLoadingTremor: true,
+      isDoneTremor: false
     }, async () => {
-      const res = await API.post('/runLkqdTremorDuplicate')
+      const res = await API.post('/runLkqdTremorDuplicate/duplicate-tremor')
       if (res.data.success !== true) {
         console.error(res)
       }
       this.setState({
         ...this.state,
-        isLoading: false,
-        isDone: true,
-        hasError: res.data.success !== true
+        isLoadingTremor: false,
+        isDoneTremor: true,
+        hasErrorTremor: res.data.success !== true
+      })
+    })
+  }
+
+  runLkqd = () => {
+    this.setState({
+      ...this.state,
+      isLoadingLkqd: true,
+      isDoneLkqd: false
+    }, async () => {
+      const res = await API.post('/runLkqdTremorDuplicate/copy-lkqd')
+      if (res.data.success !== true) {
+        console.error(res)
+      }
+      this.setState({
+        ...this.state,
+        isLoadingLkqd: false,
+        isDoneLkqd: true,
+        hasErrorLkqd: res.data.success !== true
       })
     })
   }
@@ -92,26 +116,51 @@ class DuplicateTremorLkqd extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <h3 className={classes.title}>Duplicate LKQD Supply Tremor</h3>
+        <h3 className={classes.title}>Duplicate On Tremor Only</h3>
         <Button
           className={classes.button}
-          onClick={this.run}
+          onClick={this.runTremor}
           size='small'
           variant='raised'
-          disabled={this.state.isLoading}
+          disabled={this.state.isLoadingTremor}
         >
-          {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
-          {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
+          {this.state.isLoadingTremor && <CircularProgress size={24} className={classes.progress} />}
+          {!this.state.isLoadingTremor && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
           Run
         </Button>
         {
-          this.state.isDone && this.state.hasError &&
+          this.state.isDoneTremor && this.state.hasErrorTremor &&
           <div className={classes.error}>
             <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
           </div>
         }
         {
-          this.state.isDone && !this.state.hasError &&
+          this.state.isDoneTremor && !this.state.hasErrorTremor &&
+          <div className={classes.success}>
+            <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
+          </div>
+        }
+
+        <h3 className={classes.title}>Copy to LKQD</h3>
+        <Button
+          className={classes.button}
+          onClick={this.runLkqd}
+          size='small'
+          variant='raised'
+          disabled={this.state.isLoadingLkqd}
+        >
+          {this.state.isLoadingLkqd && <CircularProgress size={24} className={classes.progress} />}
+          {!this.state.isLoadingLkqd && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
+          Run
+        </Button>
+        {
+          this.state.isDoneLkqd && this.state.hasErrorLkqd &&
+          <div className={classes.error}>
+            <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
+          </div>
+        }
+        {
+          this.state.isDoneLkqd && !this.state.hasErrorLkqd &&
           <div className={classes.success}>
             <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
           </div>

@@ -13,11 +13,19 @@ const {
 } = process.env
 
 const LOGS_DIR = process.env.RAZZLE_TMP_PATH || path.join(__dirname, '..', '..', '..')
-const LOCAL_FILE_PATH = path.join(LOGS_DIR, 'run.txt')
-const REMOTE_FULL_FILE_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/tremor/run.txt`
 
-export default () => {
+export default action => {
   return new Promise((resolve, reject) => {
+    let fileName
+    if (action === 'duplicate-tremor') {
+      fileName = 'run_tremor.txt'
+    } else if (action === 'copy-lkqd') {
+      fileName = 'run_lkqd.txt'
+    } else {
+      return reject(new Error('invalid-tremor-lkqd-action'))
+    }
+    const LOCAL_FILE_PATH = path.join(LOGS_DIR, fileName)
+    const REMOTE_FULL_FILE_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/tremor/${fileName}`
     fs.writeFileSync(LOCAL_FILE_PATH, '', 'utf8')
     const conn = new SshClient()
     conn.on('ready', () => {

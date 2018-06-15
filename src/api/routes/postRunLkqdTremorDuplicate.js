@@ -1,8 +1,9 @@
 import runLkqdTremorDuplicate from '../controllers/LegacyFtp/runLkqdTremorDuplicate'
 
-export default async () => {
+export default async req => {
   try {
-    const res = await runLkqdTremorDuplicate()
+    const action = req.params.action
+    const res = await runLkqdTremorDuplicate(action)
     return {
       success: res === true
     }

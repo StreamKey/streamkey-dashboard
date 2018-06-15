@@ -72,7 +72,7 @@ export default app => {
   app.get('/api/reports/:report', ensureLoggedIn, asyncMiddleware(getReport))
   app.get('/api/logs', ensureLoggedIn, asyncMiddleware(getLogs))
   app.get('/api/logs/:file', ensureLoggedIn, asyncMiddleware(getLog))
-  app.post('/api/runLkqdTremorDuplicate', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))
+  app.post('/api/runLkqdTremorDuplicate/:action', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))
   app.put('/api/uploadTagGenerator', ensureLoggedIn, multipartMiddleware, asyncMiddleware(uploadTagGenerator))
 
   app.use('/api/admin/*', ensureAdmin)

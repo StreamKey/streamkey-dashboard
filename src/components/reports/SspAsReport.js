@@ -177,6 +177,61 @@ class SspAsReport extends React.Component {
     return total
   }
 
+  calcTotalColumn = (data, column, type) => {
+    if (type === 'sum') {
+      const total = {
+        current: 0,
+        diff: 0
+      }
+      each(data, row => {
+        if (type === 'sum') {
+          total.current += Number(row[column].current || 0)
+          total.diff += Number(row[column].diff || 0)
+        }
+      })
+      return total
+    } else if (type === 'margin') {
+      const total = {
+        current: {
+          profit: 0,
+          revenue: 0
+        },
+        previous: {
+          profit: 0,
+          revenue: 0
+        }
+      }
+      const as = column.split('.')[0]
+      each(this.props.data.current, row => {
+        total.current.profit += row[as].profit
+        total.current.revenue += row[as].revenue
+      })
+      each(this.props.data.previous, row => {
+        total.previous.profit += row[as].profit
+        total.previous.revenue += row[as].revenue
+      })
+      const currentMargin = total.current.revenue === 0 ? 0 : total.current.profit / total.current.revenue
+      const prevMargin = total.previous.revenue === 0 ? 0 : total.previous.profit / total.previous.revenue
+      return {
+        current: currentMargin,
+        diff: currentMargin - prevMargin
+      }
+    } else {
+      return ''
+    }
+  }
+
+  renderFooter = (column, type, sumType) => ({ data }) => {
+    const total = this.calcTotalColumn(data, column, sumType)
+    const cell = {
+      value: total,
+      column: {
+        id: column
+      }
+    }
+    return <strong>{this.renderValue(type)(cell)}</strong>
+  }
+
   render () {
     const { classes, data } = this.props
     const total = this.calcTotal(data)
@@ -205,7 +260,8 @@ class SspAsReport extends React.Component {
     ]
     const columns = [{
       Header: 'Demand',
-      accessor: 'ssp'
+      accessor: 'ssp',
+      Footer: <strong>Total</strong>
     }, {
       Header: 'LKQD',
       columns: [
@@ -213,11 +269,13 @@ class SspAsReport extends React.Component {
           Header: 'Profit',
           accessor: 'lkqd.profit',
           Cell: this.renderValue('usd'),
-          minWidth: 120
+          minWidth: 120,
+          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'lkqd.margin',
-          Cell: this.renderValue('percent')
+          Cell: this.renderValue('percent'),
+          Footer: this.renderFooter('lkqd.profit', 'percent', 'margin')
         }
       ]
     }, {
@@ -227,11 +285,13 @@ class SspAsReport extends React.Component {
           Header: 'Profit',
           accessor: 'streamrail.profit',
           Cell: this.renderValue('usd'),
-          minWidth: 120
+          minWidth: 120,
+          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'streamrail.margin',
-          Cell: this.renderValue('percent')
+          Cell: this.renderValue('percent'),
+          Footer: this.renderFooter('streamrail.profit', 'percent', 'margin')
         }
       ]
     }, {
@@ -241,11 +301,13 @@ class SspAsReport extends React.Component {
           Header: 'Profit',
           accessor: 'springserve.profit',
           Cell: this.renderValue('usd'),
-          minWidth: 120
+          minWidth: 120,
+          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'springserve.margin',
-          Cell: this.renderValue('percent')
+          Cell: this.renderValue('percent'),
+          Footer: this.renderFooter('springserve.profit', 'percent', 'margin')
         }
       ]
     }, {
@@ -255,11 +317,13 @@ class SspAsReport extends React.Component {
           Header: 'Profit',
           accessor: 'aniview.profit',
           Cell: this.renderValue('usd'),
-          minWidth: 120
+          minWidth: 120,
+          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'aniview.margin',
-          Cell: this.renderValue('percent')
+          Cell: this.renderValue('percent'),
+          Footer: this.renderFooter('aniview.profit', 'percent', 'margin')
         }
       ]
     }]

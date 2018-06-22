@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import numeral from 'numeral'
 import ReactTable from 'react-table'
+import each from 'lodash/each'
 
 import Paper from 'material-ui/Paper'
 import Tooltip from 'material-ui/Tooltip'
@@ -86,12 +87,35 @@ class DiscrepancyReport extends React.Component {
     )
   }
 
+  calcTotalColumn = (data, column) => {
+    const totalCell = {
+      value: 0,
+      diff: 0,
+      diffPercent: 0,
+      asRevenue: 0
+    }
+    each(data, row => {
+      const cell = row[column]
+      totalCell.value += cell.value
+      totalCell.asRevenue += cell.asRevenue
+    })
+    totalCell.diff = totalCell.value - totalCell.asRevenue
+    totalCell.diffPercent = totalCell.asRevenue === 0 ? 0 : (totalCell.value / totalCell.asRevenue) - 1
+    return totalCell
+  }
+
+  renderFooter = column => ({ data }) => {
+    const totalCell = this.calcTotalColumn(data, column)
+    return <strong>{this.renderCell({ value: totalCell })}</strong>
+  }
+
   render () {
     const { classes, data } = this.props
     const columns = [{
       Header: 'SSP',
       columns: [{
-        accessor: 'ssp'
+        accessor: 'ssp',
+        Footer: <strong>Total</strong>
       }]
     }, {
       Header: 'AS',
@@ -100,27 +124,32 @@ class DiscrepancyReport extends React.Component {
           Header: 'LKQD',
           accessor: 'lkqd.revenue',
           Cell: this.renderCell,
-          minWidth: 180
+          minWidth: 180,
+          Footer: this.renderFooter('lkqd.revenue')
         }, {
           Header: 'StreamRail',
           accessor: 'streamrail.revenue',
           Cell: this.renderCell,
-          minWidth: 180
+          minWidth: 180,
+          Footer: this.renderFooter('streamrail.revenue')
         }, {
           Header: 'SpringServe',
           accessor: 'springserve.revenue',
           Cell: this.renderCell,
-          minWidth: 180
+          minWidth: 180,
+          Footer: this.renderFooter('springserve.revenue')
         }, {
           Header: 'Aniview',
           accessor: 'aniview.revenue',
           Cell: this.renderCell,
-          minWidth: 180
+          minWidth: 180,
+          Footer: this.renderFooter('aniview.revenue')
         }, {
           Header: 'Total',
           accessor: 'total',
           Cell: this.renderCell,
-          minWidth: 180
+          minWidth: 180,
+          Footer: this.renderFooter('total')
         }
       ]
     }]

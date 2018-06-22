@@ -116,6 +116,11 @@ class DiscrepancyReport extends React.Component {
           accessor: 'aniview.revenue',
           Cell: this.renderCell,
           minWidth: 180
+        }, {
+          Header: 'Total',
+          accessor: 'total',
+          Cell: this.renderCell,
+          minWidth: 180
         }
       ]
     }]

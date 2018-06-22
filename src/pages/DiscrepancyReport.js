@@ -54,6 +54,10 @@ class DiscrepancyReportPage extends React.Component {
   mapData (bySsp) {
     return bySsp.map(ssp => {
       const as = {}
+      const total = {
+        value: 0,
+        asRevenue: 0
+      }
       each(ssp, (v, k) => {
         if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
           as[k] = {
@@ -64,11 +68,16 @@ class DiscrepancyReportPage extends React.Component {
               asRevenue: v.asRevenue
             }
           }
+          total.value += v.revenue
+          total.asRevenue += v.asRevenue
         }
       })
+      total.diff = total.value - total.asRevenue
+      total.diffPercent = total.asRevenue === 0 ? 0 : (total.value / total.asRevenue) - 1
       return {
         ssp: ssp.ssp,
-        ...as
+        ...as,
+        total
       }
     })
   }

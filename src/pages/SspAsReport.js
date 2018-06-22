@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
+import each from 'lodash/each'
 
 import IconButton from 'material-ui/IconButton'
 import MdIcon from '../components/MdIcon'
@@ -51,6 +52,27 @@ class SspAsReportPage extends React.Component {
     this.getReport()
   }
 
+  addTotalSsp = bySsp => {
+    return bySsp.map(row => {
+      const total = {
+        revenue: 0,
+        profit: 0,
+        margin: 0
+      }
+      each(row, (v, k) => {
+        if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
+          total.revenue += v.revenue
+          total.profit += v.profit
+        }
+      })
+      total.margin += total.profit === 0 ? 0 : total.profit / total.revenue
+      return {
+        ...row,
+        total
+      }
+    })
+  }
+
   getReport () {
     this.setState({
       ...this.state,
@@ -70,8 +92,8 @@ class SspAsReportPage extends React.Component {
       this.setState({
         ...this.state,
         data: {
-          current: response.data.report.bySsp,
-          previous: response2.data.report.bySsp
+          current: this.addTotalSsp(response.data.report.bySsp),
+          previous: this.addTotalSsp(response2.data.report.bySsp)
         },
         isLoading: false,
         error: false

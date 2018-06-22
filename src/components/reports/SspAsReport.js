@@ -286,7 +286,7 @@ class SspAsReport extends React.Component {
           accessor: 'streamrail.profit',
           Cell: this.renderValue('usd'),
           minWidth: 120,
-          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
+          Footer: this.renderFooter('streamrail.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'streamrail.margin',
@@ -302,7 +302,7 @@ class SspAsReport extends React.Component {
           accessor: 'springserve.profit',
           Cell: this.renderValue('usd'),
           minWidth: 120,
-          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
+          Footer: this.renderFooter('springserve.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'springserve.margin',
@@ -318,12 +318,28 @@ class SspAsReport extends React.Component {
           accessor: 'aniview.profit',
           Cell: this.renderValue('usd'),
           minWidth: 120,
-          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
+          Footer: this.renderFooter('aniview.profit', 'usd', 'sum')
         }, {
           Header: 'Margin',
           accessor: 'aniview.margin',
           Cell: this.renderValue('percent'),
           Footer: this.renderFooter('aniview.profit', 'percent', 'margin')
+        }
+      ]
+    }, {
+      Header: 'Total',
+      columns: [
+        {
+          Header: 'Profit',
+          accessor: 'total.profit',
+          Cell: this.renderValue('usd'),
+          minWidth: 120,
+          Footer: this.renderFooter('total.profit', 'usd', 'sum')
+        }, {
+          Header: 'Margin',
+          accessor: 'total.margin',
+          Cell: this.renderValue('percent'),
+          Footer: this.renderFooter('total.profit', 'percent', 'margin')
         }
       ]
     }]

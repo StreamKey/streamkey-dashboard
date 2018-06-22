@@ -4,6 +4,7 @@ import numeral from 'numeral'
 import ReactTable from 'react-table'
 
 import Paper from 'material-ui/Paper'
+import Tooltip from 'material-ui/Tooltip'
 
 import 'react-table/react-table.css'
 
@@ -31,69 +32,57 @@ const styles = theme => {
       textAlign: 'center'
     },
     positiveDiff: {
-      fontSize: 11,
-      fontStyle: 'italic',
-      marginLeft: theme.spacing.unit,
       color: theme.palette.green[700]
     },
     negativeDiff: {
-      fontSize: 11,
-      fontStyle: 'italic',
-      marginLeft: theme.spacing.unit,
       color: theme.palette.red[700]
     },
     neutralDiff: {
-      fontSize: 11,
-      fontStyle: 'italic',
-      marginLeft: theme.spacing.unit,
       color: theme.palette.grey[500]
+    },
+    usdDiff: {
+      marginLeft: theme.spacing.unit,
+      fontSize: 11,
+      fontStyle: 'italic'
     }
   }
 }
 
 class DiscrepancyReport extends React.Component {
-  renderValue = type => cell => {
+  renderCell = cell => {
+    const { classes } = this.props
     const val = cell.value
     if (!val) {
       return ''
     }
     const {
       value,
-      diff
-      // diffPercent
+      diff,
+      diffPercent,
+      asRevenue
     } = val
-    let currentVal
-    let diffVal
-    switch (type) {
-      case 'integer':
-        currentVal = numeral(value).format('0,')
-        diffVal = numeral(diff).format('0,')
-        break
-      case 'float':
-        currentVal = numeral(value).format('0,0.0')
-        diffVal = numeral(diff).format('0,0.0')
-        break
-      case 'percent':
-        currentVal = numeral(value).format('0a%')
-        diffVal = numeral(diff).format('0a%')
-        break
-      case 'usd':
-        currentVal = numeral(value).format('$0,0.0')
-        diffVal = numeral(diff).format('$0,0.0')
-        break
-      default:
-        currentVal = value
-        diffVal = ''
-    }
-    return (
-      <div className={this.props.classes.cellContainer}>
-        <span>
-          {currentVal}
-        </span>
-        <span className={this.props.classes[diff > 0 ? 'positiveDiff' : (diff < 0 ? 'negativeDiff' : 'neutralDiff')]}>
-          {(diff > 0 ? '+' : '') + diffVal}
-        </span>
+    const currentVal = numeral(value).format('$0,0.0')
+    const diffVal = numeral(diff).format('$0,0.0')
+    const diffPercentVal = numeral(diffPercent).format('0a%')
+    const asRevenueVal = numeral(asRevenue).format('$0,0.0')
+    const tooltip = (
+      <div>
+        <div>SSP Revenue: {currentVal}</div>
+        <div>AS Revenue: {asRevenueVal}</div>
       </div>
+    )
+    const cls = classes[diff > 0 ? 'positiveDiff' : (diff < 0 ? 'negativeDiff' : 'neutralDiff')]
+    return (
+      <Tooltip className={this.props.classes.cellContainer} title={tooltip} placement='top' enterDelay={300}>
+        <div className={classes.cellContainer}>
+          <span className={cls}>
+            {diffPercentVal}
+          </span>
+          <span className={`${cls} ${classes.usdDiff}`}>
+            {(diff > 0 ? '+' : '') + diffVal}
+          </span>
+        </div>
+      </Tooltip>
     )
   }
 
@@ -110,22 +99,22 @@ class DiscrepancyReport extends React.Component {
         {
           Header: 'LKQD',
           accessor: 'lkqd.revenue',
-          Cell: this.renderValue('usd'),
+          Cell: this.renderCell,
           minWidth: 180
         }, {
           Header: 'StreamRail',
           accessor: 'streamrail.revenue',
-          Cell: this.renderValue('usd'),
+          Cell: this.renderCell,
           minWidth: 180
         }, {
           Header: 'SpringServe',
           accessor: 'springserve.revenue',
-          Cell: this.renderValue('usd'),
+          Cell: this.renderCell,
           minWidth: 180
         }, {
           Header: 'Aniview',
           accessor: 'aniview.revenue',
-          Cell: this.renderValue('usd'),
+          Cell: this.renderCell,
           minWidth: 180
         }
       ]

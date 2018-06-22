@@ -59,7 +59,9 @@ class DiscrepancyReportPage extends React.Component {
           as[k] = {
             revenue: {
               value: v.revenue,
-              diff: v.revenue - v.asRevenue
+              diff: v.revenue - v.asRevenue,
+              diffPercent: (v.revenue / v.asRevenue) - 1,
+              asRevenue: v.asRevenue
             }
           }
         }

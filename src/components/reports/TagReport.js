@@ -236,6 +236,7 @@ class TagReport extends React.Component {
       'margin',
       'sspOpp',
       'sspImp',
+      'sspCpm',
       'sspRev',
       'sspScost',
       'as',

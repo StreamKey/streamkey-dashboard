@@ -6,6 +6,7 @@ import getProfile from './getProfile'
 import getReport from './getReport'
 import getLogs from './getLogs'
 import getLog from './getLog'
+import getSpotxOauth from './getSpotxOauth'
 import postRunLkqdTremorDuplicate from './postRunLkqdTremorDuplicate'
 import uploadTagGenerator from './uploadTagGenerator'
 import { notFound, parseError, serverError } from './Errors'
@@ -67,6 +68,8 @@ export default app => {
 
   app.post('/api/login', asyncMiddleware(postLogin))
   app.get('/api/logout', asyncMiddleware(getLogout))
+
+  app.get('/api/oauth/spotx', asyncMiddleware(getSpotxOauth))
 
   app.get('/api/profile', ensureLoggedIn, asyncMiddleware(getProfile))
   app.get('/api/reports/:report', ensureLoggedIn, asyncMiddleware(getReport))

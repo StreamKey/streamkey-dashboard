@@ -51,6 +51,11 @@ const errors = {
     id: 17,
     code: 404,
     message: 'This type of report does not exist'
+  },
+  'spotx-oauth-token-error': {
+    id: 18,
+    code: 400,
+    message: 'SpotX OAuth token request failed'
   }
 }
 

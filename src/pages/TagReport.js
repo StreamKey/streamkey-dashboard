@@ -38,8 +38,9 @@ const styles = theme => {
 class TagReportPage extends React.Component {
   constructor (props) {
     super(props)
+    const date = moment(props.match.params.date, 'YYYY-MM-DD')
     this.state = {
-      date: moment().startOf('day'),
+      date,
       data: [],
       isLoading: false,
       error: false

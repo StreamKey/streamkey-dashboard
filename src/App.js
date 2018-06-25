@@ -12,6 +12,7 @@ import { withStyles } from 'material-ui/styles'
 import TagReport from './pages/TagReport'
 import SspAsReport from './pages/SspAsReport'
 import DiscrepancyReport from './pages/DiscrepancyReport'
+import RedirectToYesterday from './pages/RedirectToYesterday'
 import Login from './pages/Login'
 import Logs from './pages/Logs'
 import TagGenerator from './pages/TagGenerator'
@@ -99,9 +100,12 @@ class App extends React.Component {
                   <Switch>
                     <Route exact path='/' component={Login} />
                     <Route exact path='/login' component={Login} />
-                    <Route exact path='/ssp-adserver' component={SspAsReport} />
-                    <Route exact path='/tag-report' component={TagReport} />
-                    <Route exact path='/discrepancy' component={DiscrepancyReport} />
+                    <Route exact path='/ssp-adserver' component={RedirectToYesterday} />
+                    <Route exact path='/ssp-adserver/:date' component={SspAsReport} />
+                    <Route exact path='/tag-report' component={RedirectToYesterday} />
+                    <Route exact path='/tag-report/:date' component={TagReport} />
+                    <Route exact path='/discrepancy' component={RedirectToYesterday} />
+                    <Route exact path='/discrepancy/:date' component={DiscrepancyReport} />
                     <Route exact path='/tag-generator' component={TagGenerator} />
                     <Route exact path='/duplicate-tremor-lkqd' component={DuplicateTremorLkqd} />
                     <Route exact path='/configuration-ui' component={ConfigurationUI} />

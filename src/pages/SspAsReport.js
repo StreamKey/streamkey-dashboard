@@ -103,6 +103,8 @@ class SspAsReportPage extends React.Component {
   }
 
   onDateChange = date => {
+    const path = '/ssp-adserver/' + date.format('YYYY-MM-DD')
+    this.props.history.push(path)
     this.setState({
       ...this.state,
       date

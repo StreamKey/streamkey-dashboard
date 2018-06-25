@@ -95,7 +95,17 @@ class NavBar extends React.Component {
   }
 
   navTo = path => () => {
-    this.props.history.push(path)
+    if (path.endsWith('/:date')) {
+      const re = /^\/(?:discrepancy|ssp-adserver|tag-report)\/(\d+-\d+-\d+)$/ig
+      const matches = re.exec(this.props.location.pathname)
+      if (matches) {
+        this.props.history.push(path.replace(':date', matches[1]))
+      } else {
+        this.props.history.push(path.replace('/:date', ''))
+      }
+    } else {
+      this.props.history.push(path)
+    }
   }
 
   logout = async () => {
@@ -123,13 +133,13 @@ class NavBar extends React.Component {
           <div className={classes.nav}>
             <List className={classes.list} component='nav' dense>
               <ListHeader text='Reports' />
-              <ListItem button onClick={this.navTo('/ssp-adserver')}>
+              <ListItem button onClick={this.navTo('/ssp-adserver/:date')}>
                 <ListItemText primary='SSP - Ad Server' />
               </ListItem>
-              <ListItem button onClick={this.navTo('/tag-report')}>
+              <ListItem button onClick={this.navTo('/tag-report/:date')}>
                 <ListItemText primary='Tag Report' />
               </ListItem>
-              <ListItem button onClick={this.navTo('/discrepancy')}>
+              <ListItem button onClick={this.navTo('/discrepancy/:date')}>
                 <ListItemText primary='Discrepancy' />
               </ListItem>
               <ListHeader text='Legacy' />

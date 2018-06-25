@@ -104,6 +104,8 @@ class DiscrepancyReportPage extends React.Component {
   }
 
   onDateChange = date => {
+    const path = '/discrepancy/' + date.format('YYYY-MM-DD')
+    this.props.history.push(path)
     this.setState({
       ...this.state,
       date

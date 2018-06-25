@@ -72,6 +72,8 @@ class TagReportPage extends React.Component {
   }
 
   onDateChange = date => {
+    const path = '/tag-report/' + date.format('YYYY-MM-DD')
+    this.props.history.push(path)
     this.setState({
       ...this.state,
       date

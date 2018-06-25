@@ -139,6 +139,9 @@ class NavBar extends React.Component {
               <ListItem button onClick={this.navTo('/duplicate-tremor-lkqd')}>
                 <ListItemText primary='Duplicate' />
               </ListItem>
+              <ListItem button onClick={this.navTo('/configuration-ui')}>
+                <ListItemText primary='Configuration UI' />
+              </ListItem>
               <ListHeader text='Logs' />
               <ListItem button onClick={this.navTo('/logs/activity')}>
                 <ListItemText primary='Activity' />

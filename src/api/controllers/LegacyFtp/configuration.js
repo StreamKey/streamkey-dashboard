@@ -10,10 +10,24 @@ const {
   RAZZLE_LEGACY_SSH_KEY
 } = process.env
 
-const REMOTE_DESTINATION_PATH = `/home/${RAZZLE_LEGACY_USER}/dev/lkqd/config/default.json`
+const REMOTE_DEV_PATH = `/home/${RAZZLE_LEGACY_USER}/dev`
 
-const load = () => {
+const load = as => {
   return new Promise((resolve, reject) => {
+    let REMOTE_DESTINATION_PATH = REMOTE_DEV_PATH
+    switch (as) {
+      case 'lkqd':
+        REMOTE_DESTINATION_PATH += '/lkqd/config/default.json'
+        break
+      case 'streamrail':
+        REMOTE_DESTINATION_PATH += '/streamrail/config/default.json'
+        break
+      case 'springserve':
+        REMOTE_DESTINATION_PATH += '/springserve/config/default.json'
+        break
+      default:
+        return reject(new Error('unknown-configuration-file'))
+    }
     const conn = new SshClient()
     conn.on('ready', () => {
       conn.sftp(async (err, sftp) => {
@@ -52,7 +66,8 @@ const load = () => {
   })
 }
 
-const save = async jsonData => {
+const save = async (as, jsonData) => {
+  console.log('as', as)
   console.log('jsonData', jsonData)
 }
 

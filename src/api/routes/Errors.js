@@ -56,6 +56,11 @@ const errors = {
     id: 18,
     code: 400,
     message: 'SpotX OAuth token request failed'
+  },
+  'unknown-configuration-file': {
+    id: 19,
+    code: 404,
+    message: 'No such configuration file'
   }
 }
 

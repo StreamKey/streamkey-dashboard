@@ -2,7 +2,7 @@ import configuration from '../controllers/LegacyFtp/configuration'
 
 export default async req => {
   try {
-    const jsonData = await configuration.load()
+    const jsonData = await configuration.load(req.params.as)
     return {
       jsonData
     }

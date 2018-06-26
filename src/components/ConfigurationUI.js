@@ -2,9 +2,9 @@ import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
 import ReactJson from 'react-json-view'
+
 import Button from 'material-ui/Button'
 import { CircularProgress } from 'material-ui/Progress'
-
 import TextField from 'material-ui/TextField'
 import { MenuItem } from 'material-ui/Menu'
 import Select from 'material-ui/Select'
@@ -13,6 +13,7 @@ import Dialog, {
   DialogContent,
   DialogTitle
 } from 'material-ui/Dialog'
+import Paper from 'material-ui/Paper'
 
 import SuccessSvg from 'mdi-svg/svg/check.svg'
 import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
@@ -36,7 +37,7 @@ const styles = theme => {
       width: '100%',
       height: '65vh',
       overflowY: 'scroll',
-      border: '1px solid #ccc'
+      padding: theme.spacing.double
     },
     fileContainer: {
       width: '100%',
@@ -103,9 +104,16 @@ class ConfigurationUI extends React.Component {
       isLoading: true,
       isDone: false
     }, async () => {
-      const res = await API.get('/configuration-ui/load/' + this.state.as)
-      if (res.data.success !== true) {
-        console.error(res)
+      try {
+        const res = await API.get('/configuration-ui/load/' + this.state.as)
+        this.setState({
+          ...this.state,
+          isLoading: false,
+          jsonData: res.data.jsonData,
+          hasError: res.data.success !== true
+        })
+      } catch (e) {
+        console.error(e)
         this.setState({
           ...this.state,
           isLoading: false,
@@ -113,12 +121,6 @@ class ConfigurationUI extends React.Component {
           hasError: true
         })
       }
-      this.setState({
-        ...this.state,
-        isLoading: false,
-        jsonData: res.data.jsonData,
-        hasError: res.data.success !== true
-      })
     })
   }
 
@@ -269,7 +271,7 @@ class ConfigurationUI extends React.Component {
             }
           </div>
         </div>
-        <div className={classes.jsonEditor}>
+        <Paper className={classes.jsonEditor}>
           <ReactJson
             src={this.state.jsonData || {}}
             displayObjectSize={false}
@@ -279,7 +281,7 @@ class ConfigurationUI extends React.Component {
             enableClipboard={false}
             onEdit={this.onEdit}
           />
-        </div>
+        </Paper>
         {
           this.state.jsonData &&
           <div className={classes.fileContainer}>

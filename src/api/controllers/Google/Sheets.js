@@ -1,40 +1,69 @@
 // Assumes env var GOOGLE_APPLICATION_CREDENTIALS points to service account credentials
 
 const { google } = require('googleapis')
-const FOLDER_ID = 'ab12'
+const FOLDER_ID = '1OT7UPDnjNSq6zDrUBH3wntPHo5xF5BcU'
+let auth,
+  drive,
+  sheets
 
 const main = async () => {
-  const auth = await google.auth.getClient({
+  await init()
+
+  const filename = 'Report-2018-07-10'
+
+  let fileId
+  const existingFiles = await listFiles({ query: filename, exact: true })
+  if (existingFiles.length === 1 && existingFiles[0].name === filename) {
+    console.log('Found existing file', existingFiles[0].id)
+    fileId = existingFiles[0].id
+  } else {
+    console.log('Creating new file')
+    fileId = await createNewSheet({ filename })
+    await moveFileToSharedFolder({ fileId })
+  }
+
+  console.log('Using ' + fileId)
+  writeToSheet({ fileId, data: [1, 2, 3] })
+
+  // await listFiles({ drive })
+  // await deleteFile({ drive, fileId: 'ab12' })
+  // await createFolder({ drive })
+  // await shareFile({ drive, fileId: 'ab12' })
+}
+
+const init = async () => {
+  if (auth) {
+    return
+  }
+  auth = await google.auth.getClient({
     scopes: [
       'https://www.googleapis.com/auth/spreadsheets',
       'https://www.googleapis.com/auth/drive'
     ]
   })
-
-  const drive = google.drive({ version: 'v3', auth })
-  const sheets = google.sheets({ version: 'v4', auth })
-
-  // const fileId = await createEmptySheet({ drive, sheets })
-  await moveFileToSharedFolder({ drive, fileId: 'abcd' })
-  // await drive.files.delete({ fileId: 'defg' })
-  await listFiles({ drive })
-  // await createFolder({ drive })
-  // await shareFile({ drive, fileId: 'ab12' })
+  drive = google.drive({ version: 'v3', auth })
+  sheets = google.sheets({ version: 'v4', auth })
 }
 
-const listFiles = async ({ drive }) => {
-  const listRes = await drive.files.list()
-  const files = listRes.data.files
-  if (!files.length) {
-    console.log('No files')
-  } else {
-    files.map(async file => {
-      console.log(`${file.name} (${file.id})`)
-    })
+const deleteFile = ({ fileId }) => {
+  return drive.files.delete({ fileId })
+}
+
+const listFiles = async ({ query, exact }) => {
+  const listRes = await drive.files.list({
+    query
+  })
+  if (query && exact) {
+    for (let f of listRes.data.files) {
+      if (f.name === query) {
+        return [f]
+      }
+    }
   }
+  return listRes.data.files
 }
 
-const createFolder = async ({ drive }) => {
+const createFolder = async () => {
   const res = await drive.files.create({
     resource: {
       name: 'Dashboard Reports',
@@ -44,20 +73,35 @@ const createFolder = async ({ drive }) => {
   console.log(res)
 }
 
-const createEmptySheet = async ({ sheets }) => {
+const createNewSheet = async ({ filename }) => {
   const request = {
     resource: {
       properties: {
-        title: 'Test Spreadsheet'
+        title: filename
       }
     }
   }
   const res = await sheets.spreadsheets.create(request)
-  console.log(res.data)
   return res.data.spreadsheetId
 }
 
-const shareFile = async ({ drive, fileId }) => {
+const writeToSheet = async ({ fileId, data }) => {
+  const request = {
+    spreadsheetId: fileId,
+    range: 'Sheet1!A1:C1',
+    valueInputOption: 'RAW',
+    requestBody: {
+      majorDimension: 'ROWS',
+      values: [
+        ['A', 'B', 'C']
+      ]
+    }
+  }
+  const res = await sheets.spreadsheets.values.update(request)
+  console.log(res.data)
+}
+
+const shareFile = async ({ fileId }) => {
   const res = await drive.permissions.create({
     fileId,
     resource: {
@@ -69,7 +113,7 @@ const shareFile = async ({ drive, fileId }) => {
   console.log(res)
 }
 
-const moveFileToSharedFolder = async ({ drive, fileId }) => {
+const moveFileToSharedFolder = async ({ fileId }) => {
   await drive.files.update({
     fileId,
     addParents: [FOLDER_ID]
@@ -77,3 +121,11 @@ const moveFileToSharedFolder = async ({ drive, fileId }) => {
 }
 
 main().catch(console.error)
+
+// export default {
+//   init,
+//   createNewSheet,
+//   createFolder,
+//   shareFile,
+//   moveFileToSharedFolder
+// }

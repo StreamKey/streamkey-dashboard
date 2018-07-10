@@ -1,16 +1,16 @@
 // Assumes env var GOOGLE_APPLICATION_CREDENTIALS points to service account credentials
 
 const { google } = require('googleapis')
+const moment = require('moment')
+const _ = require('lodash')
+_.mixin(require('lodash-deep'))
 const FOLDER_ID = '1OT7UPDnjNSq6zDrUBH3wntPHo5xF5BcU'
 let auth,
   drive,
   sheets
 
-const main = async () => {
+const publishReport = async ({ filename, sheetTitle, data, formatData }) => {
   await init()
-
-  const filename = 'Report-2018-07-10'
-
   let fileId
   const existingFiles = await listFiles({ query: filename, exact: true })
   if (existingFiles.length === 1 && existingFiles[0].name === filename) {
@@ -23,7 +23,7 @@ const main = async () => {
   }
 
   console.log('Using ' + fileId)
-  writeToSheet({ fileId, data: [1, 2, 3] })
+  writeToSheet({ fileId, sheetTitle, data, formatData })
 
   // await listFiles({ drive })
   // await deleteFile({ drive, fileId: 'ab12' })
@@ -85,20 +85,53 @@ const createNewSheet = async ({ filename }) => {
   return res.data.spreadsheetId
 }
 
-const writeToSheet = async ({ fileId, data }) => {
-  const request = {
+const writeToSheet = async ({ fileId, sheetTitle, data, formatData }) => {
+  // Create new sheet
+  const sheetRes = await sheets.spreadsheets.batchUpdate({
     spreadsheetId: fileId,
-    range: 'Sheet1!A1:C1',
-    valueInputOption: 'RAW',
-    requestBody: {
+    resource: {
+      requests: [{
+        addSheet: {
+          properties: {
+            index: 0,
+            title: sheetTitle
+          }
+        }
+      }]
+    }
+  })
+  const sheetId = sheetRes.data.replies[0].addSheet.properties.sheetId
+  console.log('sheetId', sheetId)
+
+  // Add data
+  const dataRequest = {
+    spreadsheetId: fileId,
+    range: `${sheetTitle}!A1:ZZ99999`,
+    valueInputOption: 'USER_ENTERED',
+    resource: {
       majorDimension: 'ROWS',
-      values: [
-        ['A', 'B', 'C']
-      ]
+      values: data
     }
   }
-  const res = await sheets.spreadsheets.values.update(request)
+  const res = await sheets.spreadsheets.values.update(dataRequest)
   console.log(res.data)
+
+  // Add format
+  const mappedFormatData = _.deepMapValues(formatData, (v, path) => {
+    if (v === '__sheetId__') {
+      return sheetId
+    } else {
+      return v
+    }
+  })
+  const formatRequest = {
+    spreadsheetId: fileId,
+    resource: {
+      requests: mappedFormatData
+    }
+  }
+  const res2 = await sheets.spreadsheets.batchUpdate(formatRequest)
+  console.log(res2.data)
 }
 
 const shareFile = async ({ fileId }) => {
@@ -120,10 +153,51 @@ const moveFileToSharedFolder = async ({ fileId }) => {
   })
 }
 
-main().catch(console.error)
+const filename = 'Report-2018-07-10'
+const sheetTitle = moment().format('HH:mm:ss')
+const data = [
+  ['Demand', 'Profit', 'Margin'],
+  ['aerserv', 128.1, 28.2],
+  ['beachfront', -0.8, -11.7],
+  ['freewheel', 1.6, 39.89],
+  ['Total', '=SUM(B2:B4)', '=SUM(C2:C4)']
+]
+const formatData = [
+  {
+    repeatCell: {
+      range: {
+        sheetId: '__sheetId__',
+        startRowIndex: 0,
+        endRowIndex: 1
+      },
+      cell: {
+        userEnteredFormat: {
+          backgroundColor: {
+            red: 0.5,
+            green: 0.0,
+            blue: 0.0
+          },
+          horizontalAlignment: 'CENTER',
+          textFormat: {
+            foregroundColor: {
+              red: 1.0,
+              green: 1.0,
+              blue: 1.0
+            },
+            fontSize: 12,
+            bold: true
+          }
+        }
+      },
+      fields: 'userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)'
+    }
+  }
+]
+publishReport({ filename, sheetTitle, data, formatData }).catch(console.error)
 
 // export default {
 //   init,
+//   publishReport,
 //   createNewSheet,
 //   createFolder,
 //   shareFile,

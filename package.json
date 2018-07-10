@@ -39,6 +39,7 @@
     "googleapis": "^32.0.0",
     "jsonwebtoken": "^8.2.1",
     "lodash": "^4.17.5",
+    "lodash-deep": "^2.0.0",
     "material-ui": "^1.0.0-beta.42",
     "material-ui-pickers": "^1.0.0-rc.6",
     "mdi-svg": "^2.1.99",

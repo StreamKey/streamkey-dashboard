@@ -15,7 +15,8 @@
     "db:start": "docker start streamkey-postgres",
     "db:rm": "docker stop streamkey-postgres && docker rm streamkey-postgres",
     "workers:scrapeDaily": "babel-node src/workers/scrapeDaily/index.js --presets es2015,stage-2",
-    "workers:createUser": "babel-node src/workers/createUser/index.js --presets es2015,stage-2"
+    "workers:createUser": "babel-node src/workers/createUser/index.js --presets es2015,stage-2",
+    "workers:emailReport": "babel-node src/workers/emailReport/index.js --presets es2015,stage-2"
   },
   "dependencies": {
     "axios": "^0.18.0",

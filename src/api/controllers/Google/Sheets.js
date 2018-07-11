@@ -1,7 +1,6 @@
 // Assumes env var GOOGLE_APPLICATION_CREDENTIALS points to service account credentials
 
 const { google } = require('googleapis')
-const moment = require('moment')
 const _ = require('lodash')
 _.mixin(require('lodash-deep'))
 const FOLDER_ID = '1OT7UPDnjNSq6zDrUBH3wntPHo5xF5BcU'
@@ -11,16 +10,17 @@ let auth,
 
 const publishReport = async ({ filename, sheetTitle, data, formatData }) => {
   await init()
-  let fileId
-  const existingFiles = await listFiles({ query: filename, exact: true })
-  if (existingFiles.length === 1 && existingFiles[0].name === filename) {
-    console.log('Found existing file', existingFiles[0].id)
-    fileId = existingFiles[0].id
-  } else {
-    console.log('Creating new file')
-    fileId = await createNewSheet({ filename })
-    await moveFileToSharedFolder({ fileId })
-  }
+  let fileId = '1pALaGub8D2VFthH7KEF5zuIobIPBHqjWSvBuYtDXEGc'
+  // let fileId
+  // const existingFiles = await listFiles({ query: filename, exact: true })
+  // if (existingFiles.length === 1 && existingFiles[0].name === filename) {
+  //   console.log('Found existing file', existingFiles[0].id)
+  //   fileId = existingFiles[0].id
+  // } else {
+  //   console.log('Creating new file')
+  //   fileId = await createNewSheet({ filename })
+  //   await moveFileToSharedFolder({ fileId })
+  // }
 
   console.log('Using ' + fileId)
   writeToSheet({ fileId, sheetTitle, data, formatData })
@@ -153,53 +153,11 @@ const moveFileToSharedFolder = async ({ fileId }) => {
   })
 }
 
-const filename = 'Report-2018-07-10'
-const sheetTitle = moment().format('HH:mm:ss')
-const data = [
-  ['Demand', 'Profit', 'Margin'],
-  ['aerserv', 128.1, 28.2],
-  ['beachfront', -0.8, -11.7],
-  ['freewheel', 1.6, 39.89],
-  ['Total', '=SUM(B2:B4)', '=SUM(C2:C4)']
-]
-const formatData = [
-  {
-    repeatCell: {
-      range: {
-        sheetId: '__sheetId__',
-        startRowIndex: 0,
-        endRowIndex: 1
-      },
-      cell: {
-        userEnteredFormat: {
-          backgroundColor: {
-            red: 0.5,
-            green: 0.0,
-            blue: 0.0
-          },
-          horizontalAlignment: 'CENTER',
-          textFormat: {
-            foregroundColor: {
-              red: 1.0,
-              green: 1.0,
-              blue: 1.0
-            },
-            fontSize: 12,
-            bold: true
-          }
-        }
-      },
-      fields: 'userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)'
-    }
-  }
-]
-publishReport({ filename, sheetTitle, data, formatData }).catch(console.error)
-
-// export default {
-//   init,
-//   publishReport,
-//   createNewSheet,
-//   createFolder,
-//   shareFile,
-//   moveFileToSharedFolder
-// }
+module.exports = {
+  init,
+  publishReport,
+  createNewSheet,
+  createFolder,
+  shareFile,
+  moveFileToSharedFolder
+}

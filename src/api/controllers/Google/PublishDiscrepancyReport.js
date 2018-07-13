@@ -20,6 +20,26 @@ const styles = ({
   endColumnIndex
 }) => {
   switch (type) {
+    case 'total':
+      return {
+        repeatCell: {
+          range: {
+            sheetId: '__sheetId__',
+            startColumnIndex,
+            endColumnIndex,
+            startRowIndex,
+            endRowIndex
+          },
+          cell: {
+            userEnteredFormat: {
+              textFormat: {
+                bold: true
+              }
+            }
+          },
+          fields: 'userEnteredFormat(textFormat)'
+        }
+      }
     case 'centered':
       return {
         repeatCell: {
@@ -32,13 +52,10 @@ const styles = ({
           },
           cell: {
             userEnteredFormat: {
-              horizontalAlignment: 'CENTER',
-              textFormat: {
-                bold: true
-              }
+              horizontalAlignment: 'CENTER'
             }
           },
-          fields: 'userEnteredFormat(textFormat,horizontalAlignment)'
+          fields: 'userEnteredFormat(horizontalAlignment)'
         }
       }
     case 'usd':
@@ -83,7 +100,7 @@ const styles = ({
           fields: 'userEnteredFormat(numberFormat)'
         }
       }
-    case 'conditionalColor':
+    case 'conditionalColorPositive':
       return {
         addConditionalFormatRule: {
           rule: {
@@ -96,7 +113,74 @@ const styles = ({
             }],
             booleanRule: {
               condition: {
-                type: 'NUMBER_LESS_THAN_EQ',
+                type: 'NUMBER_GREATER',
+                values: [
+                  {
+                    userEnteredValue: '0'
+                  }
+                ]
+              },
+              format: {
+                backgroundColor: {
+                  blue: 0.9,
+                  green: 1,
+                  red: 0.9
+                }
+              }
+            }
+          },
+          index: 0
+        }
+      }
+    case 'conditionalColorNutral':
+      return {
+        addConditionalFormatRule: {
+          rule: {
+            ranges: [{
+              sheetId: '__sheetId__',
+              startColumnIndex,
+              endColumnIndex,
+              startRowIndex,
+              endRowIndex
+            }],
+            booleanRule: {
+              condition: {
+                type: 'NUMBER_EQ',
+                values: [
+                  {
+                    userEnteredValue: '0'
+                  }
+                ]
+              },
+              format: {
+                textFormat: {
+                  foregroundColor: {
+                    blue: 0.75,
+                    green: 0.75,
+                    red: 0.75
+                  },
+                  italic: true
+                }
+              }
+            }
+          },
+          index: 0
+        }
+      }
+    case 'conditionalColorNegative':
+      return {
+        addConditionalFormatRule: {
+          rule: {
+            ranges: [{
+              sheetId: '__sheetId__',
+              startColumnIndex,
+              endColumnIndex,
+              startRowIndex,
+              endRowIndex
+            }],
+            booleanRule: {
+              condition: {
+                type: 'NUMBER_LESS',
                 values: [
                   {
                     userEnteredValue: '0'
@@ -128,6 +212,14 @@ const formatData = [
       endColumnIndex: (asList.length + 1) * 2 + 1,
       startRowIndex: 0,
       endRowIndex: 2
+    })
+  }, {
+    ...styles({
+      type: 'total',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 2 + 1,
+      startRowIndex: 2,
+      endRowIndex: 3
     })
   }
 ]
@@ -180,8 +272,31 @@ const addHeader = data => {
 }
 
 const addTotalRow = (data, report) => {
-  const lastRow = 4 + report.bySsp.length
-  data.push(['Total', '', `=SUM(C4:C${lastRow})`, '', `=SUM(E4:E${lastRow})`])
+  const totalRow = ['Total']
+  let totalTotalAsRev = 0
+  let totalTotalSspRev = 0
+  for (let i in asList) {
+    const as = asList[i]
+    let totalAsRev = 0
+    let totalSspRev = 0
+    for (let ssp of report.bySsp) {
+      totalSspRev += ssp[as].revenue
+      totalAsRev += ssp[as].asRevenue
+      totalTotalAsRev += ssp[as].revenue
+      totalTotalAsRev += ssp[as].asRevenue
+    }
+    // Add total cells for this AS
+    const totalDiff = totalSspRev - totalAsRev
+    const totalDiffPercent = totalAsRev === 0 ? 0 : totalSspRev / totalAsRev - 1
+    totalRow.push(totalDiffPercent)
+    totalRow.push(totalDiff)
+  }
+  // Add total cells for all ASs
+  const totalTotalDiff = totalTotalSspRev - totalTotalAsRev
+  const totalTotalDiffPercent = totalTotalAsRev === 0 ? 0 : totalTotalSspRev / totalTotalAsRev - 1
+  totalRow.push(totalTotalDiff)
+  totalRow.push(totalTotalDiffPercent)
+  data.push(totalRow)
 }
 
 const addAsRows = (data, report) => {
@@ -210,7 +325,25 @@ const addAsRows = (data, report) => {
 const addCellFormat = (data, formatData) => {
   formatData.push({
     ...styles({
-      type: 'conditionalColor',
+      type: 'conditionalColorPositive',
+      startColumnIndex: 1,
+      endColumnIndex: data[0].length + 1,
+      startRowIndex: 2,
+      endRowIndex: data.length
+    })
+  })
+  formatData.push({
+    ...styles({
+      type: 'conditionalColorNutral',
+      startColumnIndex: 1,
+      endColumnIndex: data[0].length + 1,
+      startRowIndex: 2,
+      endRowIndex: data.length
+    })
+  })
+  formatData.push({
+    ...styles({
+      type: 'conditionalColorNegative',
       startColumnIndex: 1,
       endColumnIndex: data[0].length + 1,
       startRowIndex: 2,

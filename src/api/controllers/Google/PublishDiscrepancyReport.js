@@ -2,7 +2,6 @@ const moment = require('moment')
 const Sheets = require('./Sheets')
 const Report = require('../Report/')
 
-const filename = 'Discrepancy-Report-2018-07-11'
 const sheetTitle = moment().format('HH:mm:ss')
 
 const asList = [
@@ -353,7 +352,6 @@ const addCellFormat = (data, formatData) => {
 }
 
 const createSheetData = report => {
-  // console.log(report.bySsp)
   const data = []
   addHeader(data)
   addTotalRow(data, report)
@@ -367,7 +365,9 @@ const createSheetData = report => {
 
 const main = async ({ from, to }) => {
   const report = await Report.default.groupBySspAs(from, to)
+  // TODO - report is empty
   const { data, formatData } = createSheetData(report)
+  const filename = 'Discrepancy-Report-' + moment(from, 'X').format('YYYY-MM-DD')
   await Sheets.publishReport({ filename, sheetTitle, data, formatData })
 }
 

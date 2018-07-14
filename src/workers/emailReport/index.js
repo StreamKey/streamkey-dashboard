@@ -5,10 +5,28 @@ import DB from '../../DB/'
 
 import PublishDiscrepancyReport from '../../api/controllers/Google/PublishDiscrepancyReport'
 
+const getScriptDate = () => {
+  for (let i in process.argv) {
+    const next = Number(i) + 1
+    if (process.argv[i] === '--date' && process.argv[next]) {
+      const date = moment(process.argv[next], 'YYYY-MM-DD')
+      if (!date.isValid()) {
+        console.error('Invalid date')
+        process.exit()
+      }
+      return date
+    }
+  }
+  // TODO stored data is not in UTC?
+  // return moment().utc().subtract(1, 'days').startOf('day')
+  return moment().subtract(1, 'days').startOf('day')
+}
+
 const main = async () => {
   await DB.init()
-  const from = moment('2018-07-14').startOf('day').format('X')
-  const to = moment('2018-07-14').endOf('day').format('X')
+  const utcTime = getScriptDate()
+  const from = moment(utcTime).startOf('day').format('X')
+  const to = moment(utcTime).endOf('day').format('X')
   await PublishDiscrepancyReport({ from, to })
   await DB.close()
 }

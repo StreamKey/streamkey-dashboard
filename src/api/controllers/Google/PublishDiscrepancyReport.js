@@ -282,7 +282,7 @@ const addTotalRow = (data, report) => {
     for (let ssp of report.bySsp) {
       totalSspRev += ssp[as].revenue
       totalAsRev += ssp[as].asRevenue
-      totalTotalAsRev += ssp[as].revenue
+      totalTotalSspRev += ssp[as].revenue
       totalTotalAsRev += ssp[as].asRevenue
     }
     // Add total cells for this AS
@@ -294,8 +294,8 @@ const addTotalRow = (data, report) => {
   // Add total cells for all ASs
   const totalTotalDiff = totalTotalSspRev - totalTotalAsRev
   const totalTotalDiffPercent = totalTotalAsRev === 0 ? 0 : totalTotalSspRev / totalTotalAsRev - 1
-  totalRow.push(totalTotalDiff)
   totalRow.push(totalTotalDiffPercent)
+  totalRow.push(totalTotalDiff)
   data.push(totalRow)
 }
 

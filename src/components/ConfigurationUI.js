@@ -166,6 +166,13 @@ class ConfigurationUI extends React.Component {
     })
   }
 
+  onDelete = e => {
+    this.setState({
+      ...this.state,
+      jsonData: e.updated_src
+    })
+  }
+
   promptForName = key => () => {
     this.setState({
       ...this.state,
@@ -288,6 +295,7 @@ class ConfigurationUI extends React.Component {
             enableClipboard={false}
             onEdit={this.onEdit}
             onAdd={this.onAdd}
+            onDelete={this.onDelete}
           />
         </Paper>
         {

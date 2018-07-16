@@ -152,6 +152,13 @@ class ConfigurationUI extends React.Component {
     })
   }
 
+  onAdd = e => {
+    this.setState({
+      ...this.state,
+      jsonData: e.updated_src
+    })
+  }
+
   onEdit = e => {
     this.setState({
       ...this.state,
@@ -280,6 +287,7 @@ class ConfigurationUI extends React.Component {
             collapsed={1}
             enableClipboard={false}
             onEdit={this.onEdit}
+            onAdd={this.onAdd}
           />
         </Paper>
         {

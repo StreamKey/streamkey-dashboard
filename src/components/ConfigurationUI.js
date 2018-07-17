@@ -152,7 +152,21 @@ class ConfigurationUI extends React.Component {
     })
   }
 
+  onAdd = e => {
+    this.setState({
+      ...this.state,
+      jsonData: e.updated_src
+    })
+  }
+
   onEdit = e => {
+    this.setState({
+      ...this.state,
+      jsonData: e.updated_src
+    })
+  }
+
+  onDelete = e => {
     this.setState({
       ...this.state,
       jsonData: e.updated_src
@@ -280,6 +294,8 @@ class ConfigurationUI extends React.Component {
             collapsed={1}
             enableClipboard={false}
             onEdit={this.onEdit}
+            onAdd={this.onAdd}
+            onDelete={this.onDelete}
           />
         </Paper>
         {

@@ -365,10 +365,10 @@ const createSheetData = report => {
 
 const main = async ({ from, to }) => {
   const report = await Report.default.groupBySspAs(from, to)
-  // TODO - report is empty
   const { data, formatData } = createSheetData(report)
   const filename = 'Discrepancy-Report-' + moment(from, 'X').format('YYYY-MM-DD')
-  await Sheets.publishReport({ filename, sheetTitle, data, formatData })
+  const discrepancyUrl = await Sheets.publishReport({ filename, sheetTitle, data, formatData })
+  return discrepancyUrl
 }
 
 export default main

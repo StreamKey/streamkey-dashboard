@@ -3,8 +3,10 @@ import winston from 'winston'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
 import uniqBy from 'lodash/uniqBy'
+import moment from 'moment'
 
 import Email from '../../api/controllers/Email/'
+import PublishDiscrepancyReport from '../../api/controllers/Google/PublishDiscrepancyReport'
 
 const { RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS } = process.env
 
@@ -72,7 +74,7 @@ const getErrorData = error => {
   }
 }
 
-const getEmailBody = (utcTime, loggerData) => {
+const getEmailBody = ({ utcTime, loggerData, reportsUrls }) => {
   const date = utcTime.format('YYYY-MM-DD')
   const executionTime = numeral(loggerData.runDuration).format('00:00:00')
   const profits = sumProfit(loggerData.items)
@@ -92,16 +94,14 @@ Execution time: ${executionTime}`
 <tr><td>Execution time</td><td>${executionTime}</td></tr>
 </table>`
 
-  text += '\nProfit breakdown:\n'
-  html += '<br/><b>Profit breakdown:</b><table>'
-  for (let ssp in profits.ssp) {
-    for (let as in profits.ssp[ssp]) {
-      const profit = numeral(profits.ssp[ssp][as]).format('$0,0.0')
-      text += `${ssp === '_empty_' ? 'v2v ' + as : ssp} - ${as}: ${profit}` + '\n'
-      html += `<tr><td>${ssp === '_empty_' ? 'v2v ' + as : ssp}</td><td>${as}</td><td>${profit}<td></tr>`
-    }
-  }
-  html += '</table>'
+  text += `
+Reports Links
+Discrepancy: ${reportsUrls.discrepancyUrl}
+`
+  html += `<br/><b>Reports Links</b><br/>
+  <a href="${reportsUrls.discrepancyUrl}">Discrepancy</a>
+  <br/>
+`
 
   if (loggerData.errors.length > 0) {
     text += '\nErrors:\n'
@@ -132,9 +132,26 @@ Execution time: ${executionTime}`
   }
 }
 
+const generateReports = async (utcTime) => {
+  const from = Number(moment(utcTime).startOf('day').format('X'))
+  const to = Number(moment(utcTime).endOf('day').format('X'))
+  winston.info('Generating reports', { from, to })
+  let discrepancyUrl
+  try {
+    discrepancyUrl = await PublishDiscrepancyReport({ from, to })
+    winston.info('Discrepancy report done', { url: discrepancyUrl })
+  } catch (e) {
+    winston.error('Generating discrepancy report failed', { error: e.message })
+  }
+  return {
+    discrepancyUrl
+  }
+}
+
 const send = async ({ utcTime }) => {
   const loggerData = await getLoggerData()
-  const emailBody = getEmailBody(utcTime, loggerData)
+  const reportsUrls = await generateReports(utcTime)
+  const emailBody = getEmailBody({ utcTime, loggerData, reportsUrls })
   try {
     await Email.send({
       to: RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS,

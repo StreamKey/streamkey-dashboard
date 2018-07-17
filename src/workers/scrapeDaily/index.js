@@ -116,8 +116,6 @@ const main = async () => {
     })
   }
 
-  await DB.close()
-  winston.info('Script finish')
   winston.profile('run-duration')
   try {
     await EmailResults.send({ utcTime })
@@ -127,6 +125,9 @@ const main = async () => {
       error: e.message
     })
   }
+
+  await DB.close()
+  winston.info('Script finish')
 }
 
 main()

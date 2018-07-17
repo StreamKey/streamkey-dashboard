@@ -25,8 +25,8 @@ export default async (fromTs, toTs) => {
   const reports = await DB.models.Reports.findAll({
     where: {
       date: {
-        [Sequelize.Op.gt]: moment(fromTs, 'X'),
-        [Sequelize.Op.lt]: moment(toTs, 'X')
+        [Sequelize.Op.gte]: moment(fromTs, 'X'),
+        [Sequelize.Op.lte]: moment(toTs, 'X')
       }
     }
   })

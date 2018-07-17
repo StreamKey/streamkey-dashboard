@@ -10,25 +10,21 @@ let auth,
 
 const publishReport = async ({ filename, sheetTitle, data, formatData }) => {
   await init()
-  let fileId = '1pALaGub8D2VFthH7KEF5zuIobIPBHqjWSvBuYtDXEGc'
-  // let fileId
-  // const existingFiles = await listFiles({ query: filename, exact: true })
-  // if (existingFiles.length === 1 && existingFiles[0].name === filename) {
-  //   console.log('Found existing file', existingFiles[0].id)
-  //   fileId = existingFiles[0].id
-  // } else {
-  //   console.log('Creating new file')
-  //   fileId = await createNewSheet({ filename })
-  //   await moveFileToSharedFolder({ fileId })
-  // }
 
-  console.log('Using ' + fileId)
-  writeToSheet({ fileId, sheetTitle, data, formatData })
+  let fileId
+  const existingFiles = await listFiles({ query: filename, exact: true })
+  if (existingFiles.length === 1 && existingFiles[0].name === filename) {
+    // Found existing file
+    fileId = existingFiles[0].id
+  } else {
+    // Creating a new file
+    fileId = await createNewSheet({ filename })
+    await moveFileToSharedFolder({ fileId })
+  }
+  await writeToSheet({ fileId, sheetTitle, data, formatData })
 
-  // await listFiles({ drive })
-  // await deleteFile({ drive, fileId: 'ab12' })
-  // await createFolder({ drive })
-  // await shareFile({ drive, fileId: 'ab12' })
+  const fileUrl = `https://docs.google.com/spreadsheets/d/${fileId}`
+  return fileUrl
 }
 
 const init = async () => {
@@ -64,13 +60,12 @@ const listFiles = async ({ query, exact }) => {
 }
 
 const createFolder = async () => {
-  const res = await drive.files.create({
+  await drive.files.create({
     resource: {
       name: 'Dashboard Reports',
       mimeType: 'application/vnd.google-apps.folder'
     }
   })
-  console.log(res)
 }
 
 const createNewSheet = async ({ filename }) => {
@@ -101,7 +96,6 @@ const writeToSheet = async ({ fileId, sheetTitle, data, formatData }) => {
     }
   })
   const sheetId = sheetRes.data.replies[0].addSheet.properties.sheetId
-  console.log('sheetId', sheetId)
 
   // Add data
   const dataRequest = {
@@ -113,8 +107,7 @@ const writeToSheet = async ({ fileId, sheetTitle, data, formatData }) => {
       values: data
     }
   }
-  const res = await sheets.spreadsheets.values.update(dataRequest)
-  console.log(res.data)
+  await sheets.spreadsheets.values.update(dataRequest)
 
   // Add format
   const mappedFormatData = _.deepMapValues(formatData, (v, path) => {
@@ -130,12 +123,11 @@ const writeToSheet = async ({ fileId, sheetTitle, data, formatData }) => {
       requests: mappedFormatData
     }
   }
-  const res2 = await sheets.spreadsheets.batchUpdate(formatRequest)
-  console.log(res2.data)
+  await sheets.spreadsheets.batchUpdate(formatRequest)
 }
 
 const shareFile = async ({ fileId }) => {
-  const res = await drive.permissions.create({
+  await drive.permissions.create({
     fileId,
     resource: {
       role: 'writer',
@@ -143,7 +135,6 @@ const shareFile = async ({ fileId }) => {
       domain: 'streamkey.tv'
     }
   })
-  console.log(res)
 }
 
 const moveFileToSharedFolder = async ({ fileId }) => {
@@ -159,5 +150,7 @@ module.exports = {
   createNewSheet,
   createFolder,
   shareFile,
+  listFiles,
+  deleteFile,
   moveFileToSharedFolder
 }

@@ -1,8 +1,10 @@
-const moment = require('moment')
-const Sheets = require('./Sheets')
-const Report = require('../Report/')
+import moment from 'moment'
+import Sheets from './Sheets'
 
-const sheetTitle = moment().format('HH:mm:ss')
+import Report from '../Report/'
+import { getPartnerName } from '../../../components/Utils'
+
+const sheetTitle = 'Discrepancy ' + moment().format('HH:mm:ss')
 
 const asList = [
   'lkqd',
@@ -16,7 +18,8 @@ const styles = ({
   startRowIndex,
   endRowIndex,
   startColumnIndex,
-  endColumnIndex
+  endColumnIndex,
+  options = {}
 }) => {
   switch (type) {
     case 'total':
@@ -55,6 +58,26 @@ const styles = ({
             }
           },
           fields: 'userEnteredFormat(horizontalAlignment)'
+        }
+      }
+    case 'bold':
+      return {
+        repeatCell: {
+          range: {
+            sheetId: '__sheetId__',
+            startColumnIndex,
+            endColumnIndex,
+            startRowIndex,
+            endRowIndex
+          },
+          cell: {
+            userEnteredFormat: {
+              textFormat: {
+                bold: true
+              }
+            }
+          },
+          fields: 'userEnteredFormat(textFormat)'
         }
       }
     case 'usd':
@@ -154,9 +177,9 @@ const styles = ({
               format: {
                 textFormat: {
                   foregroundColor: {
-                    blue: 0.75,
-                    green: 0.75,
-                    red: 0.75
+                    blue: 0.5,
+                    green: 0.5,
+                    red: 0.5
                   },
                   italic: true
                 }
@@ -198,6 +221,33 @@ const styles = ({
           index: 0
         }
       }
+    case 'border':
+      const borderStyle = {
+        style: options.style || 'SOLID',
+        width: options.width || 1,
+        color: options.color || {
+          red: 0,
+          green: 0,
+          blue: 0
+        }
+      }
+      return {
+        updateBorders: {
+          range: {
+            sheetId: '__sheetId__',
+            startColumnIndex,
+            endColumnIndex,
+            startRowIndex,
+            endRowIndex
+          },
+          top: borderStyle,
+          right: borderStyle,
+          bottom: borderStyle,
+          left: borderStyle,
+          innerHorizontal: options.inner === false ? undefined : borderStyle,
+          innerVertical: options.inner === false ? undefined : borderStyle
+        }
+      }
     default:
       return {}
   }
@@ -205,6 +255,14 @@ const styles = ({
 
 const formatData = [
   {
+    ...styles({
+      type: 'bold',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 2 + 1,
+      startRowIndex: 0,
+      endRowIndex: 1
+    })
+  }, {
     ...styles({
       type: 'centered',
       startColumnIndex: 0,
@@ -222,6 +280,7 @@ const formatData = [
     })
   }
 ]
+
 for (let i = 0; i < asList.length + 1; i++) {
   formatData.push({
     mergeCells: {
@@ -256,14 +315,14 @@ for (let i = 0; i < asList.length + 1; i++) {
 const addHeader = data => {
   const firstRow = ['']
   const secondRow = ['']
+  firstRow.push('Total')
+  firstRow.push('')
   for (let as of asList) {
-    firstRow.push(as)
+    firstRow.push(getPartnerName(as))
     firstRow.push('')
     secondRow.push('%')
     secondRow.push('$')
   }
-  firstRow.push('Total')
-  firstRow.push('')
   secondRow.push('%')
   secondRow.push('$')
   data.push(firstRow)
@@ -272,6 +331,7 @@ const addHeader = data => {
 
 const addTotalRow = (data, report) => {
   const totalRow = ['Total']
+  const dataColumns = []
   let totalTotalAsRev = 0
   let totalTotalSspRev = 0
   for (let i in asList) {
@@ -287,20 +347,22 @@ const addTotalRow = (data, report) => {
     // Add total cells for this AS
     const totalDiff = totalSspRev - totalAsRev
     const totalDiffPercent = totalAsRev === 0 ? 0 : totalSspRev / totalAsRev - 1
-    totalRow.push(totalDiffPercent)
-    totalRow.push(totalDiff)
+    dataColumns.push(totalDiffPercent)
+    dataColumns.push(totalDiff)
   }
   // Add total cells for all ASs
   const totalTotalDiff = totalTotalSspRev - totalTotalAsRev
   const totalTotalDiffPercent = totalTotalAsRev === 0 ? 0 : totalTotalSspRev / totalTotalAsRev - 1
   totalRow.push(totalTotalDiffPercent)
   totalRow.push(totalTotalDiff)
+  totalRow.push(...dataColumns)
   data.push(totalRow)
 }
 
 const addAsRows = (data, report) => {
   for (let ssp of report.bySsp) {
-    const row = [ssp.ssp]
+    const row = [getPartnerName(ssp.ssp)]
+    const dataColumns = []
     let totalSspRev = 0
     let totalAsRev = 0
     for (let as of asList) {
@@ -308,8 +370,8 @@ const addAsRows = (data, report) => {
       const asRevenue = ssp[as].asRevenue
       const diff = sspRevenue - asRevenue
       const diffPercent = asRevenue === 0 ? 0 : sspRevenue / asRevenue - 1
-      row.push(diffPercent)
-      row.push(diff)
+      dataColumns.push(diffPercent)
+      dataColumns.push(diff)
       totalSspRev += sspRevenue
       totalAsRev += asRevenue
     }
@@ -317,6 +379,7 @@ const addAsRows = (data, report) => {
     const totalDiffPercent = totalAsRev === 0 ? 0 : totalSspRev / totalAsRev - 1
     row.push(totalDiffPercent)
     row.push(totalDiff)
+    row.push(...dataColumns)
     data.push(row)
   }
 }
@@ -351,12 +414,57 @@ const addCellFormat = (data, formatData) => {
   })
 }
 
+const addBorders = (report, formatData) => {
+  // 1px borders to all cells
+  formatData.push({
+    ...styles({
+      type: 'border',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 2 + 1,
+      startRowIndex: 0,
+      endRowIndex: 3 + report.bySsp.length,
+      options: {
+        width: 1
+      }
+    })
+  })
+  // 2px border around total row
+  formatData.push({
+    ...styles({
+      type: 'border',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 2 + 1,
+      startRowIndex: 2,
+      endRowIndex: 3,
+      options: {
+        width: 2,
+        inner: false
+      }
+    })
+  })
+  // 2px border around all cells
+  formatData.push({
+    ...styles({
+      type: 'border',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 2 + 1,
+      startRowIndex: 0,
+      endRowIndex: 3 + report.bySsp.length,
+      options: {
+        width: 2,
+        inner: false
+      }
+    })
+  })
+}
+
 const createSheetData = report => {
   const data = []
   addHeader(data)
   addTotalRow(data, report)
   addAsRows(data, report)
   addCellFormat(data, formatData)
+  addBorders(report, formatData)
   return {
     data,
     formatData
@@ -364,11 +472,11 @@ const createSheetData = report => {
 }
 
 const main = async ({ from, to }) => {
-  const report = await Report.default.groupBySspAs(from, to)
+  const report = await Report.groupBySspAs(from, to)
   const { data, formatData } = createSheetData(report)
-  const filename = 'Discrepancy-Report-' + moment(from, 'X').format('YYYY-MM-DD')
-  const discrepancyUrl = await Sheets.publishReport({ filename, sheetTitle, data, formatData })
-  return discrepancyUrl
+  const filename = 'Daily ' + moment(from, 'X').format('YYYY-MM-DD')
+  const reportUrl = await Sheets.publishReport({ filename, sheetTitle, data, formatData })
+  return reportUrl
 }
 
 export default main

@@ -3,7 +3,7 @@
 const { google } = require('googleapis')
 const _ = require('lodash')
 _.mixin(require('lodash-deep'))
-const FOLDER_ID = '1OT7UPDnjNSq6zDrUBH3wntPHo5xF5BcU'
+const FOLDER_ID = process.env.GOOGLE_DRIVE_REPORTS_FOLDER || '1OT7UPDnjNSq6zDrUBH3wntPHo5xF5BcU'
 let auth,
   drive,
   sheets
@@ -12,7 +12,7 @@ const publishReport = async ({ filename, sheetTitle, data, formatData }) => {
   await init()
 
   let fileId
-  const existingFiles = await listFiles({ query: filename, exact: true })
+  const existingFiles = await listFiles({ query: `name = '${filename}' and '${FOLDER_ID}' in parents` })
   if (existingFiles.length === 1 && existingFiles[0].name === filename) {
     // Found existing file
     fileId = existingFiles[0].id
@@ -45,27 +45,23 @@ const deleteFile = ({ fileId }) => {
   return drive.files.delete({ fileId })
 }
 
-const listFiles = async ({ query, exact }) => {
+const listFiles = async ({ query }) => {
+  // https://developers.google.com/drive/api/v3/search-parameters
+  // https://developers.google.com/drive/api/v3/reference/query-ref
   const listRes = await drive.files.list({
-    query
+    q: query
   })
-  if (query && exact) {
-    for (let f of listRes.data.files) {
-      if (f.name === query) {
-        return [f]
-      }
-    }
-  }
   return listRes.data.files
 }
 
-const createFolder = async () => {
-  await drive.files.create({
+const createFolder = async (folderName = 'Dashboard Reports') => {
+  const res = await drive.files.create({
     resource: {
-      name: 'Dashboard Reports',
+      name: folderName,
       mimeType: 'application/vnd.google-apps.folder'
     }
   })
+  return res.data.id
 }
 
 const createNewSheet = async ({ filename }) => {

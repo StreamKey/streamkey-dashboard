@@ -1,13 +1,22 @@
 import '../../env'
-import { init, listFiles, deleteFile, createFolder } from '../api/controllers/Google/Sheets'
+
+import moment from 'moment'
+
+import { init, listFiles, deleteFile, createFolder, shareFile } from '../api/controllers/Google/Sheets'
+import DB from '../DB'
+import PublishDiscrepancyReport from '../api/controllers/Google/PublishDiscrepancyReport'
 
 const main = async () => {
   await init()
-  const files = await listFiles({ query: '' })
-  console.log(files)
+  // await DB.init()
+  // const utcTime = moment().utc().subtract(1, 'days').startOf('day')
+  // const from = Number(moment(utcTime).startOf('day').format('X'))
+  // const to = Number(moment(utcTime).endOf('day').format('X'))
+  // await PublishDiscrepancyReport({ from, to })
+  // await DB.close()
 
+  // const folderId = await createFolder('folder name')
   // await deleteFile({ fileId: 'ab12' })
-  // await createFolder()
   // await shareFile({ fileId: 'ab12' })
 }
 

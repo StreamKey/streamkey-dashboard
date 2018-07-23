@@ -19,6 +19,7 @@ const styles = ({
   endRowIndex,
   startColumnIndex,
   endColumnIndex,
+  ranges,
   options = {}
 }) => {
   switch (type) {
@@ -102,23 +103,17 @@ const styles = ({
           fields: 'userEnteredFormat(numberFormat)'
         }
       }
-    case 'conditionalColorPositive':
+    case 'conditionalUsdPositive':
       return {
         addConditionalFormatRule: {
           rule: {
-            ranges: [{
-              sheetId: '__sheetId__',
-              startColumnIndex,
-              endColumnIndex,
-              startRowIndex,
-              endRowIndex
-            }],
+            ranges,
             booleanRule: {
               condition: {
-                type: 'NUMBER_GREATER',
+                type: 'CUSTOM_FORMULA',
                 values: [
                   {
-                    userEnteredValue: '0'
+                    userEnteredValue: '=INDIRECT("R[0]C[0]", false) - INDIRECT("R[0]C[1]", false) > 10'
                   }
                 ]
               },
@@ -134,34 +129,25 @@ const styles = ({
           index: 0
         }
       }
-    case 'conditionalColorNutral':
+    case 'conditionalUsdNegative':
       return {
         addConditionalFormatRule: {
           rule: {
-            ranges: [{
-              sheetId: '__sheetId__',
-              startColumnIndex,
-              endColumnIndex,
-              startRowIndex,
-              endRowIndex
-            }],
+            ranges,
             booleanRule: {
               condition: {
-                type: 'NUMBER_EQ',
+                type: 'CUSTOM_FORMULA',
                 values: [
                   {
-                    userEnteredValue: '0'
+                    userEnteredValue: '=INDIRECT("R[0]C[1]", false) - INDIRECT("R[0]C[0]", false) > 10'
                   }
                 ]
               },
               format: {
-                textFormat: {
-                  foregroundColor: {
-                    blue: 0.5,
-                    green: 0.5,
-                    red: 0.5
-                  },
-                  italic: true
+                backgroundColor: {
+                  blue: 0.9,
+                  green: 0.9,
+                  red: 1
                 }
               }
             }
@@ -169,23 +155,43 @@ const styles = ({
           index: 0
         }
       }
-    case 'conditionalColorNegative':
+    case 'conditionalPercentagePositive':
       return {
         addConditionalFormatRule: {
           rule: {
-            ranges: [{
-              sheetId: '__sheetId__',
-              startColumnIndex,
-              endColumnIndex,
-              startRowIndex,
-              endRowIndex
-            }],
+            ranges,
             booleanRule: {
               condition: {
-                type: 'NUMBER_LESS',
+                type: 'CUSTOM_FORMULA',
                 values: [
                   {
-                    userEnteredValue: '0'
+                    userEnteredValue: '=N(INDIRECT("R[0]C[0]", false)) - N(INDIRECT("R[0]C[1]", false)) > 0.3'
+                  }
+                ]
+              },
+              format: {
+                backgroundColor: {
+                  blue: 0.9,
+                  green: 1,
+                  red: 0.9
+                }
+              }
+            }
+          },
+          index: 0
+        }
+      }
+    case 'conditionalPercentageNegative':
+      return {
+        addConditionalFormatRule: {
+          rule: {
+            ranges,
+            booleanRule: {
+              condition: {
+                type: 'CUSTOM_FORMULA',
+                values: [
+                  {
+                    userEnteredValue: '=N(INDIRECT("R[0]C[1]", false)) - N(INDIRECT("R[0]C[0]", false)) > 0.3'
                   }
                 ]
               },
@@ -281,6 +287,26 @@ for (let i = 0; i < (asList.length + 1) * 2; i++) {
     }
   })
 }
+for (let i = 0; i < (asList.length + 1); i++) {
+  formatData.push({
+    ...styles({
+      type: 'usd',
+      startColumnIndex: (i * 4) + 1,
+      endColumnIndex: (i * 4) + 3,
+      startRowIndex: 3,
+      endRowIndex: 11
+    })
+  })
+  formatData.push({
+    ...styles({
+      type: 'percentage',
+      startColumnIndex: (i * 4) + 3,
+      endColumnIndex: (i * 4) + 5,
+      startRowIndex: 3,
+      endRowIndex: 11
+    })
+  })
+}
 
 const addHeader = data => {
   const firstRow = ['']
@@ -304,7 +330,6 @@ const addHeader = data => {
 }
 
 const addTotalRow = (data, diff) => {
-  console.log(JSON.stringify(diff, null, 2))
   const total = {
     revenue: {
       current: 0,
@@ -404,32 +429,95 @@ const addAsRows = (data, diff) => {
   }
 }
 
-const addCellFormat = (data, formatData) => {
+const addBorders = (diff, formatData) => {
+  // 1px borders to all cells
   formatData.push({
     ...styles({
-      type: 'conditionalColorPositive',
-      startColumnIndex: 1,
-      endColumnIndex: data[0].length + 1,
-      startRowIndex: 2,
-      endRowIndex: data.length
+      type: 'border',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 4 + 1,
+      startRowIndex: 0,
+      endRowIndex: 4 + diff.length,
+      options: {
+        width: 1
+      }
+    })
+  })
+  // 2px border around total row
+  formatData.push({
+    ...styles({
+      type: 'border',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 4 + 1,
+      startRowIndex: 3,
+      endRowIndex: 4,
+      options: {
+        width: 2,
+        inner: false
+      }
+    })
+  })
+  // 2px border around all cells
+  formatData.push({
+    ...styles({
+      type: 'border',
+      startColumnIndex: 0,
+      endColumnIndex: (asList.length + 1) * 4 + 1,
+      startRowIndex: 0,
+      endRowIndex: 4 + diff.length,
+      options: {
+        width: 2,
+        inner: false
+      }
+    })
+  })
+}
+
+const addConditionalFormats = (diff, formatData) => {
+  const usdRanges = []
+  const percentRanges = []
+  const sheetLines = diff.length + 4
+  for (let i = 0; i < (asList.length + 1); i++) {
+    usdRanges.push({
+      sheetId: '__sheetId__',
+      startColumnIndex: (i * 4) + 1,
+      endColumnIndex: (i * 4) + 2,
+      startRowIndex: 3,
+      endRowIndex: sheetLines
+    })
+    percentRanges.push({sheetId: '__sheetId__',
+      startColumnIndex: (i * 4) + 3,
+      endColumnIndex: (i * 4) + 4,
+      startRowIndex: 3,
+      endRowIndex: sheetLines
+    })
+  }
+  formatData.push({
+    ...styles({
+      sheetId: '__sheetId__',
+      type: 'conditionalUsdPositive',
+      ranges: usdRanges
     })
   })
   formatData.push({
     ...styles({
-      type: 'conditionalColorNutral',
-      startColumnIndex: 1,
-      endColumnIndex: data[0].length + 1,
-      startRowIndex: 2,
-      endRowIndex: data.length
+      sheetId: '__sheetId__',
+      type: 'conditionalUsdNegative',
+      ranges: usdRanges
     })
   })
   formatData.push({
     ...styles({
-      type: 'conditionalColorNegative',
-      startColumnIndex: 1,
-      endColumnIndex: data[0].length + 1,
-      startRowIndex: 2,
-      endRowIndex: data.length
+      sheetId: '__sheetId__',
+      type: 'conditionalPercentagePositive',
+      ranges: percentRanges
+    })
+  })
+  formatData.push({
+    ...styles({
+      sheetId: '__sheetId__',
+      type: 'conditionalPercentageNegative',
+      ranges: percentRanges
     })
   })
 }
@@ -439,7 +527,8 @@ const createSheetData = diff => {
   addHeader(data)
   addTotalRow(data, diff)
   addAsRows(data, diff)
-  // addCellFormat(data, formatData)
+  addBorders(diff, formatData)
+  addConditionalFormats(diff, formatData)
   return {
     data,
     formatData

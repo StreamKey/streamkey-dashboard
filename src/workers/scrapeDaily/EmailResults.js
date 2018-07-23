@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import Email from '../../api/controllers/Email/'
 import PublishDiscrepancyReport from '../../api/controllers/Google/PublishDiscrepancyReport'
+import PublishSspAsReport from '../../api/controllers/Google/PublishSspAsReport'
 
 const { RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS } = process.env
 
@@ -139,6 +140,7 @@ const generateReports = async (utcTime) => {
   let discrepancyUrl
   try {
     discrepancyUrl = await PublishDiscrepancyReport({ from, to })
+    await PublishSspAsReport({ from, to })
     winston.info('Discrepancy report done', { url: discrepancyUrl })
   } catch (e) {
     winston.error('Generating discrepancy report failed', { error: e.message })

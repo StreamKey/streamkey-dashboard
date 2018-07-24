@@ -1,4 +1,3 @@
-import moment from 'moment'
 import qs from 'querystring'
 
 import GenerateAxiosCookies from '../GenerateAxiosCookies'
@@ -9,6 +8,9 @@ const credentials = {
   username: process.env.RAZZLE_CREDENTIALS_BEACHFRONT_USERNAME,
   password: process.env.RAZZLE_CREDENTIALS_BEACHFRONT_PASSWORD
 }
+
+// Yesterday Report
+const REPORT_ID = process.env.RAZZLE_CREDENTIALS_BEACHFRONT_REPORT_ID
 
 axios.defaults.baseURL = 'https://platform.beachfront.io'
 
@@ -28,19 +30,9 @@ const login = async () => {
 }
 
 const getResults = async dateTs => {
-  const date = moment.utc(dateTs, 'X').format('M/D/YYYY')
-  const form = {
-    start_date: date,
-    end_date: date,
-    // date_range: 'yesterday',
-    search: '',
-    view: 'ALL',
-    selected_filter: 0,
-    compare_previous: 0
-  }
   try {
-    const res = await axios.post('/restful/users/dashboard/inventory/stats', qs.stringify(form))
-    return res.data.data.grid.data
+    const res = await axios.get(`/restful/users/reports/report/${REPORT_ID}`)
+    return res.data.data.data
   } catch (e) {
     e.prevError = e.message
     e.message = 'Beachfront report failed'
@@ -51,7 +43,7 @@ const getResults = async dateTs => {
 const normalize = results => {
   return results.map(r => {
     return {
-      tag: r.title,
+      tag: r.inventoryname,
       opp: r.requests,
       imp: r.impressions,
       rev: r.revenue,

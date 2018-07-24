@@ -96,13 +96,23 @@ Execution time: ${executionTime}`
 </table>`
 
   text += `
-Reports Links
-Discrepancy: ${reportsUrls.discrepancyUrl}
+Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
 `
-  html += `<br/><b>Reports Links</b><br/>
-  <a href="${reportsUrls.discrepancyUrl}">Discrepancy</a>
+  html += `<br/><b>Discrepancy/SSP-AS Reports:</b><br/>
+  <a href="${reportsUrls.discrepancyUrl}">Google Sheets</a>
   <br/>
 `
+
+  text += '\nProfit breakdown:\n'
+  html += '<br/><b>Profit breakdown:</b><table>'
+  for (let ssp in profits.ssp) {
+    for (let as in profits.ssp[ssp]) {
+      const profit = numeral(profits.ssp[ssp][as]).format('$0,0.0')
+      text += `${ssp === '_empty_' ? 'v2v ' + as : ssp} - ${as}: ${profit}` + '\n'
+      html += `<tr><td>${ssp === '_empty_' ? 'v2v ' + as : ssp}</td><td>${as}</td><td>${profit}<td></tr>`
+    }
+  }
+  html += '</table>'
 
   if (loggerData.errors.length > 0) {
     text += '\nErrors:\n'

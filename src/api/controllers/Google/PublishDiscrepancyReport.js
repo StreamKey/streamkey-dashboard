@@ -443,20 +443,32 @@ const addConditionalFormats = (data, formatData) => {
       startRowIndex: 2,
       endRowIndex: data.length
     })
-    usdRanges.push({sheetId: '__sheetId__',
+    usdRanges.push({
+      sheetId: '__sheetId__',
       startColumnIndex: (i * 2) + 2,
       endColumnIndex: (i * 2) + 3,
       startRowIndex: 2,
       endRowIndex: data.length
     })
   }
-  formatData.push({
-    ...styles({
-      sheetId: '__sheetId__',
-      type: 'percentage',
-      ranges: percentRanges
+
+  for (let r of percentRanges) {
+    formatData.push({
+      ...styles({
+        type: 'percentage',
+        ...r
+      })
     })
-  })
+  }
+  for (let r of usdRanges) {
+    formatData.push({
+      ...styles({
+        type: 'usd',
+        ...r
+      })
+    })
+  }
+
   formatData.push({
     ...styles({
       sheetId: '__sheetId__',
@@ -476,13 +488,6 @@ const addConditionalFormats = (data, formatData) => {
       sheetId: '__sheetId__',
       type: 'conditionalPercentageNeutral',
       ranges: percentRanges
-    })
-  })
-  formatData.push({
-    ...styles({
-      sheetId: '__sheetId__',
-      type: 'usd',
-      ranges: usdRanges
     })
   })
   formatData.push({

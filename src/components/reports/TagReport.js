@@ -54,6 +54,11 @@ const styles = theme => {
       fontFamily: `'Roboto Mono', monospace`,
       textAlign: 'right'
     },
+    cellPaddingRight: {
+      '&.rt-td': {
+        paddingRight: 40
+      }
+    },
     sspCell: {
       backgroundColor: theme.palette.green[100]
     },
@@ -389,7 +394,8 @@ class TagReport extends React.Component {
           Header: 'Revenue',
           accessor: 'diffRev',
           Cell: this.renderValue,
-          className: classes.numericCell,
+          minWidth: 120,
+          className: `${classes.numericCell} ${classes.cellPaddingRight}`,
           Footer: this.renderFooter('diffRev')
         }
       ]

@@ -18,6 +18,7 @@ import Logs from './pages/Logs'
 import TagGenerator from './pages/TagGenerator'
 import DuplicateTremorLkqd from './pages/DuplicateTremorLkqd'
 import ConfigurationUI from './pages/ConfigurationUI'
+import CleanBL from './pages/CleanBL'
 import ComingSoon from './pages/ComingSoon'
 import Theme from './Theme'
 import Header from './components/Header'
@@ -109,6 +110,7 @@ class App extends React.Component {
                     <Route exact path='/tag-generator' component={TagGenerator} />
                     <Route exact path='/duplicate-tremor-lkqd' component={DuplicateTremorLkqd} />
                     <Route exact path='/configuration-ui' component={ConfigurationUI} />
+                    <Route exact path='/clean-bl' component={CleanBL} />
                     <Route exact path='/logs' component={Logs} />
                     <Route exact path='/logs/errors' component={Logs} />
                     <Route exact path='/logs/activity' component={ComingSoon} />

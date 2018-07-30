@@ -142,7 +142,7 @@ class NavBar extends React.Component {
               <ListItem button onClick={this.navTo('/discrepancy/:date')}>
                 <ListItemText primary='Discrepancy' />
               </ListItem>
-              <ListHeader text='Legacy' />
+              <ListHeader text='Automation' />
               <ListItem button onClick={this.navTo('/tag-generator')}>
                 <ListItemText primary='Tag Generator' />
               </ListItem>
@@ -151,6 +151,9 @@ class NavBar extends React.Component {
               </ListItem>
               <ListItem button onClick={this.navTo('/configuration-ui')}>
                 <ListItemText primary='Configuration UI' />
+              </ListItem>
+              <ListItem button onClick={this.navTo('/clean-bl')}>
+                <ListItemText primary='Clean BL' />
               </ListItem>
               <ListHeader text='Logs' />
               <ListItem button onClick={this.navTo('/logs/activity')}>

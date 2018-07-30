@@ -1,6 +1,6 @@
 {
   "name": "top-sub",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MIT",
   "engines": {
     "node": ">=9.6.1"

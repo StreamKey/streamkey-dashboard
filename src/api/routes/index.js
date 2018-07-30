@@ -8,6 +8,7 @@ import getLogs from './getLogs'
 import getLog from './getLog'
 import getSpotxOauth from './getSpotxOauth'
 import postRunLkqdTremorDuplicate from './postRunLkqdTremorDuplicate'
+import postCleanBl from './postCleanBl'
 import uploadTagGenerator from './uploadTagGenerator'
 import getConfigurationUi from './getConfigurationUi'
 import postConfigurationUi from './postConfigurationUi'
@@ -78,6 +79,7 @@ export default app => {
   app.get('/api/logs', ensureLoggedIn, asyncMiddleware(getLogs))
   app.get('/api/logs/:file', ensureLoggedIn, asyncMiddleware(getLog))
   app.post('/api/runLkqdTremorDuplicate/:action', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))
+  app.post('/api/cleanBl/:action', ensureLoggedIn, asyncMiddleware(postCleanBl))
   app.put('/api/uploadTagGenerator', ensureLoggedIn, multipartMiddleware, asyncMiddleware(uploadTagGenerator))
   app.get('/api/configuration-ui/load/:as', ensureLoggedIn, asyncMiddleware(getConfigurationUi))
   app.post('/api/configuration-ui/save/:as', ensureLoggedIn, asyncMiddleware(postConfigurationUi))

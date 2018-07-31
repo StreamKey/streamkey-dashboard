@@ -59,7 +59,7 @@ const getResults = async dateTs => {
 const normalize = results => {
   return results.map(r => ({
     tag: r.adSource,
-    asOpp: r.opportunities,
+    asOpp: r.requests,
     asImp: r.impressions,
     asRev: r.demandRevenues,
     asCost: r.cost,

@@ -16,6 +16,7 @@ const styles = theme => {
   return {
     root: {
       padding: theme.spacing.double,
+      paddingBottom: theme.spacing.huge,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

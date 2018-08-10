@@ -221,7 +221,7 @@ class SspAsReport extends React.Component {
     }
   }
 
-  renderFooter = (column, type, sumType) => ({ data }) => {
+  renderTotal = (column, type, sumType) => ({ data }) => {
     const total = this.calcTotalColumn(data, column, sumType)
     const cell = {
       value: total,
@@ -260,88 +260,85 @@ class SspAsReport extends React.Component {
     ]
     const columns = [{
       Header: 'Demand',
-      accessor: 'ssp',
-      Footer: <strong>Total</strong>
+      columns: [{
+        accessor: 'ssp',
+        Header: <strong>Total</strong>
+      }]
     }, {
-      Header: 'LKQD',
-      columns: [
-        {
-          Header: 'Profit',
-          accessor: 'lkqd.profit',
-          Cell: this.renderValue('usd'),
-          minWidth: 120,
-          Footer: this.renderFooter('lkqd.profit', 'usd', 'sum')
-        }, {
-          Header: 'Margin',
-          accessor: 'lkqd.margin',
-          Cell: this.renderValue('percent'),
-          Footer: this.renderFooter('lkqd.profit', 'percent', 'margin')
-        }
-      ]
+      Header: 'Total Profit',
+      columns: [{
+        accessor: 'total.profit',
+        Cell: this.renderValue('usd'),
+        minWidth: 140,
+        Header: this.renderTotal('total.profit', 'usd', 'sum')
+      }]
     }, {
-      Header: 'StreamRail',
-      columns: [
-        {
-          Header: 'Profit',
-          accessor: 'streamrail.profit',
-          Cell: this.renderValue('usd'),
-          minWidth: 120,
-          Footer: this.renderFooter('streamrail.profit', 'usd', 'sum')
-        }, {
-          Header: 'Margin',
-          accessor: 'streamrail.margin',
-          Cell: this.renderValue('percent'),
-          Footer: this.renderFooter('streamrail.profit', 'percent', 'margin')
-        }
-      ]
+      Header: 'Total Margin',
+      columns: [{
+        accessor: 'total.margin',
+        Cell: this.renderValue('percent'),
+        Header: this.renderTotal('total.profit', 'percent', 'margin')
+      }]
     }, {
-      Header: 'SpringServe',
-      columns: [
-        {
-          Header: 'Profit',
-          accessor: 'springserve.profit',
-          Cell: this.renderValue('usd'),
-          minWidth: 120,
-          Footer: this.renderFooter('springserve.profit', 'usd', 'sum')
-        }, {
-          Header: 'Margin',
-          accessor: 'springserve.margin',
-          Cell: this.renderValue('percent'),
-          Footer: this.renderFooter('springserve.profit', 'percent', 'margin')
-        }
-      ]
+      Header: 'LKQD Profit',
+      columns: [{
+        accessor: 'lkqd.profit',
+        Cell: this.renderValue('usd'),
+        minWidth: 140,
+        Header: this.renderTotal('lkqd.profit', 'usd', 'sum')
+      }]
     }, {
-      Header: 'Aniview',
-      columns: [
-        {
-          Header: 'Profit',
-          accessor: 'aniview.profit',
-          Cell: this.renderValue('usd'),
-          minWidth: 120,
-          Footer: this.renderFooter('aniview.profit', 'usd', 'sum')
-        }, {
-          Header: 'Margin',
-          accessor: 'aniview.margin',
-          Cell: this.renderValue('percent'),
-          Footer: this.renderFooter('aniview.profit', 'percent', 'margin')
-        }
-      ]
+      Header: 'LKQD Margin',
+      columns: [{
+        accessor: 'lkqd.margin',
+        Cell: this.renderValue('percent'),
+        Header: this.renderTotal('lkqd.profit', 'percent', 'margin')
+      }]
     }, {
-      Header: 'Total',
-      columns: [
-        {
-          Header: 'Profit',
-          accessor: 'total.profit',
-          Cell: this.renderValue('usd'),
-          minWidth: 120,
-          Footer: this.renderFooter('total.profit', 'usd', 'sum')
-        }, {
-          Header: 'Margin',
-          accessor: 'total.margin',
-          Cell: this.renderValue('percent'),
-          Footer: this.renderFooter('total.profit', 'percent', 'margin')
-        }
-      ]
+      Header: 'StreamRail Profit',
+      columns: [{
+        accessor: 'streamrail.profit',
+        Cell: this.renderValue('usd'),
+        minWidth: 140,
+        Header: this.renderTotal('streamrail.profit', 'usd', 'sum')
+      }]
+    }, {
+      Header: 'StreamRail Margin',
+      columns: [{
+        accessor: 'streamrail.margin',
+        Cell: this.renderValue('percent'),
+        Header: this.renderTotal('streamrail.profit', 'percent', 'margin')
+      }]
+    }, {
+      Header: 'SpringServe Profit',
+      columns: [{
+        accessor: 'springserve.profit',
+        Cell: this.renderValue('usd'),
+        minWidth: 140,
+        Header: this.renderTotal('springserve.profit', 'usd', 'sum')
+      }]
+    }, {
+      Header: 'SpringServe Margin',
+      columns: [{
+        accessor: 'springserve.margin',
+        Cell: this.renderValue('percent'),
+        Header: this.renderTotal('springserve.profit', 'percent', 'margin')
+      }]
+    }, {
+      Header: 'Aniview Profit',
+      columns: [{
+        accessor: 'aniview.profit',
+        Cell: this.renderValue('usd'),
+        minWidth: 140,
+        Header: this.renderTotal('aniview.profit', 'usd', 'sum')
+      }]
+    }, {
+      Header: 'Aniview Margin',
+      columns: [{
+        accessor: 'aniview.margin',
+        Cell: this.renderValue('percent'),
+        Header: this.renderTotal('aniview.profit', 'percent', 'margin')
+      }]
     }]
     return (
       <div className={classes.root}>

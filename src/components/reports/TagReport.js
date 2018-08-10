@@ -264,6 +264,11 @@ class TagReport extends React.Component {
     FileSaver.saveAs(blob, `streamkey-report-${this.props.date.format('YYYY-MM-DD')}.csv`)
   }
 
+  filter = (filter, row) => {
+    const re = new RegExp(filter.value, 'ig')
+    return re.test(row[filter.id])
+  }
+
   render () {
     const { classes, data } = this.props
     const columns = [{
@@ -423,6 +428,7 @@ class TagReport extends React.Component {
             defaultPageSize={100}
             pageSizeOptions={[50, 100, 500, 1000]}
             ref={r => { this.reactTableRef = r }}
+            defaultFilterMethod={this.filter}
           />
         </Paper>
       </div>

@@ -33,23 +33,37 @@ const styles = theme => {
       textAlign: 'center'
     },
     positiveDiff: {
-      color: theme.palette.green[700]
+      color: theme.palette.green[900],
+      fontWeight: 500
     },
     negativeDiff: {
-      color: theme.palette.red[700]
+      color: theme.palette.red[700],
+      fontWeight: 500
     },
     neutralDiff: {
-      color: theme.palette.grey[500]
+      color: theme.palette.grey[900]
     },
     usdDiff: {
       marginLeft: theme.spacing.unit,
       fontSize: 11,
-      fontStyle: 'italic'
+      fontStyle: 'italic',
+      fontWeight: 300
     }
   }
 }
 
 class DiscrepancyReport extends React.Component {
+  cellClass = (diff, diffPercent) => {
+    const { classes } = this.props
+    let cls = 'neutralDiff'
+    if (diff >= 10 && diffPercent >= 0.03) {
+      cls = 'positiveDiff'
+    } else if (diff <= -10 && diffPercent <= -0.03) {
+      cls = 'negativeDiff'
+    }
+    return classes[cls]
+  }
+
   renderCell = cell => {
     const { classes } = this.props
     const val = cell.value
@@ -72,7 +86,7 @@ class DiscrepancyReport extends React.Component {
         <div>AS Revenue: {asRevenueVal}</div>
       </div>
     )
-    const cls = classes[diff > 0 ? 'positiveDiff' : (diff < 0 ? 'negativeDiff' : 'neutralDiff')]
+    const cls = this.cellClass(diff, diffPercent)
     return (
       <Tooltip className={this.props.classes.cellContainer} title={tooltip} placement='top' enterDelay={300}>
         <div className={classes.cellContainer}>

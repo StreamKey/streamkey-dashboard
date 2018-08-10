@@ -115,43 +115,48 @@ class DiscrepancyReport extends React.Component {
       Header: 'SSP',
       columns: [{
         accessor: 'ssp',
-        Footer: <strong>Total</strong>
+        Header: <strong>Total</strong>
       }]
     }, {
-      Header: 'AS',
-      columns: [
-        {
-          Header: 'LKQD',
-          accessor: 'lkqd.revenue',
-          Cell: this.renderCell,
-          minWidth: 180,
-          Footer: this.renderFooter('lkqd.revenue')
-        }, {
-          Header: 'StreamRail',
-          accessor: 'streamrail.revenue',
-          Cell: this.renderCell,
-          minWidth: 180,
-          Footer: this.renderFooter('streamrail.revenue')
-        }, {
-          Header: 'SpringServe',
-          accessor: 'springserve.revenue',
-          Cell: this.renderCell,
-          minWidth: 180,
-          Footer: this.renderFooter('springserve.revenue')
-        }, {
-          Header: 'Aniview',
-          accessor: 'aniview.revenue',
-          Cell: this.renderCell,
-          minWidth: 180,
-          Footer: this.renderFooter('aniview.revenue')
-        }, {
-          Header: 'Total',
-          accessor: 'total',
-          Cell: this.renderCell,
-          minWidth: 180,
-          Footer: this.renderFooter('total')
-        }
-      ]
+      Header: 'Total',
+      columns: [{
+        accessor: 'total',
+        Cell: this.renderCell,
+        minWidth: 180,
+        Header: this.renderFooter('total')
+      }]
+    }, {
+      Header: 'LKQD',
+      columns: [{
+        accessor: 'lkqd.revenue',
+        Cell: this.renderCell,
+        minWidth: 180,
+        Header: this.renderFooter('lkqd.revenue')
+      }]
+    }, {
+      Header: 'StreamRail',
+      columns: [{
+        accessor: 'streamrail.revenue',
+        Cell: this.renderCell,
+        minWidth: 180,
+        Header: this.renderFooter('streamrail.revenue')
+      }]
+    }, {
+      Header: 'SpringServe',
+      columns: [{
+        accessor: 'springserve.revenue',
+        Cell: this.renderCell,
+        minWidth: 180,
+        Header: this.renderFooter('springserve.revenue')
+      }]
+    }, {
+      Header: 'Aniview',
+      columns: [{
+        accessor: 'aniview.revenue',
+        Cell: this.renderCell,
+        minWidth: 180,
+        Header: this.renderFooter('aniview.revenue')
+      }]
     }]
     return (
       <div className={classes.root}>

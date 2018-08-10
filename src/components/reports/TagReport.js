@@ -201,7 +201,7 @@ class TagReport extends React.Component {
     }
   }
 
-  renderFooter = column => ({ data }) => {
+  renderTotal = column => ({ data }) => {
     const total = this.calcTotal(data, column)
     const cell = {
       value: total,
@@ -271,139 +271,172 @@ class TagReport extends React.Component {
 
   render () {
     const { classes, data } = this.props
+    // TODO add 3rd header row when this PR is merged:
+    // https://github.com/react-tools/react-table/pull/1077
     const columns = [{
       Header: 'Tag',
-      accessor: 'tag',
-      minWidth: 240,
-      Footer: this.renderFooter('tag')
+      columns: [
+        {
+          accessor: 'tag',
+          minWidth: 240,
+          Header: this.renderTotal('tag')
+        }
+      ]
     }, {
       Header: 'Profit',
-      accessor: 'profit',
-      Cell: this.renderValue,
-      className: classes.numericCell,
-      Footer: this.renderFooter('profit')
+      columns: [
+        {
+          accessor: 'profit',
+          Cell: this.renderValue,
+          className: classes.numericCell,
+          Header: this.renderTotal('profit')
+        }
+      ]
     },
     {
       Header: 'Margin',
-      accessor: 'margin',
-      Cell: this.renderValue,
-      className: classes.numericCell,
-      Footer: this.renderFooter('margin')
+      columns: [
+        {
+          accessor: 'margin',
+          Cell: this.renderValue,
+          className: classes.numericCell,
+          Header: this.renderTotal('margin')
+        }
+      ]
     },
     {
       Header: 'SSP',
-      columns: [
-        {
-          Header: 'ID',
-          accessor: 'ssp',
-          className: classes.sspCell
-        }, {
-          Header: 'Opp',
-          accessor: 'sspOpp',
-          Cell: this.renderValue,
-          className: `${classes.sspCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('sspOpp')
-        }, {
-          Header: 'Imp',
-          accessor: 'sspImp',
-          Cell: this.renderValue,
-          className: `${classes.sspCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('sspImp')
-        }, {
-          Header: 'CPM',
-          accessor: 'sspCpm',
-          Cell: this.renderValue,
-          className: `${classes.sspCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('sspCpm')
-        }, {
-          Header: 'Revenue',
-          accessor: 'sspRev',
-          Cell: this.renderValue,
-          className: `${classes.sspCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('sspRev')
-        }, {
-          Header: 'sCost',
-          accessor: 'sspScost',
-          Cell: this.renderValue,
-          className: `${classes.sspCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('sspScost')
-        }
-      ]
+      columns: [{
+        accessor: 'ssp',
+        className: classes.sspCell
+      }]
+    }, {
+      Header: 'SSP Opp',
+      columns: [{
+        accessor: 'sspOpp',
+        Cell: this.renderValue,
+        className: `${classes.sspCell} ${classes.numericCell}`,
+        Header: this.renderTotal('sspOpp')
+      }]
+    }, {
+      Header: 'SSP Imp',
+      columns: [{
+        accessor: 'sspImp',
+        Cell: this.renderValue,
+        className: `${classes.sspCell} ${classes.numericCell}`,
+        Header: this.renderTotal('sspImp')
+      }]
+    }, {
+      Header: 'SSP CPM',
+      columns: [{
+        accessor: 'sspCpm',
+        Cell: this.renderValue,
+        className: `${classes.sspCell} ${classes.numericCell}`,
+        Header: this.renderTotal('sspCpm')
+      }]
+    }, {
+      Header: 'SSP Revenue',
+      columns: [{
+        accessor: 'sspRev',
+        Cell: this.renderValue,
+        className: `${classes.sspCell} ${classes.numericCell}`,
+        Header: this.renderTotal('sspRev')
+      }]
+    }, {
+      Header: 'SSP sCost',
+      columns: [{
+        accessor: 'sspScost',
+        Cell: this.renderValue,
+        className: `${classes.sspCell} ${classes.numericCell}`,
+        Header: this.renderTotal('sspScost')
+      }]
     }, {
       Header: 'AS',
-      columns: [
-        {
-          Header: 'ID',
-          accessor: 'as',
-          className: classes.asCell
-        }, {
-          Header: 'Opp',
-          accessor: 'asOpp',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asOpp')
-        }, {
-          Header: 'Imp',
-          accessor: 'asImp',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asImp')
-        }, {
-          Header: 'CPM',
-          accessor: 'asCpm',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asCpm')
-        }, {
-          Header: 'pCPM',
-          accessor: 'asPcpm',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asPcpm')
-        }, {
-          Header: 'Revenue',
-          accessor: 'asRev',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asRev')
-        }, {
-          Header: 'Cost',
-          accessor: 'asCost',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asCost')
-        }, {
-          Header: 'sCost',
-          accessor: 'asScost',
-          Cell: this.renderValue,
-          className: `${classes.asCell} ${classes.numericCell}`,
-          Footer: this.renderFooter('asScost')
-        }
-      ]
+      columns: [{
+        accessor: 'as',
+        className: classes.asCell
+      }]
     }, {
-      Header: 'Diff',
-      columns: [
-        {
-          Header: 'CPM',
-          accessor: 'diffCpm',
-          Cell: this.renderValue,
-          className: classes.numericCell,
-          Footer: this.renderFooter('diffCpm')
-        }, {
-          Header: 'Imp',
-          accessor: 'diffImp',
-          Cell: this.renderValue,
-          className: classes.numericCell,
-          Footer: this.renderFooter('diffImp')
-        }, {
-          Header: 'Revenue',
-          accessor: 'diffRev',
-          Cell: this.renderValue,
-          minWidth: 120,
-          className: `${classes.numericCell} ${classes.cellPaddingRight}`,
-          Footer: this.renderFooter('diffRev')
-        }
-      ]
+      Header: 'AS Opp',
+      columns: [{
+        accessor: 'asOpp',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asOpp')
+      }]
+    }, {
+      Header: 'AS Imp',
+      columns: [{
+        accessor: 'asImp',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asImp')
+      }]
+    }, {
+      Header: 'AS CPM',
+      columns: [{
+        accessor: 'asCpm',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asCpm')
+      }]
+    }, {
+      Header: 'AS pCPM',
+      columns: [{
+        accessor: 'asPcpm',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asPcpm')
+      }]
+    }, {
+      Header: 'AS Revenue',
+      columns: [{
+        accessor: 'asRev',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asRev')
+      }]
+    }, {
+      Header: 'AS Cost',
+      columns: [{
+        accessor: 'asCost',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asCost')
+      }]
+    }, {
+      Header: 'AS sCost',
+      columns: [{
+        accessor: 'asScost',
+        Cell: this.renderValue,
+        className: `${classes.asCell} ${classes.numericCell}`,
+        Header: this.renderTotal('asScost')
+      }]
+    }, {
+      Header: 'Diff CPM',
+      columns: [{
+        accessor: 'diffCpm',
+        Cell: this.renderValue,
+        className: classes.numericCell,
+        Header: this.renderTotal('diffCpm')
+      }]
+    }, {
+      Header: 'Diff Imp',
+      columns: [{
+        accessor: 'diffImp',
+        Cell: this.renderValue,
+        className: classes.numericCell,
+        Header: this.renderTotal('diffImp')
+      }]
+    }, {
+      Header: 'Diff Revenue',
+      columns: [{
+        accessor: 'diffRev',
+        Cell: this.renderValue,
+        minWidth: 120,
+        className: `${classes.numericCell} ${classes.cellPaddingRight}`,
+        Header: this.renderTotal('diffRev')
+      }]
     }]
     return (
       <div className={classes.root}>

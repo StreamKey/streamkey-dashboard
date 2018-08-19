@@ -70,10 +70,10 @@ const validateDataStructure = data => {
   })
 }
 
-export default async dateTs => {
+export default async (dateTs, sspList) => {
   const results = []
 
-  const fetchJobs = SSPs.map(async item => {
+  const fetchJobs = SSPs.filter(item => sspList.has(item.key)).map(async item => {
     try {
       winston.info('SSP Start', { ssp: item.key })
       const data = await item.controller.getData(dateTs)

@@ -91,10 +91,10 @@ const validateDataStructure = data => {
   })
 }
 
-export default async dateTs => {
+export default async (dateTs, asList, group = true) => {
   const results = []
 
-  const fetchJobs = AdServers.map(async item => {
+  const fetchJobs = AdServers.filter(item => asList.has(item.key)).map(async item => {
     try {
       winston.info('AS Start', { as: item.key })
       const data = await item.controller.getData(dateTs)
@@ -106,7 +106,7 @@ export default async dateTs => {
       })
       results.push({
         key: item.key,
-        data: groupAsResults(data, item.key)
+        data: group ? groupAsResults(data, item.key) : data
       })
     } catch (e) {
       winston.error('AS getData Error', {

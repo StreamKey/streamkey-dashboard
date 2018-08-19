@@ -2,11 +2,15 @@ import Sequelize from 'sequelize'
 
 import User from './models/user'
 import Report from './models/report'
+import SspData from './models/sspdata'
+import AsData from './models/asdata'
 
 // Order is important for associations
 const modelsDefinitions = [
   User,
-  Report
+  Report,
+  SspData,
+  AsData
 ]
 
 const models = {}

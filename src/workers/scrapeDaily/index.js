@@ -59,18 +59,73 @@ const getScriptDate = () => {
   return moment().utc().subtract(1, 'days').startOf('day')
 }
 
+const getSspSet = () => {
+  // Get the list of SSPs to fetch data from (comma separated)
+  // Default: All
+  // Example: --sspList freewheel,aerserv,onevideo
+  const sspOptions = new Set([
+    'telaria',
+    'freewheel',
+    'beachfront',
+    'aerserv',
+    'onevideo'
+  ])
+  for (let i in process.argv) {
+    const next = Number(i) + 1
+    if (process.argv[i] === '--sspList' && process.argv[next]) {
+      const sspList = process.argv[next].split(',')
+      for (let ssp of sspList) {
+        if (!sspOptions.has(ssp)) {
+          console.error('Invalid SSP', ssp)
+          process.exit(1)
+        }
+      }
+      return new Set(sspList)
+    }
+  }
+  return sspOptions
+}
+
+const getAsSet = () => {
+  // Get the list of ASs to fetch data from (comma separated)
+  // Default: All
+  // Example: --asList streamrail,lkqd
+  const asOptions = new Set([
+    'streamrail',
+    'lkqd',
+    'aniview',
+    'springserve'
+  ])
+  for (let i in process.argv) {
+    const next = Number(i) + 1
+    if (process.argv[i] === '--asList' && process.argv[next]) {
+      const asList = process.argv[next].split(',')
+      for (let as of asList) {
+        if (!asOptions.has(as)) {
+          console.error('Invalid AS', as)
+          process.exit(1)
+        }
+      }
+      return new Set(asList)
+    }
+  }
+  return asOptions
+}
+
 const main = async () => {
   configLogger()
   winston.profile('run-duration')
   const utcTime = getScriptDate()
+  const sspList = getSspSet()
+  const asList = getAsSet()
   winston.info('Script time (UTC)', {
     time: utcTime.format('YYYY-MM-DD')
   })
 
   await DB.init()
 
-  const sspResults = await GetSSPData(utcTime)
-  const asResults = await GetASData(utcTime)
+  const sspResults = await GetSSPData(utcTime, sspList)
+  const asResults = await GetASData(utcTime, asList)
   winston.verbose('Final Results', {
     sspResults,
     asResults

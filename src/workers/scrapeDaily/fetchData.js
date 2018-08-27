@@ -7,7 +7,7 @@ import Sequelize from 'sequelize'
 
 import DB from '../../DB/'
 import GetSSPData from './GetSSPData'
-import GetASData from './GetASData'
+import { fetch as fetchAsData } from './GetASData'
 import GetLogsDir from '../../components/Log/GetLogsDir'
 
 const configLogger = () => {
@@ -64,6 +64,7 @@ const getSspSet = () => {
   // Default: All
   // Example: --sspList freewheel,aerserv,onevideo
   const sspOptions = new Set([
+    '_empty_',
     'telaria',
     'freewheel',
     'beachfront',
@@ -114,11 +115,11 @@ const getAsSet = () => {
 
 const main = async () => {
   configLogger()
-  winston.profile('run-duration')
+  winston.profile('fetch-duration')
   const utcTime = getTargetDate()
   const sspList = getSspSet()
   const asList = getAsSet()
-  winston.info('Script configuration', {
+  winston.info('Fetch script configuration', {
     utcTime: utcTime.format('YYYY-MM-DD'),
     sspList,
     asList
@@ -127,7 +128,7 @@ const main = async () => {
   await DB.init()
 
   const sspResults = await GetSSPData(utcTime, sspList)
-  const asResults = await GetASData(utcTime, asList, false)
+  const asResults = await fetchAsData(utcTime, asList, false)
   winston.verbose('Results', {
     sspResults,
     asResults
@@ -226,6 +227,7 @@ const main = async () => {
   }
 
   await DB.close()
+  winston.profile('fetch-duration')
   winston.info('Fetch finish')
 }
 

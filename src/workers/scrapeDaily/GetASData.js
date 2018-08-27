@@ -33,7 +33,7 @@ const KNOWN_INVALID_TAGS = [
   'other'
 ]
 
-const groupAsResults = (asResults, asKey) => {
+export const groupAsResults = (asResults, asKey) => {
   const groups = {
     mnl: {},
     auton_wl: {},
@@ -91,7 +91,7 @@ const validateDataStructure = data => {
   })
 }
 
-export default async (dateTs, asList, group = true) => {
+export const fetch = async (dateTs, asList, group = true) => {
   const results = []
 
   const fetchJobs = AdServers.filter(item => asList.has(item.key)).map(async item => {

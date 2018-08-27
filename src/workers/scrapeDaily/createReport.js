@@ -1,16 +1,17 @@
 import '../../../env'
+import _ from 'lodash'
 import moment from 'moment'
 import winston from 'winston'
 import path from 'path'
 import fs from 'fs'
+import Sequelize from 'sequelize'
 
 import DB from '../../DB/'
-import GetSSPData from './GetSSPData'
-import { fetch as fetchAsData } from './GetASData'
+import GetLogsDir from '../../components/Log/GetLogsDir'
+import { groupAsResults } from './GetASData'
 import MergeTags from './MergeTags'
 import CalcProfit from './CalcProfit'
 import EmailResults from './EmailResults'
-import GetLogsDir from '../../components/Log/GetLogsDir'
 
 const configLogger = () => {
   const LOGS_DIR = GetLogsDir()
@@ -18,7 +19,7 @@ const configLogger = () => {
   if (!fs.existsSync(LOGS_DIR)) {
     fs.mkdirSync(LOGS_DIR)
   }
-  const LAST_LOG_PATH = path.join(LOGS_DIR, 'reports-last-run.log')
+  const LAST_LOG_PATH = path.join(LOGS_DIR, 'reports-build-last.log')
   if (fs.existsSync(LAST_LOG_PATH)) {
     fs.truncateSync(LAST_LOG_PATH)
   }
@@ -30,11 +31,11 @@ const configLogger = () => {
     ),
     transports: [
       new winston.transports.File({
-        filename: path.join(LOGS_DIR, `reports-error.${now}.log`),
+        filename: path.join(LOGS_DIR, `reports-build-error.${now}.log`),
         level: 'error'
       }),
       new winston.transports.File({
-        filename: path.join(LOGS_DIR, `reports-info.${now}.log`),
+        filename: path.join(LOGS_DIR, `reports-build-info.${now}.log`),
         level: 'info'
       }),
       new winston.transports.File({
@@ -44,14 +45,16 @@ const configLogger = () => {
   })
 }
 
-const getScriptDate = () => {
+const getTargetDate = () => {
+  // Get the date argument the script will fetch data for
+  // Default: yesterday
   for (let i in process.argv) {
     const next = Number(i) + 1
     if (process.argv[i] === '--date' && process.argv[next]) {
-      const date = moment(process.argv[next], 'YYYY-MM-DD')
+      const date = moment(process.argv[next] + ' 0:00 +0000', 'YYYY-MM-DD HH:mm Z').utc()
       if (!date.isValid()) {
         console.error('Invalid date')
-        process.exit()
+        process.exit(1)
       }
       return date
     }
@@ -64,6 +67,7 @@ const getSspSet = () => {
   // Default: All
   // Example: --sspList freewheel,aerserv,onevideo
   const sspOptions = new Set([
+    '_empty_',
     'telaria',
     'freewheel',
     'beachfront',
@@ -112,24 +116,106 @@ const getAsSet = () => {
   return asOptions
 }
 
+const getSspData = async (dateRange, sspList) => {
+  // Fetch from DB
+  const sspRecords = await DB.models.SspData.findAll({
+    where: {
+      date: {
+        [Sequelize.Op.between]: dateRange
+      },
+      key: {
+        [Sequelize.Op.in]: Array.from(sspList)
+      }
+    }
+  })
+
+  // Group by SSP
+  const groupedSspRecords = {}
+  _.each(sspRecords, r => {
+    const record = r.dataValues
+    if (!groupedSspRecords[record.key]) {
+      groupedSspRecords[record.key] = []
+    }
+    groupedSspRecords[record.key].push({
+      tag: record.tag,
+      opp: record.opp,
+      imp: record.imp,
+      rev: Number(record.rev),
+      sCost: Number(record.sCost)
+    })
+  })
+
+  // Convert to array
+  const sspResults = []
+  _.each(groupedSspRecords, (v, k) => {
+    sspResults.push({
+      key: k,
+      data: v
+    })
+  })
+
+  return sspResults
+}
+
+const getAsData = async (dateRange, asList) => {
+  const asRecords = await DB.models.AsData.findAll({
+    where: {
+      date: {
+        [Sequelize.Op.between]: dateRange
+      },
+      key: {
+        [Sequelize.Op.in]: Array.from(asList)
+      }
+    }
+  })
+
+  const groupedAsRecords = {}
+  _.each(asRecords, r => {
+    const record = r.dataValues
+    if (!groupedAsRecords[record.key]) {
+      groupedAsRecords[record.key] = []
+    }
+    groupedAsRecords[record.key].push({
+      tag: record.tag,
+      asOpp: record.opp,
+      asImp: record.imp,
+      asRev: Number(record.rev),
+      asCost: Number(record.cost),
+      asScost: Number(record.sCost)
+    })
+  })
+
+  const asResults = []
+  _.each(groupedAsRecords, (data, key) => {
+    asResults.push({
+      key,
+      data: groupAsResults(data, key)
+    })
+  })
+
+  return asResults
+}
+
 const main = async () => {
   configLogger()
   winston.profile('run-duration')
-  const utcTime = getScriptDate()
+  const utcTime = getTargetDate()
   const sspList = getSspSet()
   const asList = getAsSet()
-  winston.info('Script time (UTC)', {
-    time: utcTime.format('YYYY-MM-DD')
+  winston.info('Script configuration', {
+    utcTime: utcTime.format('YYYY-MM-DD'),
+    sspList,
+    asList
   })
 
   await DB.init()
 
-  const sspResults = await GetSSPData(utcTime, sspList)
-  const asResults = await fetchAsData(utcTime, asList)
-  winston.verbose('Final Results', {
-    sspResults,
-    asResults
-  })
+  const dateRange = [
+    moment(utcTime).startOf('day').toDate(),
+    moment(utcTime).endOf('day').toDate()
+  ]
+  const sspResults = await getSspData(dateRange, sspList)
+  const asResults = await getAsData(dateRange, asList)
 
   // Match tags
   const merged = MergeTags(sspResults, asResults)
@@ -145,11 +231,13 @@ const main = async () => {
   try {
     const deleted = await DB.models.Reports.destroy({
       where: {
-        date: utcTime
+        date: {
+          [Sequelize.Op.between]: dateRange
+        }
       }
     })
-    winston.info('Clear existing records', {
-      date: utcTime.format('YYYY-MM-DD'),
+    winston.info('Clear existing Reports records', {
+      deleteRange: dateRange,
       deleted
     })
   } catch (e) {
@@ -174,7 +262,7 @@ const main = async () => {
   winston.profile('run-duration')
   try {
     await EmailResults.send({ utcTime })
-    winston.info('Email sent')
+    winston.info('Email sent successfully')
   } catch (e) {
     winston.error('Send email failed', {
       error: e.message
@@ -182,7 +270,7 @@ const main = async () => {
   }
 
   await DB.close()
-  winston.info('Script finish')
+  winston.info('Create report finish')
 }
 
 main()

@@ -22,7 +22,7 @@ const groupBySsp = results => {
     })
   })
   each(results, r => {
-    const ssp = r.ssp || detectV2V(r)
+    const ssp = r.ssp || 'v2v'
     if (!ssp) {
       return
     }
@@ -42,12 +42,6 @@ const groupBySsp = results => {
     })
   })
   return groupsToArray(sspGroups)
-}
-
-const detectV2V = result => {
-  return 'v2v'
-  // console.error('Unknown SSP', result.ssp)
-  // return 'v2v_aniview'
 }
 
 const groupsToArray = sspGroups => {

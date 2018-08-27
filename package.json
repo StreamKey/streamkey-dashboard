@@ -17,6 +17,7 @@
     "workers:scrapeDaily": "babel-node src/workers/scrapeDaily/index.js --presets es2015,stage-2",
     "workers:fetchData": "babel-node src/workers/scrapeDaily/fetchData --presets es2015,stage-2",
     "workers:createReport": "babel-node src/workers/scrapeDaily/createReport --presets es2015,stage-2",
+    "workers:clearLogs": "babel-node src/workers/scrapeDaily/clearLogs --presets es2015,stage-2",
     "workers:createUser": "babel-node src/workers/createUser/index.js --presets es2015,stage-2",
     "workers:sheets": "babel-node src/workers/sheets.js --presets es2015,stage-2"
   },

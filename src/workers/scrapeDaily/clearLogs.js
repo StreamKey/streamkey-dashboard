@@ -1,3 +1,5 @@
+import '../../../env'
+
 import path from 'path'
 import fs from 'fs'
 

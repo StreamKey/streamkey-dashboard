@@ -37,7 +37,11 @@ const styles = theme => {
       width: '100%',
       height: '65vh',
       overflowY: 'scroll',
-      padding: theme.spacing.double
+      padding: theme.spacing.double,
+      '&.disabled': {
+        opacity: 0.5,
+        pointerEvents: 'none'
+      }
     },
     fileContainer: {
       width: '100%',
@@ -92,10 +96,15 @@ class ConfigurationUI extends React.Component {
       isDone: false,
       hasError: false,
       jsonData: null,
+      hasChanges: false,
       isPromptOpen: false,
       promptValue: '',
       promptKey: ''
     }
+  }
+
+  componentDidMount () {
+    this.load()
   }
 
   load = () => {
@@ -110,6 +119,7 @@ class ConfigurationUI extends React.Component {
           ...this.state,
           isLoading: false,
           jsonData: res.data.jsonData,
+          hasChanges: false,
           hasError: res.data.success !== true
         })
       } catch (e) {
@@ -139,6 +149,7 @@ class ConfigurationUI extends React.Component {
           ...this.state,
           isLoading: false,
           isDone: true,
+          hasChanges: false,
           hasError: res.data.success !== true
         })
       } catch (e) {
@@ -155,21 +166,24 @@ class ConfigurationUI extends React.Component {
   onAdd = e => {
     this.setState({
       ...this.state,
-      jsonData: e.updated_src
+      jsonData: e.updated_src,
+      hasChanges: true
     })
   }
 
   onEdit = e => {
     this.setState({
       ...this.state,
-      jsonData: e.updated_src
+      jsonData: e.updated_src,
+      hasChanges: true
     })
   }
 
   onDelete = e => {
     this.setState({
       ...this.state,
-      jsonData: e.updated_src
+      jsonData: e.updated_src,
+      hasChanges: true
     })
   }
 
@@ -193,7 +207,8 @@ class ConfigurationUI extends React.Component {
     }
     this.setState({
       ...this.state,
-      jsonData: newJsonData
+      jsonData: newJsonData,
+      hasChanges: true
     })
   }
 
@@ -221,11 +236,13 @@ class ConfigurationUI extends React.Component {
   }
 
   onAsChange = e => {
-    console.log('e', e)
-    this.setState({
-      ...this.state,
-      as: e.target.value
-    })
+    // TODO use material dialog instead of native prompt
+    if (!this.state.hasChanges || window.confirm('This will discard your unsaved changes. Continue?')) {
+      this.setState({
+        ...this.state,
+        as: e.target.value
+      }, this.load)
+    }
   }
 
   render () {
@@ -243,15 +260,6 @@ class ConfigurationUI extends React.Component {
               <MenuItem value='springserve'>SpringServe</MenuItem>
               <MenuItem value='streamrail'>StreamRail</MenuItem>
             </Select>
-            <Button
-              className={classes.button}
-              onClick={this.load}
-              size='small'
-              variant='raised'
-              disabled={this.state.isLoading}
-            >
-              Load
-            </Button>
             <Button
               className={classes.button}
               onClick={this.save}
@@ -285,7 +293,7 @@ class ConfigurationUI extends React.Component {
             }
           </div>
         </div>
-        <Paper className={classes.jsonEditor}>
+        <Paper className={`${classes.jsonEditor} ${this.state.isLoading ? 'disabled' : ''}`}>
           <ReactJson
             src={this.state.jsonData || {}}
             displayObjectSize={false}
@@ -306,6 +314,7 @@ class ConfigurationUI extends React.Component {
                 className={classes.button}
                 onClick={this.promptForName('bundle')}
                 size='small'
+                disabled={this.state.isLoading}
               >
                 Add Bundle
               </Button>
@@ -313,6 +322,7 @@ class ConfigurationUI extends React.Component {
                 className={classes.button}
                 onClick={this.promptForName('domain')}
                 size='small'
+                disabled={this.state.isLoading}
               >
                 Add Domain
               </Button>
@@ -320,6 +330,7 @@ class ConfigurationUI extends React.Component {
                 className={classes.button}
                 onClick={this.promptForName('ctv')}
                 size='small'
+                disabled={this.state.isLoading}
               >
                 Add CTV
               </Button>

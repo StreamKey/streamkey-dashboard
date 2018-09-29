@@ -303,8 +303,32 @@ class TagReport extends React.Component {
           Header: this.renderTotal('margin')
         }
       ]
-    },
-    {
+    }, {
+      Header: 'Diff CPM',
+      columns: [{
+        accessor: 'diffCpm',
+        Cell: this.renderValue,
+        className: classes.numericCell,
+        Header: this.renderTotal('diffCpm')
+      }]
+    }, {
+      Header: 'Diff Imp',
+      columns: [{
+        accessor: 'diffImp',
+        Cell: this.renderValue,
+        className: classes.numericCell,
+        Header: this.renderTotal('diffImp')
+      }]
+    }, {
+      Header: 'Diff Revenue',
+      columns: [{
+        accessor: 'diffRev',
+        Cell: this.renderValue,
+        minWidth: 120,
+        className: `${classes.numericCell} ${classes.cellPaddingRight}`,
+        Header: this.renderTotal('diffRev')
+      }]
+    }, {
       Header: 'SSP',
       columns: [{
         accessor: 'ssp',
@@ -411,31 +435,6 @@ class TagReport extends React.Component {
         Cell: this.renderValue,
         className: `${classes.asCell} ${classes.numericCell}`,
         Header: this.renderTotal('asScost')
-      }]
-    }, {
-      Header: 'Diff CPM',
-      columns: [{
-        accessor: 'diffCpm',
-        Cell: this.renderValue,
-        className: classes.numericCell,
-        Header: this.renderTotal('diffCpm')
-      }]
-    }, {
-      Header: 'Diff Imp',
-      columns: [{
-        accessor: 'diffImp',
-        Cell: this.renderValue,
-        className: classes.numericCell,
-        Header: this.renderTotal('diffImp')
-      }]
-    }, {
-      Header: 'Diff Revenue',
-      columns: [{
-        accessor: 'diffRev',
-        Cell: this.renderValue,
-        minWidth: 120,
-        className: `${classes.numericCell} ${classes.cellPaddingRight}`,
-        Header: this.renderTotal('diffRev')
       }]
     }]
     return (

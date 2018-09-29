@@ -4,13 +4,15 @@ import User from './models/user'
 import Report from './models/report'
 import SspData from './models/sspdata'
 import AsData from './models/asdata'
+import BackupConfigUI from './models/backupconfigui'
 
 // Order is important for associations
 const modelsDefinitions = [
   User,
   Report,
   SspData,
-  AsData
+  AsData,
+  BackupConfigUI
 ]
 
 const models = {}

@@ -100,11 +100,20 @@ Sync DB with:
 ```
 yarn sequelize db:migrate --config src/DB/config.js
 ```
+Undo migration:
+```
+yarn sequelize db:migrate:undo --config src/DB/config.js
+```
 Add a DB model and a [migration](http://docs.sequelizejs.com/manual/tutorial/migrations.html):
 ```
 yarn sequelize model:generate --name User --attributes firstName:string,lastName:string
 ```
 Then edit the `src/DB/migrations/xxx-create.user.js` and `src/DB/models/user.js` files.
+
+Finally add your model to the DB class and use it like this (table name is prular):
+```
+await DB.models.Users.create({ ... })
+```
 
 Add a DB migration to an existing model:
 ```

@@ -1,6 +1,8 @@
 import fs from 'fs'
 import ssh2 from 'ssh2'
 
+import DB from '../../../DB/'
+
 const SshClient = ssh2.Client
 
 const {
@@ -67,7 +69,7 @@ const load = as => {
 }
 
 const save = (as, jsonData) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const strData = JSON.stringify(jsonData, null, 2)
     let REMOTE_DESTINATION_PATH = REMOTE_DEV_PATH
     switch (as) {
@@ -83,6 +85,7 @@ const save = (as, jsonData) => {
       default:
         return reject(new Error('unknown-configuration-file'))
     }
+    await saveBackup(as, jsonData)
     const conn = new SshClient()
     conn.on('ready', () => {
       conn.sftp(async (err, sftp) => {
@@ -127,6 +130,13 @@ const save = (as, jsonData) => {
       password: RAZZLE_LEGACY_PASSWORD,
       privateKey: fs.readFileSync(RAZZLE_LEGACY_SSH_KEY)
     })
+  })
+}
+
+const saveBackup = async (as, jsonData) => {
+  await DB.models.BackupConfigUIs.create({
+    as,
+    data: jsonData
   })
 }
 

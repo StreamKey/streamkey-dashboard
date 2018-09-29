@@ -37,11 +37,20 @@ export default async (fromTs, toTs) => {
       ...diffs
     }
   })
+  const links = await DB.models.ReportLinks.findAll({
+    where: {
+      date: {
+        [Sequelize.Op.gte]: moment(fromTs, 'X'),
+        [Sequelize.Op.lte]: moment(toTs, 'X')
+      }
+    }
+  })
   return {
     range: {
       from: fromTs,
       to: toTs
     },
-    data
+    data,
+    links
   }
 }

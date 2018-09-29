@@ -14,6 +14,7 @@ import IconButton from 'material-ui/IconButton'
 
 import MdIcon from '../MdIcon'
 import DownloadSvg from 'mdi-svg/svg/download.svg'
+import GoogleSheetsSvg from 'mdi-svg/svg/google-drive.svg'
 
 import 'react-table/react-table.css'
 
@@ -264,6 +265,11 @@ class TagReport extends React.Component {
     FileSaver.saveAs(blob, `streamkey-report-${this.props.date.format('YYYY-MM-DD')}.csv`)
   }
 
+  openLink = links => () => {
+    const link = links[links.length - 1]
+    window.open(link.url, '_blank')
+  }
+
   filter = (filter, row) => {
     const re = new RegExp(filter.value, 'ig')
     return re.test(row[filter.id])
@@ -448,6 +454,17 @@ class TagReport extends React.Component {
               <MdIcon svg={DownloadSvg} className={classes.downloadIcon} />
             </IconButton>
           </Tooltip>
+          {
+            this.props.links.length > 0 &&
+            <Tooltip title='Google Sheets' placement='top' enterDelay={300}>
+              <IconButton
+                onClick={this.openLink(this.props.links)}
+                className={classes.downloadButton}
+              >
+                <MdIcon svg={GoogleSheetsSvg} className={classes.downloadIcon} />
+              </IconButton>
+            </Tooltip>
+          }
         </div>
         <Paper className={classes.tableContainer}>
           <ReactTable

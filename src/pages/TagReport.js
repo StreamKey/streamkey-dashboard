@@ -42,6 +42,7 @@ class TagReportPage extends React.Component {
     this.state = {
       date,
       data: [],
+      links: [],
       isLoading: false,
       error: false
     }
@@ -65,6 +66,7 @@ class TagReportPage extends React.Component {
       this.setState({
         ...this.state,
         data: response.data.report.data,
+        links: response.data.report.links,
         isLoading: false,
         error: false
       })
@@ -117,7 +119,7 @@ class TagReportPage extends React.Component {
             <MdIcon svg={RightSvg} className={classes.menuIcon} />
           </IconButton>
         </div>
-        <TagReport data={this.state.data} date={this.state.date} />
+        <TagReport data={this.state.data} date={this.state.date} links={this.state.links} />
       </div>
     )
   }

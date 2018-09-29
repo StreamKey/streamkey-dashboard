@@ -5,6 +5,7 @@ import pick from 'lodash/pick'
 import uniqBy from 'lodash/uniqBy'
 import moment from 'moment'
 
+import DB from '../../DB/'
 import Email from '../../api/controllers/Email/'
 import PublishDiscrepancyReport from '../../api/controllers/Google/PublishDiscrepancyReport'
 import PublishSspAsReport from '../../api/controllers/Google/PublishSspAsReport'
@@ -160,9 +161,18 @@ const generateReports = async (utcTime) => {
   }
 }
 
+const saveReportUrl = async ({ utcTime, reportsUrls }) => {
+  await DB.models.ReportLinks.create({
+    date: utcTime,
+    url: reportsUrls.discrepancyUrl
+  })
+  winston.info('Saved sheet URL to DB', { date: utcTime, url: reportsUrls.discrepancyUrl })
+}
+
 const send = async ({ utcTime }) => {
   const loggerData = await getLoggerData()
   const reportsUrls = await generateReports(utcTime)
+  await saveReportUrl({ utcTime, loggerData, reportsUrls })
   const emailBody = getEmailBody({ utcTime, loggerData, reportsUrls })
   try {
     await Email.send({

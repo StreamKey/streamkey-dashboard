@@ -66,11 +66,15 @@ const sumProfit = items => {
 }
 
 const getErrorData = error => {
-  switch (error.error) {
-    case 'invalid-tag':
+  switch (error.message) {
+    case 'Invalid Tag Group':
       return error.asKey
-        ? error.asKey + ': ' + get(error, 'asResult.tag')
-        : error.ssp + ': ' + get(error, 'sspData.tag')
+        ? error.asKey + ': ' + error.tag
+        : error.ssp + ': ' + error.tag
+    case 'Invalid SSP Tag':
+      return error.ssp + ': ' + error.sspData.tag
+    case 'Tag Error':
+      return (error.ssp ? error.ssp : error.as) + ': ' + error.tag
     default:
       return ''
   }
@@ -78,22 +82,19 @@ const getErrorData = error => {
 
 const getEmailBody = ({ utcTime, loggerData, reportsUrls }) => {
   const date = utcTime.format('YYYY-MM-DD')
-  const executionTime = numeral(loggerData.runDuration).format('00:00:00')
   const profits = sumProfit(loggerData.items)
   let text, html
   text = `Date: ${date}
 Total profit: ${numeral(profits.total).format('$0,0')}
 Total records: ${loggerData.items.length}
 Errors: ${loggerData.errors.length}
-Warnings: ${loggerData.warns.length}
-Execution time: ${executionTime}`
+Warnings: ${loggerData.warns.length}`
   html = `<table>
 <tr><td>Date</td><td>${date}</td></tr>
 <tr><td>Total profit</td><td>${numeral(profits.total).format('$0,0')}</td></tr>
 <tr><td>Total records</td><td>${loggerData.items.length}</td></tr>
 <tr><td>Errors</td><td>${loggerData.errors.length}</td></tr>
 <tr><td>Warnings</td><td>${loggerData.warns.length}</td></tr>
-<tr><td>Execution time</td><td>${executionTime}</td></tr>
 </table>`
 
   text += `
@@ -120,8 +121,8 @@ Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
     html += '<br/><b>Errors:</b><table>'
     for (let e of loggerData.errors) {
       const errorData = getErrorData(e)
-      text += `${e.error}, ${e.message}` + '\n'
-      html += `<tr><td>${e.error}</td><td>${e.message}</td><td>${errorData}</td></tr>`
+      text += `${e.message}` + '\n'
+      html += `<tr><td>- ${e.message}: </td><td>${errorData}</td></tr>`
     }
     html += '</table>'
   }
@@ -130,10 +131,10 @@ Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
     text += '\nWarnings:\n'
     html += '<br/><b>Warnings:</b><table>'
     for (let e of loggerData.warns) {
-      const jsonStr = JSON.stringify(pick(e.data, ['tag', 'as', 'ssp']))
-      const jsonMsg = jsonStr.length > 20 ? jsonStr.substring(0, 20) + '...' : jsonStr
-      text += `${e.message}, ${jsonMsg}` + '\n'
-      html += `<tr><td>${e.message}</td><td>${jsonMsg}</td></tr>`
+      console.log(e)
+      const errorData = getErrorData(e)
+      text += `${e.message}` + '\n'
+      html += `<tr><td>- ${e.message}: </td><td>${errorData}</td></tr>`
     }
     html += '</table>'
   }

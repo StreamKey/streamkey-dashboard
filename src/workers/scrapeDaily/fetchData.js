@@ -63,6 +63,7 @@ const getSspSet = () => {
   // Get the list of SSPs to fetch data from (comma separated)
   // Default: All
   // Example: --sspList freewheel,aerserv,onevideo
+  // Example: --skipSsp
   const sspOptions = new Set([
     '_empty_',
     'telaria',
@@ -72,6 +73,9 @@ const getSspSet = () => {
     'onevideo'
   ])
   for (let i in process.argv) {
+    if (process.argv[i] === '--skipSsp') {
+      return new Set()
+    }
     const next = Number(i) + 1
     if (process.argv[i] === '--sspList' && process.argv[next]) {
       const sspList = process.argv[next].split(',')
@@ -91,6 +95,7 @@ const getAsSet = () => {
   // Get the list of ASs to fetch data from (comma separated)
   // Default: All
   // Example: --asList streamrail,lkqd
+  // Example: --skipAs
   const asOptions = new Set([
     'streamrail',
     'lkqd',
@@ -98,6 +103,9 @@ const getAsSet = () => {
     'springserve'
   ])
   for (let i in process.argv) {
+    if (process.argv[i] === '--skipAs') {
+      return new Set()
+    }
     const next = Number(i) + 1
     if (process.argv[i] === '--asList' && process.argv[next]) {
       const asList = process.argv[next].split(',')

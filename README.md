@@ -121,6 +121,11 @@ yarn sequelize migration:generate --name User
 ```
 Then edit the new migration in `src/DB/migrations` and provide up/down methods using the [QueryInterface API](http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html).
 
+Example of SQL query:
+```
+docker run -it --rm --link streamkey-postgres:postgres postgres psql -h postgres -U postgres -d postgres -t -A -F"," -c "SELECT * FROM \"SspData\" WHERE date='2018-09-14' AND key='beachfront'"
+```
+
 ## Development
 * `yarn start`
 

@@ -1,7 +1,7 @@
-import { createMuiTheme } from 'material-ui/styles'
-import red from 'material-ui/colors/red'
-import green from 'material-ui/colors/green'
-import grey from 'material-ui/colors/grey'
+import { createMuiTheme } from '@material-ui/core/styles'
+import red from '@material-ui/core/colors/red'
+import green from '@material-ui/core/colors/green'
+import grey from '@material-ui/core/colors/grey'
 
 const Theme = createMuiTheme({
   palette: {
@@ -38,7 +38,7 @@ const Theme = createMuiTheme({
     huge: 128
   },
   typography: {
-
+    useNextVariants: true
   },
   utils: {
     container: {

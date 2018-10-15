@@ -1,24 +1,22 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 import ReactJson from 'react-json-view'
 
-import Button from 'material-ui/Button'
-import { CircularProgress } from 'material-ui/Progress'
-import TextField from 'material-ui/TextField'
-import { MenuItem } from 'material-ui/Menu'
-import Select from 'material-ui/Select'
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogTitle
-} from 'material-ui/Dialog'
-import Paper from 'material-ui/Paper'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Paper from '@material-ui/core/Paper'
 
-import SuccessSvg from 'mdi-svg/svg/check.svg'
-import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
+import SuccessSvg from 'mdi-material-ui/Check'
+import ErrorSvg from 'mdi-material-ui/AlertCircleOutline'
 
-import MdIcon from './MdIcon'
 import API from './API'
 
 const styles = theme => {
@@ -282,13 +280,13 @@ class ConfigurationUI extends React.Component {
             {
               this.state.isDone && this.state.hasError &&
               <div className={classes.error}>
-                <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
+                <ErrorSvg className={classes.icon} /> Something went wrong
               </div>
             }
             {
               this.state.isDone && !this.state.hasError &&
               <div className={classes.success}>
-                <MdIcon svg={SuccessSvg} className={classes.icon} /> Saved
+                <SuccessSvg className={classes.icon} /> Saved
               </div>
             }
           </div>

@@ -1,19 +1,17 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 import { omit, orderBy, take } from 'lodash'
 
-import Button from 'material-ui/Button'
-import IconButton from 'material-ui/IconButton'
-import List, {
-  ListItem,
-  ListItemText,
-  ListItemIcon
-} from 'material-ui/List'
-import FileSvg from 'mdi-svg/svg/file-outline.svg'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import FileSvg from 'mdi-material-ui/FileOutline'
 
 import LogViewer from '../components/Log/LogViewer'
-import MdIcon from '../components/MdIcon'
 import API from '../components/API'
 
 const styles = theme => {
@@ -130,7 +128,7 @@ class Logs extends React.Component {
                     onClick={this.getLogData(l)}
                     className={classes.logButton}
                   >
-                    <MdIcon svg={FileSvg} className={classes.logButtonIcon} />
+                    <FileSvg className={classes.logButtonIcon} />
                   </IconButton>
                 </ListItemIcon>
                 <ListItemText primary={l} />

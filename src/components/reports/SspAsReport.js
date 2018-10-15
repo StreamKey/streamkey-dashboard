@@ -1,10 +1,10 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import numeral from 'numeral'
 import ReactTable from 'react-table'
 import each from 'lodash/each'
 
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 
 import 'react-table/react-table.css'
 

@@ -1,16 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router'
 
 import { Link } from 'react-router-dom'
-import IconButton from 'material-ui/IconButton'
+import IconButton from '@material-ui/core/IconButton'
 
 import { setUser } from '../store/actions'
 import API from './API'
-import MdIcon from './MdIcon'
-import LeftCaretSvg from 'mdi-svg/svg/menu-left.svg'
-import RightCaretSvg from 'mdi-svg/svg/menu-right.svg'
+import LeftCaretSvg from 'mdi-material-ui/MenuLeft'
+import RightCaretSvg from 'mdi-material-ui/MenuRight'
 import Logo from '../assets/streamkey-logo-horizontal.png'
 
 const styles = theme => {
@@ -29,7 +28,6 @@ const styles = theme => {
       alignItems: 'center'
     },
     logoContainer: {
-      ...theme.typography.logoContainer,
       textDecoration: 'none',
       height: '100%',
       width: theme.spacing.huge * 1.25,
@@ -95,7 +93,12 @@ class Header extends React.Component {
             <img className={classes.logo} src={Logo} alt='StreamKey Logo' />
           </Link>
           <IconButton className={classes.headerToggler} onClick={toggleNavbar}>
-            <MdIcon svg={hideNavbar ? RightCaretSvg : LeftCaretSvg} />
+            {
+              hideNavbar && <RightCaretSvg />
+            }
+            {
+              !hideNavbar && <LeftCaretSvg />
+            }
           </IconButton>
         </div>
         {

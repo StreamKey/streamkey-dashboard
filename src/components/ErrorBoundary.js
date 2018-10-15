@@ -1,8 +1,7 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 
-import MdIcon from './MdIcon'
-import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
+import ErrorSvg from 'mdi-material-ui/AlertCircleOutline'
 
 const styles = theme => {
   return {
@@ -47,17 +46,15 @@ class ErrorBoundary extends React.Component {
   componentDidCatch (error, info) {
     // Display fallback UI
     this.setState({ hasError: true })
-    // You can also log the error to an error reporting service
     console.error(error, info)
   }
 
   render () {
     const { classes } = this.props
     if (this.state.hasError) {
-      // You can render any custom fallback UI
       return <div className={classes.root}>
         <div className={classes.primaryContainer}>
-          <MdIcon svg={ErrorSvg} className={classes.icon} />
+          <ErrorSvg className={classes.icon} />
           <h1 className={classes.text}>Something went wrong</h1>
         </div>
         <h2 className={classes.textSecondary}>Check the console for more details</h2>

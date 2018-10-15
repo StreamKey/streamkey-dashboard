@@ -1,14 +1,13 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import FormData from 'form-data'
 
-import Button from 'material-ui/Button'
-import { CircularProgress } from 'material-ui/Progress'
-import SuccessSvg from 'mdi-svg/svg/check.svg'
-import ErrorSvg from 'mdi-svg/svg/alert-circle-outline.svg'
-import DuplicateSvg from 'mdi-svg/svg/content-duplicate.svg'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import SuccessSvg from 'mdi-material-ui/Check'
+import ErrorSvg from 'mdi-material-ui/AlertCircleOutline'
+import DuplicateSvg from 'mdi-material-ui/ContentDuplicate'
 
-import MdIcon from '../MdIcon'
 import API from '../API'
 
 const styles = theme => {
@@ -119,19 +118,19 @@ class UploadTagGenerator extends React.Component {
             disabled={this.state.isLoading}
           >
             {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}
-            {!this.state.isLoading && <MdIcon svg={DuplicateSvg} className={classes.icon} />}
+            {!this.state.isLoading && <DuplicateSvg className={classes.icon} />}
             Upload
           </Button>
           {
             this.state.isDone && this.state.hasError &&
             <div className={classes.error}>
-              <MdIcon svg={ErrorSvg} className={classes.icon} /> Something went wrong
+              <ErrorSvg className={classes.icon} /> Something went wrong
             </div>
           }
           {
             this.state.isDone && !this.state.hasError &&
             <div className={classes.success}>
-              <MdIcon svg={SuccessSvg} className={classes.icon} /> Done
+              <SuccessSvg className={classes.icon} /> Done
             </div>
           }
         </form>

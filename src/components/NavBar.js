@@ -1,14 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router'
 
-import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import { setUser } from '../store/actions'
 import API from './API'
-import MdIcon from './MdIcon'
-import LoginSvg from 'mdi-svg/svg/login.svg'
+import LoginSvg from 'mdi-material-ui/Login'
 
 const styles = theme => {
   return {
@@ -176,7 +179,7 @@ class NavBar extends React.Component {
             <List className={classes.list} component='nav' dense>
               <ListItem button onClick={this.navTo('/login')}>
                 <ListItemIcon>
-                  <MdIcon svg={LoginSvg} className={classes.listIcon} />
+                  <LoginSvg className={classes.listIcon} />
                 </ListItemIcon>
                 <ListItemText primary='Login' />
               </ListItem>

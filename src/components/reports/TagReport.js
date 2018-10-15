@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 import ReactTable from 'react-table'
 import numeral from 'numeral'
@@ -8,13 +8,12 @@ import csvStringify from 'csv-stringify/lib/sync'
 import FileSaver from 'file-saver'
 import Blob from 'blob'
 
-import Paper from 'material-ui/Paper'
-import Tooltip from 'material-ui/Tooltip'
-import IconButton from 'material-ui/IconButton'
+import Paper from '@material-ui/core/Paper'
+import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
 
-import MdIcon from '../MdIcon'
-import DownloadSvg from 'mdi-svg/svg/download.svg'
-import GoogleSheetsSvg from 'mdi-svg/svg/google-drive.svg'
+import DownloadSvg from 'mdi-material-ui/Download'
+import GoogleSheetsSvg from 'mdi-material-ui/GoogleDrive'
 
 import 'react-table/react-table.css'
 
@@ -451,7 +450,7 @@ class TagReport extends React.Component {
               onClick={this.downloadCsv}
               className={classes.downloadButton}
             >
-              <MdIcon svg={DownloadSvg} className={classes.downloadIcon} />
+              <DownloadSvg className={classes.downloadIcon} />
             </IconButton>
           </Tooltip>
           {
@@ -461,7 +460,7 @@ class TagReport extends React.Component {
                 onClick={this.openLink(this.props.links)}
                 className={classes.downloadButton}
               >
-                <MdIcon svg={GoogleSheetsSvg} className={classes.downloadIcon} />
+                <GoogleSheetsSvg className={classes.downloadIcon} />
               </IconButton>
             </Tooltip>
           }

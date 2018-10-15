@@ -1,12 +1,11 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
 
-import IconButton from 'material-ui/IconButton'
-import MdIcon from '../components/MdIcon'
-import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
-import RightSvg from 'mdi-svg/svg/chevron-right.svg'
+import IconButton from '@material-ui/core/IconButton'
+import LeftSvg from 'mdi-material-ui/ChevronLeft'
+import RightSvg from 'mdi-material-ui/ChevronRight'
 
 import TagReport from '../components/reports/TagReport'
 import API from '../components/API'
@@ -104,7 +103,7 @@ class TagReportPage extends React.Component {
             className={classes.button}
             onClick={this.prevDay}
           >
-            <MdIcon svg={LeftSvg} className={classes.menuIcon} />
+            <LeftSvg className={classes.menuIcon} />
           </IconButton>
           <DatePicker
             className={classes.datepicker}
@@ -116,7 +115,7 @@ class TagReportPage extends React.Component {
             className={classes.button}
             onClick={this.nextDay}
           >
-            <MdIcon svg={RightSvg} className={classes.menuIcon} />
+            <RightSvg className={classes.menuIcon} />
           </IconButton>
         </div>
         <TagReport data={this.state.data} date={this.state.date} links={this.state.links} />

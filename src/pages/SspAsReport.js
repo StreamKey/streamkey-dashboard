@@ -1,13 +1,12 @@
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 import DatePicker from 'material-ui-pickers/DatePicker'
 import each from 'lodash/each'
 
-import IconButton from 'material-ui/IconButton'
-import MdIcon from '../components/MdIcon'
-import LeftSvg from 'mdi-svg/svg/chevron-left.svg'
-import RightSvg from 'mdi-svg/svg/chevron-right.svg'
+import IconButton from '@material-ui/core/IconButton'
+import LeftSvg from 'mdi-material-ui/ChevronLeft'
+import RightSvg from 'mdi-material-ui/ChevronRight'
 
 import SspAsReport from '../components/reports/SspAsReport'
 import API from '../components/API'
@@ -164,7 +163,7 @@ class SspAsReportPage extends React.Component {
               className={classes.button}
               onClick={this.startPrevDay}
             >
-              <MdIcon svg={LeftSvg} className={classes.menuIcon} />
+              <LeftSvg className={classes.menuIcon} />
             </IconButton>
             <DatePicker
               label='Start date'
@@ -177,7 +176,7 @@ class SspAsReportPage extends React.Component {
               className={classes.button}
               onClick={this.startNextDay}
             >
-              <MdIcon svg={RightSvg} className={classes.menuIcon} />
+              <RightSvg className={classes.menuIcon} />
             </IconButton>
           </div>
           <div>
@@ -185,7 +184,7 @@ class SspAsReportPage extends React.Component {
               className={classes.button}
               onClick={this.endPrevDay}
             >
-              <MdIcon svg={LeftSvg} className={classes.menuIcon} />
+              <LeftSvg className={classes.menuIcon} />
             </IconButton>
             <DatePicker
               label='End date'
@@ -198,7 +197,7 @@ class SspAsReportPage extends React.Component {
               className={classes.button}
               onClick={this.endNextDay}
             >
-              <MdIcon svg={RightSvg} className={classes.menuIcon} />
+              <RightSvg className={classes.menuIcon} />
             </IconButton>
           </div>
         </div>

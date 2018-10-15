@@ -198,7 +198,6 @@ const getAsData = async (dateRange, asList) => {
 
 const main = async () => {
   configLogger()
-  winston.profile('run-duration')
   const utcTime = getTargetDate()
   const sspList = getSspSet()
   const asList = getAsSet()
@@ -259,7 +258,6 @@ const main = async () => {
     })
   }
 
-  winston.profile('run-duration')
   try {
     await EmailResults.send({ utcTime })
     winston.info('Email sent successfully')
@@ -271,6 +269,11 @@ const main = async () => {
 
   await DB.close()
   winston.info('Create report finish')
+
+  // TODO figure out which handle prevents from exiting in dev
+  setTimeout(() => {
+    process.exit()
+  }, 1000)
 }
 
 main()

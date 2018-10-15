@@ -1,7 +1,5 @@
 import numeral from 'numeral'
 import winston from 'winston'
-import get from 'lodash/get'
-import pick from 'lodash/pick'
 import uniqBy from 'lodash/uniqBy'
 import moment from 'moment'
 
@@ -14,31 +12,40 @@ const { RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS } = process.env
 
 const getLoggerData = () => {
   return new Promise((resolve, reject) => {
-    winston.query({ limit: 999 }, function (err, results) {
-      if (err) {
-        reject(err)
-      }
-      const errors = []
-      const warns = []
-      let runDuration, items
-      for (let r of results.file) {
-        if (r.level === 'error') {
-          errors.push(r)
-        } else if (r.level === 'warn') {
-          warns.push(r)
-        } else if (r.message === 'run-duration') {
-          runDuration = r.durationMs / 1000
-        } else if (r.message === 'Items to store') {
-          items = r.items
-        }
-      }
-      resolve({
-        errors: uniqBy(errors, e => '' + e.error + e.message),
-        warns: uniqBy(warns, e => '' + e.message + JSON.stringify(e.data)),
-        runDuration,
-        items
-      })
-    })
+    const errors = []
+    const warns = []
+    let items, first
+    try {
+      // This is a hack to read the current log, as winston.query() is not working
+      // properly. Watch https://github.com/winstonjs/winston/issues/1130
+      winston.stream({ start: -1 })
+        .on('log', log => {
+          if (!first) {
+            first = log
+          }
+          if (log.level === 'error') {
+            errors.push(log)
+          } else if (log.level === 'warn') {
+            warns.push(log)
+          } else if (log.message === 'Items to store') {
+            items = log.items
+          }
+        })
+      setTimeout(() => {
+        const now = moment()
+        const firstLog = moment(first.timestamp)
+        const runDuration = moment.duration(now.diff(firstLog)).seconds()
+        resolve({
+          errors: uniqBy(errors, e => '' + e.error + e.message),
+          warns: uniqBy(warns, e => '' + e.message + JSON.stringify(e.data)),
+          runDuration,
+          items
+        })
+      }, 2000)
+    } catch (e) {
+      console.error(e)
+      reject(e)
+    }
   })
 }
 
@@ -171,11 +178,11 @@ const saveReportUrl = async ({ utcTime, reportsUrls }) => {
 }
 
 const send = async ({ utcTime }) => {
-  const loggerData = await getLoggerData()
-  const reportsUrls = await generateReports(utcTime)
-  await saveReportUrl({ utcTime, loggerData, reportsUrls })
-  const emailBody = getEmailBody({ utcTime, loggerData, reportsUrls })
   try {
+    const loggerData = await getLoggerData()
+    const reportsUrls = await generateReports(utcTime)
+    await saveReportUrl({ utcTime, loggerData, reportsUrls })
+    const emailBody = getEmailBody({ utcTime, loggerData, reportsUrls })
     await Email.send({
       to: RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS,
       subject: 'Daily Report - ' + utcTime.format('YYYY-MM-DD'),

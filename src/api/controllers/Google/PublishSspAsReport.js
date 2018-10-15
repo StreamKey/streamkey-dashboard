@@ -485,7 +485,8 @@ const addConditionalFormats = (diff, formatData) => {
       startRowIndex: 3,
       endRowIndex: sheetLines
     })
-    percentRanges.push({sheetId: '__sheetId__',
+    percentRanges.push({
+      sheetId: '__sheetId__',
       startColumnIndex: (i * 4) + 3,
       endColumnIndex: (i * 4) + 4,
       startRowIndex: 3,

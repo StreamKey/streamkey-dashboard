@@ -1,6 +1,6 @@
 {
-  "name": "top-sub",
-  "version": "0.4.0",
+  "name": "streamkey-dashboard",
+  "version": "0.5.0",
   "license": "MIT",
   "engines": {
     "node": ">=9.6.1"

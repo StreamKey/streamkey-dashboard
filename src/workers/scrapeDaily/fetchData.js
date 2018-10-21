@@ -70,6 +70,7 @@ const getSspSet = () => {
     'freewheel',
     'beachfront',
     'aerserv',
+    'spotx',
     'onevideo'
     // 'peak',
     // 'tappx'

@@ -1,40 +1,54 @@
+import axios from 'axios'
 import moment from 'moment'
+import DB from '../../../DB/'
 
-import GenerateAxiosCookies from '../GenerateAxiosCookies'
+const apiTokenUrl = 'https://publisher-api.spotxchange.com/1.0/token'
+const apiReportsUrl = 'https://api.spotxchange.com/1.0'
 
-const axios = GenerateAxiosCookies({ returnJar: true })
+const {
+  RAZZLE_CREDENTIALS_SPOTX_PUBLISHERID,
+  RAZZLE_CREDENTIALS_SPOTX_OAUTH_CLIENT_ID,
+  RAZZLE_CREDENTIALS_SPOTX_OAUTH_CLIENT_SECRET
+} = process.env
 
-const credentials = {
-  username: process.env.RAZZLE_CREDENTIALS_SPOTX_USERNAME,
-  password: process.env.RAZZLE_CREDENTIALS_SPOTX_PASSWORD,
-  publisherId: process.env.RAZZLE_CREDENTIALS_SPOTX_PUBLISHERID
-}
-
-axios.axios.defaults.baseURL = 'https://publisher-api.spotxchange.com/1.0'
-// TODO use the OAuth authentication
-// https://developer.spotxchange.com/content/local/docs/apiDocs/platform/reporting.md
-
-const login = async () => {
+const getAccessToken = async () => {
+  const configs = await DB.models.Configs.findAll({
+    where: {
+      id: 'SPOTX_REFRESH_TOKEN'
+    }
+  })
+  if (configs.length !== 1) {
+    throw new Error('SpotX refresh token not found in DB')
+  }
+  const refreshToken = configs[0].dataValues.value
   const form = {
-    username: credentials.username,
-    password: credentials.password
+    client_id: RAZZLE_CREDENTIALS_SPOTX_OAUTH_CLIENT_ID,
+    client_secret: RAZZLE_CREDENTIALS_SPOTX_OAUTH_CLIENT_SECRET,
+    grant_type: 'refresh_token',
+    refresh_token: refreshToken
   }
-  try {
-    await axios.axios.post('/Publisher/Login', form)
-  } catch (e) {
-    e.prevError = e.message
-    e.message = 'SpotX login failed'
-    throw e
-  }
+  const res = await axios.post(apiTokenUrl, form)
+  const accessToken = res.data.value.data.access_token
+
+  await DB.models.Configs.upsert({
+    id: 'SPOTX_ACCESS_TOKEN',
+    value: accessToken
+  })
+  return accessToken
 }
 
-const getResults = async dateTs => {
+const getResults = async (accessToken, dateTs) => {
   const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
   const form = {
     date_range: `${date} | ${date}`
   }
   try {
-    const res = await axios.axios.get(`/Publisher(${credentials.publisherId})/Channels/RevenueReport`, { params: form })
+    const res = await axios.get(`${apiReportsUrl}/Publisher(${RAZZLE_CREDENTIALS_SPOTX_PUBLISHERID})/Channels/RevenueReport`, {
+      params: form,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
     return res.data.value.data
   } catch (e) {
     e.prevError = e.message
@@ -57,8 +71,8 @@ const normalize = results => {
 
 export default {
   getData: async dateTs => {
-    await login()
-    const results = await getResults(dateTs)
+    const accessToken = await getAccessToken()
+    const results = await getResults(accessToken, dateTs)
     return normalize(results)
   }
 }

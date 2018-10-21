@@ -8,6 +8,7 @@ import Beachfront from './SSP/Beachfront'
 import Aerserv from './SSP/Aerserv'
 // import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
+import Peak from './SSP/Peak'
 
 const SSPs = [
   {
@@ -31,6 +32,9 @@ const SSPs = [
   // }, {
     key: 'onevideo',
     controller: OneVideo
+  }, {
+    key: 'peak',
+    controller: Peak
   }
 ]
 

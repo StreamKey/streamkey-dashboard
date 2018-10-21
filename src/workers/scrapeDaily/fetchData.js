@@ -70,7 +70,8 @@ const getSspSet = () => {
     'freewheel',
     'beachfront',
     'aerserv',
-    'onevideo'
+    'onevideo',
+    'peak'
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipSsp') {
@@ -237,6 +238,11 @@ const main = async () => {
   await DB.close()
   winston.profile('fetch-duration')
   winston.info('Fetch finish')
+
+  // TODO figure out which handle prevents from exiting in dev
+  setTimeout(() => {
+    process.exit()
+  }, 1000)
 }
 
 main()

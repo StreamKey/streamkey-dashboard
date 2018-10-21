@@ -70,9 +70,9 @@ const getSspSet = () => {
     'freewheel',
     'beachfront',
     'aerserv',
-    'onevideo',
-    'peak',
-    'tappx'
+    'onevideo'
+    // 'peak',
+    // 'tappx'
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipSsp') {

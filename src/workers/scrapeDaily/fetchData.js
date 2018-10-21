@@ -71,7 +71,8 @@ const getSspSet = () => {
     'beachfront',
     'aerserv',
     'onevideo',
-    'peak'
+    'peak',
+    'tappx'
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipSsp') {

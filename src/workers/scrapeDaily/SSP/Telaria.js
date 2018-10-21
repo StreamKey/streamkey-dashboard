@@ -50,7 +50,8 @@ const submitQuery = async dateTs => {
       'adUnit',
       'requests',
       'impressions',
-      'sspNetRevenue',
+      'netRevenue',
+      'sspNetRevenue', // Programmatic Net Revenue
       'currency',
       'netCpm'
     ],
@@ -73,20 +74,33 @@ const submitQuery = async dateTs => {
     }
   }
   const res = await axios.post(`/queries`, form)
+  winston.info('Telaria query ID', {
+    queryId: res.data.code
+  })
   return res.data.code
 }
 
 const waitUntilResultsReady = async queryId => {
   let resultsReady = false
   let retries = TIMEOUT
+  let errorRetries = 3
   while (!resultsReady) {
     await waitAsync(1000)
     const res = await axios.get(`/queries/${queryId}`)
     if (res.data.error) {
-      const e = new Error('Telaria error')
-      e.prevError = res.data.error
-      e.message = 'Telaria error'
-      throw e
+      if (errorRetries > 0) {
+        errorRetries--
+        winston.warn('Telaria retry error', {
+          retriesLeft: errorRetries
+        })
+        await waitAsync(3000)
+        continue
+      } else {
+        const e = new Error('Telaria error')
+        e.prevError = res.data.error
+        e.message = 'Telaria error'
+        throw e
+      }
     }
     resultsReady = res.data.status === 3
     retries--
@@ -103,10 +117,10 @@ const getResults = async queryId => {
 
 const normalize = (results, currencies) => {
   return results.map(r => {
-    let revenue = r.sspNetRevenue
+    let revenue = Math.max(r.sspNetRevenue, r.netRevenue)
     if (r.currency !== 'USD') {
       if (currencies[r.currency]) {
-        revenue = r.sspNetRevenue * currencies[r.currency]
+        revenue = (Math.max(r.sspNetRevenue, r.netRevenue)) * currencies[r.currency]
       } else {
         winston.error('Telaria Unknown revenue currency', { result: r })
       }

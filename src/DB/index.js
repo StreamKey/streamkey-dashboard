@@ -6,6 +6,7 @@ import SspData from './models/sspdata'
 import AsData from './models/asdata'
 import BackupConfigUI from './models/backupconfigui'
 import ReportLink from './models/reportlink'
+import Config from './models/config'
 
 // Order is important for associations
 const modelsDefinitions = [
@@ -14,7 +15,8 @@ const modelsDefinitions = [
   SspData,
   AsData,
   BackupConfigUI,
-  ReportLink
+  ReportLink,
+  Config
 ]
 
 const models = {}

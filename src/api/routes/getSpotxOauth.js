@@ -1,5 +1,6 @@
 import axios from 'axios'
 import get from 'lodash/get'
+import DB from '../../DB/'
 
 const {
   RAZZLE_CREDENTIALS_SPOTX_OAUTH_CLIENT_ID,
@@ -24,17 +25,34 @@ export default async req => {
       },
       data
     })
+    const resData = get(res, 'data.value.data')
+    const accessToken = resData.access_token
+    const refreshToken = resData.refresh_token
+
+    // Store access_token and refresh_token in DB
+    await DB.models.Configs.upsert({
+      id: 'SPOTX_ACCESS_TOKEN',
+      value: accessToken
+    })
+    await DB.models.Configs.upsert({
+      id: 'SPOTX_REFRESH_TOKEN',
+      value: refreshToken
+    })
+
     return {
       success: true,
-      token: get(res, 'data.value.data'),
+      token: {
+        accessToken,
+        refreshToken
+      },
       state
     }
   } catch (e) {
     const err = new Error('spotx-oauth-token-error')
     err.details = {
-      status: e.response.status,
-      statusText: e.response.statusText,
-      ...e.response.data
+      status: get(e, 'response.status'),
+      statusText: get(e, 'response.statusText'),
+      ...get(e, 'response.data')
     }
     throw err
   }

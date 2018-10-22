@@ -14,3 +14,15 @@ export const partnersMap = {
   telaria: 'Telaria'
 }
 export const getPartnerName = key => partnersMap[key] || key
+
+export const promiseTimeout = (ms, promise) => {
+  const timeout = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(new Error(`Timed out after ${ms} ms`))
+    }, ms)
+  })
+  return Promise.race([
+    promise,
+    timeout
+  ])
+}

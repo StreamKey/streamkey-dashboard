@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import winston from 'winston'
+import { promiseTimeout } from '../../components/Utils'
 
 import GetTagBase from './GetTagBase'
 import MergeAsResults from './MergeAsResults'
@@ -8,6 +9,8 @@ import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
 import Aniview from './AS/Aniview'
 import SpringServe from './AS/SpringServe'
+
+const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_SECONDS
 
 const AdServers = [
   {
@@ -97,7 +100,9 @@ export const fetch = async (dateTs, asList, group = true) => {
   const fetchJobs = AdServers.filter(item => asList.has(item.key)).map(async item => {
     try {
       winston.info('AS Start', { as: item.key })
-      const data = await item.controller.getData(dateTs)
+      const timeoutDuration = PARTNER_FETCH_TIMEOUT_SECONDS * 1000
+      const timeoutGetData = promiseTimeout(timeoutDuration, item.controller.getData(dateTs))
+      const data = await timeoutGetData
       validateDataStructure(data)
       winston.info('AS Finish', { as: item.key })
       winston.verbose('AS Results', {

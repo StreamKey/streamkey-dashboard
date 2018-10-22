@@ -29,11 +29,8 @@ const getResults = dateTs => {
       if (csvStr.startsWith('Error')) {
         throw new Error(csvStr)
       }
-      csv()
-        .fromString(csvStr)
-        .on('end_parsed', jsonArr => {
-          resolve(jsonArr)
-        })
+      const jsonArr = await csv().fromString(csvStr)
+      resolve(jsonArr)
     } catch (e) {
       e.prevError = e.message
       e.message = 'Aerserv report failed'

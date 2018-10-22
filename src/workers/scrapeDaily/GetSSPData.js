@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import winston from 'winston'
+import { promiseTimeout } from '../../components/Utils'
 
 import _Empty_ from './SSP/_Empty_'
 import Telaria from './SSP/Telaria'
@@ -10,6 +11,8 @@ import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
 // import Peak from './SSP/Peak'
 // import Tappx from './SSP/Tappx'
+
+const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_SECONDS
 
 const SSPs = [
   {
@@ -84,7 +87,9 @@ export default async (dateTs, sspList) => {
   const fetchJobs = SSPs.filter(item => sspList.has(item.key)).map(async item => {
     try {
       winston.info('SSP Start', { ssp: item.key })
-      const data = await item.controller.getData(dateTs)
+      const timeoutDuration = PARTNER_FETCH_TIMEOUT_SECONDS * 1000
+      const timeoutGetData = promiseTimeout(timeoutDuration, item.controller.getData(dateTs))
+      const data = await timeoutGetData
       if (item.key !== '_empty_') {
         validateDataStructure(data)
       }

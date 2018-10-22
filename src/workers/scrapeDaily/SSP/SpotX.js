@@ -64,7 +64,7 @@ const normalize = results => {
       opp: Number(r.queries),
       imp: Number(r.impressions),
       rev: Number(r.revenue_usd),
-      sCost: (Number(r.queries) - Number(r.impressions)) * 0.0000007
+      sCost: (Number(r.queries) - Number(r.impressions)) * 0.000007
     }
   })
 }

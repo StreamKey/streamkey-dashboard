@@ -72,6 +72,7 @@ const getSspSet = () => {
     'freewheel',
     'beachfront',
     'aerserv',
+    'spotx',
     'onevideo'
   ])
   for (let i in process.argv) {

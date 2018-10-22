@@ -10,6 +10,8 @@ const groupBySsp = results => {
     'freewheel': {},
     'onevideo': {},
     'telaria': {},
+    'spotx': {},
+    'improvedigital': {},
     'v2v': {}
   }
   each(sspGroups, (ssp, sspKey) => {

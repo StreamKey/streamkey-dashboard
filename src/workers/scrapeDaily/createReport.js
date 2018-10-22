@@ -73,7 +73,8 @@ const getSspSet = () => {
     'beachfront',
     'aerserv',
     'spotx',
-    'onevideo'
+    'onevideo',
+    'improvedigital'
   ])
   for (let i in process.argv) {
     const next = Number(i) + 1

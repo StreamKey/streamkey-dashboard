@@ -9,6 +9,7 @@ import Beachfront from './SSP/Beachfront'
 import Aerserv from './SSP/Aerserv'
 import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
+import ImproveDigital from './SSP/ImproveDigital'
 // import Peak from './SSP/Peak'
 // import Tappx from './SSP/Tappx'
 
@@ -36,6 +37,9 @@ const SSPs = [
   }, {
     key: 'onevideo',
     controller: OneVideo
+  }, {
+    key: 'improvedigital',
+    controller: ImproveDigital
   // }, {
   //   key: 'peak',
   //   controller: Peak

@@ -11,7 +11,8 @@ export const partnersMap = {
   freewheel: 'Freewheel',
   onevideo: 'OneVideo',
   spotx: 'SpotX',
-  telaria: 'Telaria'
+  telaria: 'Telaria',
+  improvedigital: 'ImproveDigital'
 }
 export const getPartnerName = key => partnersMap[key] || key
 

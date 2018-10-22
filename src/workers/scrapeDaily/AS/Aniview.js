@@ -114,11 +114,8 @@ const downloadReport = link => {
       const rawData = res.data
       const sections = rawData.replace('\r\n', '\n').split('\n\n')
       const csvStr = sections[sections.length - 1]
-      csv()
-        .fromString(csvStr)
-        .on('end_parsed', jsonArr => {
-          resolve(jsonArr)
-        })
+      const jsonArr = await csv().fromString(csvStr)
+      resolve(jsonArr)
     } catch (e) {
       e.prevError = e.message
       e.message = 'Aniview downloadReport failed twice'

@@ -87,8 +87,15 @@ const getErrorData = error => {
   }
 }
 
+const getItemsAboveThreshold = items => {
+  return items.filter(i => {
+    return (i.profit <= -20) || (i.profit >= 100 && i.margin < 0.15)
+  })
+}
+
 const getEmailBody = ({ utcTime, loggerData, reportsUrls }) => {
   const date = utcTime.format('YYYY-MM-DD')
+  const itemsAboveThreshold = getItemsAboveThreshold(loggerData.items)
   const profits = sumProfit(loggerData.items)
   let text, html
   text = `Date: ${date}
@@ -142,6 +149,19 @@ Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
       const errorData = getErrorData(e)
       text += `${e.message}` + '\n'
       html += `<tr><td>- ${e.message}: </td><td>${errorData}</td></tr>`
+    }
+    html += '</table>'
+  }
+
+  if (itemsAboveThreshold.length > 0) {
+    text += '\nTags above threshold:\n'
+    html += `<br/><b>Tags above threshold:</b><table>
+    <tr><td><b>Tag</b></td><td><b>Profit</b></td><td><b>Margin</b></td></tr>`
+    for (let i of itemsAboveThreshold) {
+      const profit = numeral(i.profit).format('$0,0.0')
+      const margin = numeral(i.margin).format('0a%')
+      text += `${i.tag}, ${profit}, ${margin}` + '\n'
+      html += `<tr><td>- ${i.tag}: </td><td>${profit}</td><td>${margin}</td></tr>`
     }
     html += '</table>'
   }

@@ -72,7 +72,8 @@ const getSspSet = () => {
     'aerserv',
     'spotx',
     'onevideo',
-    'improvedigital'
+    'improvedigital',
+    'pulsepointctv'
     // 'peak',
     // 'tappx'
   ])

@@ -12,6 +12,7 @@ const groupBySsp = results => {
     'telaria': {},
     'spotx': {},
     'improvedigital': {},
+    'pulsepointctv': {},
     'v2v': {}
   }
   each(sspGroups, (ssp, sspKey) => {

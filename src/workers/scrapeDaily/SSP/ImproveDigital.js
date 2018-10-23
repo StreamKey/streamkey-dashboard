@@ -20,7 +20,6 @@ const login = async () => {
     'login[g-recaptcha-response]': ''
   }
   try {
-    console.log('login', qs.stringify(form))
     await axios.post('/login_check', qs.stringify(form))
   } catch (e) {
     console.error(e)

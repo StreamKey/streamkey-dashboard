@@ -437,7 +437,7 @@ const addBorders = (diff, formatData) => {
       startColumnIndex: 0,
       endColumnIndex: (asList.length + 1) * 4 + 1,
       startRowIndex: 0,
-      endRowIndex: 4 + diff.length,
+      endRowIndex: 4 + Object.keys(diff).length,
       options: {
         width: 1
       }
@@ -464,7 +464,7 @@ const addBorders = (diff, formatData) => {
       startColumnIndex: 0,
       endColumnIndex: (asList.length + 1) * 4 + 1,
       startRowIndex: 0,
-      endRowIndex: 4 + diff.length,
+      endRowIndex: 4 + Object.keys(diff).length,
       options: {
         width: 2,
         inner: false
@@ -476,7 +476,7 @@ const addBorders = (diff, formatData) => {
 const addConditionalFormats = (diff, formatData) => {
   const usdRanges = []
   const percentRanges = []
-  const sheetLines = diff.length + 4
+  const sheetLines = Object.keys(diff).length + 4
   for (let i = 0; i < (asList.length + 1); i++) {
     usdRanges.push({
       sheetId: '__sheetId__',

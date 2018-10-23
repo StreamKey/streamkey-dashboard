@@ -161,7 +161,7 @@ Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
       const profit = numeral(i.profit).format('$0,0.0')
       const margin = numeral(i.margin).format('0a%')
       text += `${i.tag}, ${profit}, ${margin}` + '\n'
-      html += `<tr><td>- ${i.tag}: </td><td>${profit}</td><td>${margin}</td></tr>`
+      html += `<tr><td>${i.tag}</td><td>${profit}</td><td>${margin}</td></tr>`
     }
     html += '</table>'
   }

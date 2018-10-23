@@ -73,9 +73,9 @@ const getSspSet = () => {
     'spotx',
     'onevideo',
     'improvedigital',
-    'pulsepointctv'
+    'pulsepointctv',
+    'tappx'
     // 'peak',
-    // 'tappx'
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipSsp') {

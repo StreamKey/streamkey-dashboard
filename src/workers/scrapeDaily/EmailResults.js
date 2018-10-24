@@ -7,13 +7,21 @@ import DB from '../../DB/'
 import Email from '../../api/controllers/Email/'
 import PublishDiscrepancyReport from '../../api/controllers/Google/PublishDiscrepancyReport'
 import PublishSspAsReport from '../../api/controllers/Google/PublishSspAsReport'
+import GetFetchErrorLogs from '../../components/Log/GetFetchErrorLogs'
 
 const { RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS } = process.env
 
-const getLoggerData = () => {
-  return new Promise((resolve, reject) => {
+const getLoggerData = utcTime => {
+  return new Promise(async (resolve, reject) => {
     const errors = []
     const warns = []
+
+    // Get all fetch-error logs of the relevant day
+    const fetchErrors = await GetFetchErrorLogs(utcTime)
+    for (let e of fetchErrors) {
+      errors.push(e)
+    }
+
     let items, first
     try {
       // This is a hack to read the current log, as winston.query() is not working
@@ -83,7 +91,8 @@ const getErrorData = error => {
     case 'Tag Error':
       return (error.ssp ? error.ssp : error.as) + ': ' + error.tag
     default:
-      return ''
+      const partner = error.ssp || error.as || error.asKey || false
+      return (partner ? partner + ' ' : '') + error.error + (error.prevError ? '. ' + error.prevError : '')
   }
 }
 
@@ -199,7 +208,7 @@ const saveReportUrl = async ({ utcTime, reportsUrls }) => {
 
 const send = async ({ utcTime }) => {
   try {
-    const loggerData = await getLoggerData()
+    const loggerData = await getLoggerData(utcTime)
     const reportsUrls = await generateReports(utcTime)
     await saveReportUrl({ utcTime, loggerData, reportsUrls })
     const emailBody = getEmailBody({ utcTime, loggerData, reportsUrls })

@@ -73,8 +73,8 @@ const getSspSet = () => {
     'spotx',
     'onevideo',
     'improvedigital',
-    'pulsepointctv',
-    'tappx'
+    'pulsepointctv'
+    // 'tappx'
     // 'peak',
   ])
   for (let i in process.argv) {

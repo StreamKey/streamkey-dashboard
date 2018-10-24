@@ -71,9 +71,9 @@ const getSspSet = () => {
     'beachfront',
     'aerserv',
     'spotx',
-    'onevideo',
-    'improvedigital',
-    'pulsepointctv'
+    'onevideo'
+    // 'improvedigital',
+    // 'pulsepointctv'
     // 'tappx'
     // 'peak',
   ])

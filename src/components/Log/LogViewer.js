@@ -1,5 +1,6 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
+import { isObject } from 'lodash'
 
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -23,55 +24,83 @@ const styles = theme => {
   }
 }
 
+const SimpleLogViewer = props => {
+  const { classes, rows } = props
+  return (
+    <Table className={classes.table}>
+      <TableBody>
+        {
+          rows.map((r, n) => (
+            <TableRow className={classes.row} key={n}>
+              <TableCell>
+                {r}
+              </TableCell>
+            </TableRow>
+          ))
+        }
+      </TableBody>
+    </Table>
+  )
+}
+
+const WinstonLogViewer = props => {
+  const { classes, rows } = props
+  return (
+    <Table className={classes.table}>
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            Date
+          </TableCell>
+          <TableCell>
+            Time
+          </TableCell>
+          <TableCell>
+            Level
+          </TableCell>
+          <TableCell>
+            Message
+          </TableCell>
+          <TableCell>
+            Data
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {
+          rows.map((r, n) => (
+            <TableRow className={classes.row} key={n}>
+              <TableCell>
+                {r.date}
+              </TableCell>
+              <TableCell>
+                {r.time}
+              </TableCell>
+              <TableCell>
+                {r.level}
+              </TableCell>
+              <TableCell>
+                {r.message}
+              </TableCell>
+              <TableCell>
+                <JsonViewer jsonStr={r.data} />
+              </TableCell>
+            </TableRow>
+          ))
+        }
+      </TableBody>
+    </Table>
+  )
+}
+
 class LogViewer extends React.Component {
   render () {
     const { classes, rows } = this.props
-    return (
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              Date
-            </TableCell>
-            <TableCell>
-              Time
-            </TableCell>
-            <TableCell>
-              Level
-            </TableCell>
-            <TableCell>
-              Message
-            </TableCell>
-            <TableCell>
-              Data
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {
-            rows.map((r, n) => (
-              <TableRow className={classes.row} key={n}>
-                <TableCell>
-                  {r.date}
-                </TableCell>
-                <TableCell>
-                  {r.time}
-                </TableCell>
-                <TableCell>
-                  {r.level}
-                </TableCell>
-                <TableCell>
-                  {r.message}
-                </TableCell>
-                <TableCell>
-                  <JsonViewer jsonStr={r.data} />
-                </TableCell>
-              </TableRow>
-            ))
-          }
-        </TableBody>
-      </Table>
-    )
+    if (isObject(rows[0])) {
+      return <WinstonLogViewer classes={classes} rows={rows} />
+    } else {
+      return <SimpleLogViewer classes={classes} rows={rows} />
+    }
   }
 }
 

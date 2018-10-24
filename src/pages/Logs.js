@@ -35,6 +35,7 @@ const styles = theme => {
     logButton: {
       height: theme.spacing.quad,
       width: theme.spacing.quad,
+      padding: theme.spacing.unit,
       marginRight: 0
     },
     logButtonIcon: {
@@ -73,8 +74,9 @@ class Logs extends React.Component {
 
   getLogData = logName => async () => {
     const response = await API.get('/logs/' + logName)
-    const jsonStr = '[' + response.data.data.trim('\n').split('\n').join(',') + ']'
+    const logLines = response.data.data.trim('\n').split('\n')
     try {
+      const jsonStr = '[' + logLines.join(',') + ']'
       const json = JSON.parse(jsonStr)
       const currentLog = json.map(l => {
         const time = moment(l.timestamp).utc()
@@ -91,8 +93,10 @@ class Logs extends React.Component {
         currentLog
       }, this.scrollShowLog)
     } catch (e) {
-      console.error('Invalid log format')
-      console.error(e)
+      this.setState({
+        ...this.state,
+        currentLog: logLines
+      }, this.scrollShowLog)
     }
   }
 
@@ -140,7 +144,10 @@ class Logs extends React.Component {
           { showAll ? 'Show less' : `+ ${logsList.length - 10}` }
         </Button>
         <div className={classes.logContainer} ref={this.setLogRef}>
-          <LogViewer rows={currentLog} />
+          {
+            currentLog.length > 0 &&
+            <LogViewer rows={currentLog} />
+          }
         </div>
       </div>
     )

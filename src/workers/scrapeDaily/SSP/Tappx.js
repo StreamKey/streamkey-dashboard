@@ -19,9 +19,7 @@ const getResults = async dateTs => {
       currency: 'USD'
     }
     const res = await axios.get(baseURL, { params })
-    console.log(res)
-    process.exit()
-    const data = res.data
+    const data = res.data.split('\n').map(line => line.split(';'))
     return data
   } catch (e) {
     e.prevError = e.message
@@ -33,10 +31,10 @@ const getResults = async dateTs => {
 const normalize = results => {
   return results.map(r => {
     return {
-      tag: r[1],
-      opp: r[8],
-      imp: r[7],
-      rev: r[5],
+      tag: r[1], // TappxID. Should be app name
+      opp: r[6],
+      imp: r[8],
+      rev: r[10],
       sCost: 0
     }
   })

@@ -1,6 +1,6 @@
 {
   "name": "streamkey-dashboard",
-  "version": "0.8.0",
+  "version": "0.12.0",
   "license": "MIT",
   "engines": {
     "node": ">=9.6.1"
@@ -14,11 +14,11 @@
     "db:install": "docker run --name streamkey-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5445:5432 postgres",
     "db:start": "docker start streamkey-postgres",
     "db:rm": "docker stop streamkey-postgres && docker rm streamkey-postgres",
-    "workers:fetchData": "babel-node src/workers/scrapeDaily/fetchData --presets es2015,stage-2",
-    "workers:createReport": "babel-node src/workers/scrapeDaily/createReport --presets es2015,stage-2",
-    "workers:clearLogs": "babel-node src/workers/scrapeDaily/clearLogs --presets es2015,stage-2",
-    "workers:createUser": "babel-node src/workers/createUser/index.js --presets es2015,stage-2",
-    "workers:sheets": "babel-node src/workers/sheets.js --presets es2015,stage-2"
+    "workers:fetchData": "yarn babel-node src/workers/scrapeDaily/fetchData --presets es2015,stage-2",
+    "workers:createReport": "yarn babel-node src/workers/scrapeDaily/createReport --presets es2015,stage-2",
+    "workers:clearLogs": "yarn babel-node src/workers/scrapeDaily/clearLogs --presets es2015,stage-2",
+    "workers:createUser": "yarn babel-node src/workers/createUser/index.js --presets es2015,stage-2",
+    "workers:sheets": "yarn babel-node src/workers/sheets.js --presets es2015,stage-2"
   },
   "dependencies": {
     "@material-ui/core": "^3.2.1",
@@ -40,6 +40,7 @@
     "express-session": "^1.15.6",
     "file-saver": "^2.0.0-rc.3",
     "forever": "^0.15.3",
+    "glob": "^7.1.3",
     "googleapis": "^34.0.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",

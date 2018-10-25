@@ -7,13 +7,21 @@ import DB from '../../DB/'
 import Email from '../../api/controllers/Email/'
 import PublishDiscrepancyReport from '../../api/controllers/Google/PublishDiscrepancyReport'
 import PublishSspAsReport from '../../api/controllers/Google/PublishSspAsReport'
+import GetFetchErrorLogs from '../../components/Log/GetFetchErrorLogs'
 
 const { RAZZLE_REPORT_SCRIPT_EMAIL_RECEPIENTS } = process.env
 
-const getLoggerData = () => {
-  return new Promise((resolve, reject) => {
+const getLoggerData = utcTime => {
+  return new Promise(async (resolve, reject) => {
     const errors = []
     const warns = []
+
+    // Get all fetch-error logs of the relevant day
+    const fetchErrors = await GetFetchErrorLogs(utcTime)
+    for (let e of fetchErrors) {
+      errors.push(e)
+    }
+
     let items, first
     try {
       // This is a hack to read the current log, as winston.query() is not working
@@ -83,12 +91,20 @@ const getErrorData = error => {
     case 'Tag Error':
       return (error.ssp ? error.ssp : error.as) + ': ' + error.tag
     default:
-      return ''
+      const partner = error.ssp || error.as || error.asKey || false
+      return (partner ? partner + ' ' : '') + error.error + (error.prevError ? '. ' + error.prevError : '')
   }
+}
+
+const getItemsAboveThreshold = items => {
+  return items.filter(i => {
+    return (i.profit <= -20) || (i.profit >= 100 && i.margin < 0.15)
+  })
 }
 
 const getEmailBody = ({ utcTime, loggerData, reportsUrls }) => {
   const date = utcTime.format('YYYY-MM-DD')
+  const itemsAboveThreshold = getItemsAboveThreshold(loggerData.items)
   const profits = sumProfit(loggerData.items)
   let text, html
   text = `Date: ${date}
@@ -146,6 +162,19 @@ Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
     html += '</table>'
   }
 
+  if (itemsAboveThreshold.length > 0) {
+    text += '\nTags above threshold:\n'
+    html += `<br/><b>Tags above threshold:</b><table>
+    <tr><td><b>Tag</b></td><td><b>Profit</b></td><td><b>Margin</b></td></tr>`
+    for (let i of itemsAboveThreshold) {
+      const profit = numeral(i.profit).format('$0,0.0')
+      const margin = numeral(i.margin).format('0a%')
+      text += `${i.tag}, ${profit}, ${margin}` + '\n'
+      html += `<tr><td>${i.tag}</td><td>${profit}</td><td>${margin}</td></tr>`
+    }
+    html += '</table>'
+  }
+
   return {
     text,
     html
@@ -179,7 +208,7 @@ const saveReportUrl = async ({ utcTime, reportsUrls }) => {
 
 const send = async ({ utcTime }) => {
   try {
-    const loggerData = await getLoggerData()
+    const loggerData = await getLoggerData(utcTime)
     const reportsUrls = await generateReports(utcTime)
     await saveReportUrl({ utcTime, loggerData, reportsUrls })
     const emailBody = getEmailBody({ utcTime, loggerData, reportsUrls })

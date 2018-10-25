@@ -77,6 +77,7 @@ const getSspSet = () => {
     'tappx'
     // 'peak',
     // 'tappx'
+    // 'peak',
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipSsp') {

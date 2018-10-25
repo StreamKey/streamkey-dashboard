@@ -1,50 +1,24 @@
-// WIP
-
-// https://www.tappx.com/en/admin/login/
-// username: ...
-// password: ...
-
-// https://www.tappx.com/en/admin/reports/?timerange=selecteddates&dp1=2018-10-20&dp2=2018-10-20&csv=1
-
-import qs from 'querystring'
 import moment from 'moment'
-
-import GenerateAxiosCookies from '../GenerateAxiosCookies'
-
-const axios = GenerateAxiosCookies()
+import axios from 'axios'
 
 const credentials = {
-  username: process.env.RAZZLE_CREDENTIALS_TAPPX_USERNAME,
-  password: process.env.RAZZLE_CREDENTIALS_TAPPX_PASSWORD
+  userId: process.env.RAZZLE_CREDENTIALS_TAPPX_USERID,
+  apiKey: process.env.RAZZLE_CREDENTIALS_TAPPX_APIKEY
 }
 
-axios.defaults.baseURL = 'https://www.tappx.com/en/admin'
-
-const login = async () => {
-  const form = {
-    username: credentials.username,
-    password: credentials.password
-  }
-  try {
-    await axios.post('/login', qs.stringify(form))
-  } catch (e) {
-    e.prevError = e.message
-    e.message = 'Tappx login failed'
-    throw e
-  }
-}
+const baseURL = 'http://reporting.api.tappx.com/ssp/v3'
 
 const getResults = async dateTs => {
   try {
     const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
     const params = {
-      timerange: 'selecteddates',
-      dp1: date,
-      dp2: date,
-      csv: '1'
+      key: credentials.apiKey,
+      id: credentials.userId,
+      date_start: date,
+      date_end: date,
+      currency: 'USD'
     }
-    const res = await axios.get('/reports/?' + qs.stringify(params))
-    console.log('tappx URL', '/reports/?' + qs.stringify(params))
+    const res = await axios.get(baseURL, { params })
     console.log(res)
     process.exit()
     const data = res.data
@@ -70,7 +44,6 @@ const normalize = results => {
 
 export default {
   getData: async dateTs => {
-    await login()
     const results = await getResults(dateTs)
     return normalize(results)
   }

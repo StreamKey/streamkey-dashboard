@@ -11,8 +11,8 @@ import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
 import ImproveDigital from './SSP/ImproveDigital'
 import PulsePointCTV from './SSP/PulsePointCTV'
+import Tappx from './SSP/Tappx'
 // import Peak from './SSP/Peak'
-// import Tappx from './SSP/Tappx'
 
 const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_SECONDS
 
@@ -44,12 +44,12 @@ const SSPs = [
   }, {
     key: 'pulsepointctv',
     controller: PulsePointCTV
-  // }, {
-  //   key: 'peak',
-  //   controller: Peak
-  // }, {
-  //   key: 'tappx',
-  //   controller: Tappx
+  }, {
+    key: 'tappx',
+    controller: Tappx
+    // }, {
+    //   key: 'peak',
+    //   controller: Peak
   }
 ]
 

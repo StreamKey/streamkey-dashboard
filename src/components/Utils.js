@@ -13,6 +13,7 @@ export const partnersMap = {
   spotx: 'SpotX',
   telaria: 'Telaria',
   improvedigital: 'ImproveDigital',
+  tappx: 'Tappx',
   pulsepointctv: 'PulsePointCTV'
 }
 export const getPartnerName = key => partnersMap[key] || key

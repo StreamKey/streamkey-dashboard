@@ -75,7 +75,8 @@ const getSspSet = () => {
     'spotx',
     'onevideo',
     'improvedigital',
-    'pulsepointctv'
+    'tappx'
+    // 'pulsepointctv'
   ])
   for (let i in process.argv) {
     const next = Number(i) + 1

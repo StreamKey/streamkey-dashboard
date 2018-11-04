@@ -10,7 +10,7 @@ import Aerserv from './SSP/Aerserv'
 import SpotX from './SSP/SpotX'
 import OneVideo from './SSP/OneVideo'
 import ImproveDigital from './SSP/ImproveDigital'
-import PulsePointCTV from './SSP/PulsePointCTV'
+// import PulsePointCTV from './SSP/PulsePointCTV'
 import Tappx from './SSP/Tappx'
 // import Peak from './SSP/Peak'
 
@@ -42,14 +42,14 @@ const SSPs = [
     key: 'improvedigital',
     controller: ImproveDigital
   }, {
-    key: 'pulsepointctv',
-    controller: PulsePointCTV
-  }, {
     key: 'tappx',
     controller: Tappx
-    // }, {
-    //   key: 'peak',
-    //   controller: Peak
+  // }, {
+  //   key: 'pulsepointctv',
+  //   controller: PulsePointCTV
+  // }, {
+  //   key: 'peak',
+  //   controller: Peak
   }
 ]
 

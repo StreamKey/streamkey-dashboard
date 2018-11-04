@@ -2,11 +2,12 @@ import exec from '../controllers/Exec/'
 
 export default async req => {
   try {
-    await exec(req.params.script, req.body)
-  } catch (e) {
+    const res = await exec(req.params.script, req.body)
     return {
-      success: false,
-      error: e.message
+      success: true,
+      ...res
     }
+  } catch (e) {
+    throw e
   }
 }

@@ -144,6 +144,14 @@ class Scripts extends React.Component {
           }
         }
         const res = await API.post('/exec/' + this.state.script, form)
+        const {
+          rootDir,
+          stdout,
+          stderr
+        } = res.data
+        console.log('rootDir', rootDir)
+        console.log('stdout', stdout)
+        console.log('stderr', stderr)
         if (res.data.success !== true) {
           console.error(res)
         }
@@ -151,7 +159,7 @@ class Scripts extends React.Component {
           ...this.state,
           isLoading: false,
           isDone: true,
-          error: res.data.success !== true ? res.data.error.message || 'Something went wrong' : false
+          error: res.data.success !== true ? res.data.error.message || 'Something went wrong' : (stderr.length > 0 ? stderr : false)
         })
       } catch (e) {
         console.error(e)
@@ -246,7 +254,7 @@ class Scripts extends React.Component {
           {
             this.state.isDone && !this.state.error &&
             <div className={classes.success}>
-              <SuccessSvg className={classes.icon} /> Saved
+              <SuccessSvg className={classes.icon} /> Done
             </div>
           }
         </div>

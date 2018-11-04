@@ -66,6 +66,26 @@ const errors = {
     id: 20,
     code: 404,
     message: 'No such script'
+  },
+  'fetch-data-missing-as': {
+    id: 21,
+    code: 400,
+    message: 'Missing AS field'
+  },
+  'fetch-data-missing-ssp': {
+    id: 22,
+    code: 400,
+    message: 'Missing SSP field'
+  },
+  'fetch-data-missing-date': {
+    id: 23,
+    code: 400,
+    message: 'Missing date field'
+  },
+  'fetch-data-invalid-input': {
+    id: 24,
+    code: 400,
+    message: 'Invalid input'
   }
 }
 

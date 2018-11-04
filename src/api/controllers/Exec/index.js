@@ -1,17 +1,21 @@
+import fetchData from './fetchData'
+import createReport from './createReport'
 
-export default async (script, jsonData) => {
-  switch (script) {
-    case 'fetchData':
-      return {
-        script,
-        jsonData
-      }
-    case 'createReport':
-      return {
-        script,
-        jsonData
-      }
-    default:
-      throw new Error('unknown-exec-script')
+export default async (script, body) => {
+  try {
+    let res
+    switch (script) {
+      case 'fetchData':
+        res = await fetchData(body)
+        break
+      case 'createReport':
+        res = await createReport(body)
+        break
+      default:
+        throw new Error('unknown-exec-script')
+    }
+    return res
+  } catch (e) {
+    throw e
   }
 }

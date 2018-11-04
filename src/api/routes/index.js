@@ -12,6 +12,7 @@ import postCleanBl from './postCleanBl'
 import uploadTagGenerator from './uploadTagGenerator'
 import getConfigurationUi from './getConfigurationUi'
 import postConfigurationUi from './postConfigurationUi'
+import postExec from './postExec'
 import { notFound, parseError, serverError } from './Errors'
 
 const multipart = require('connect-multiparty')
@@ -83,6 +84,7 @@ export default app => {
   app.put('/api/uploadTagGenerator', ensureLoggedIn, multipartMiddleware, asyncMiddleware(uploadTagGenerator))
   app.get('/api/configuration-ui/load/:as', ensureLoggedIn, asyncMiddleware(getConfigurationUi))
   app.post('/api/configuration-ui/save/:as', ensureLoggedIn, asyncMiddleware(postConfigurationUi))
+  app.post('/api/exec/:script', ensureLoggedIn, asyncMiddleware(postExec))
 
   app.use('/api/admin/*', ensureAdmin)
 

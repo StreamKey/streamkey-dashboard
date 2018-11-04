@@ -61,6 +61,11 @@ const errors = {
     id: 19,
     code: 404,
     message: 'No such configuration file'
+  },
+  'unknown-exec-script': {
+    id: 20,
+    code: 404,
+    message: 'No such script'
   }
 }
 

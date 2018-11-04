@@ -262,7 +262,7 @@ class ConfigurationUI extends React.Component {
               className={classes.button}
               onClick={this.save}
               size='small'
-              variant='raised'
+              variant='contained'
               disabled={this.state.isLoading}
             >
               Save

@@ -153,7 +153,7 @@ class Login extends React.Component {
             </div>
           }
           <Button
-            variant='raised'
+            variant='contained'
             color='primary'
             type='submit'
             className={classes.button}

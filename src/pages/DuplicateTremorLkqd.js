@@ -142,7 +142,7 @@ class DuplicateTremorLkqd extends React.Component {
           className={classes.button}
           onClick={this.run}
           size='small'
-          variant='raised'
+          variant='contained'
           disabled={this.state.isLoadingRun}
         >
           {this.state.isLoadingRun && <CircularProgress size={24} className={classes.progress} />}
@@ -167,7 +167,7 @@ class DuplicateTremorLkqd extends React.Component {
           className={classes.button}
           onClick={this.runTremor}
           size='small'
-          variant='raised'
+          variant='contained'
           disabled={this.state.isLoadingTremor}
         >
           {this.state.isLoadingTremor && <CircularProgress size={24} className={classes.progress} />}
@@ -192,7 +192,7 @@ class DuplicateTremorLkqd extends React.Component {
           className={classes.button}
           onClick={this.runLkqd}
           size='small'
-          variant='raised'
+          variant='contained'
           disabled={this.state.isLoadingLkqd}
         >
           {this.state.isLoadingLkqd && <CircularProgress size={24} className={classes.progress} />}

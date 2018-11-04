@@ -152,7 +152,8 @@ docker run -it --rm --link streamkey-postgres:postgres postgres psql -h postgres
 5. Add partner key to `src/workers/scrapeDaily/createReport`
 6. Add partner to `src/components/Utils`
 7. Add partner key to `src/api/controllers/Report/groupBySspAs`
-8. Update server crontab
+8. Update `defaultPageSize` with number of SSPs in `DiscrepancyReport` and `SspAsReport`
+9. Update server crontab
 
 ## Tests
 `yarn test`

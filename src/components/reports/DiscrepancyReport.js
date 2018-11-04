@@ -7,6 +7,8 @@ import each from 'lodash/each'
 import Paper from '@material-ui/core/Paper'
 import Tooltip from '@material-ui/core/Tooltip'
 
+import { getPartnerName } from '../Utils'
+
 import 'react-table/react-table.css'
 
 const styles = theme => {
@@ -129,7 +131,8 @@ class DiscrepancyReport extends React.Component {
       Header: 'SSP',
       columns: [{
         accessor: 'ssp',
-        Header: <strong>Total</strong>
+        Header: <strong>Total</strong>,
+        Cell: cell => <span>{cell.value ? getPartnerName(cell.value) : ''}</span>
       }]
     }, {
       Header: 'Total',
@@ -140,7 +143,7 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('total')
       }]
     }, {
-      Header: 'LKQD',
+      Header: getPartnerName('lkqd'),
       columns: [{
         accessor: 'lkqd.revenue',
         Cell: this.renderCell,
@@ -148,7 +151,7 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('lkqd.revenue')
       }]
     }, {
-      Header: 'StreamRail',
+      Header: getPartnerName('streamrail'),
       columns: [{
         accessor: 'streamrail.revenue',
         Cell: this.renderCell,
@@ -156,7 +159,7 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('streamrail.revenue')
       }]
     }, {
-      Header: 'SpringServe',
+      Header: getPartnerName('springserve'),
       columns: [{
         accessor: 'springserve.revenue',
         Cell: this.renderCell,
@@ -164,7 +167,7 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('springserve.revenue')
       }]
     }, {
-      Header: 'Aniview',
+      Header: getPartnerName('aniview'),
       columns: [{
         accessor: 'aniview.revenue',
         Cell: this.renderCell,
@@ -172,6 +175,7 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('aniview.revenue')
       }]
     }]
+    console.log(data)
     return (
       <div className={classes.root}>
         <Paper className={classes.tableContainer}>
@@ -180,7 +184,7 @@ class DiscrepancyReport extends React.Component {
             data={data}
             columns={columns}
             showPageJump={false}
-            defaultPageSize={6}
+            defaultPageSize={9}
             PaginationComponent={() => <div />}
           />
         </Paper>

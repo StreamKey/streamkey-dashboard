@@ -6,6 +6,8 @@ import each from 'lodash/each'
 
 import Paper from '@material-ui/core/Paper'
 
+import { getPartnerName } from '../Utils'
+
 import 'react-table/react-table.css'
 
 const styles = theme => {
@@ -262,7 +264,8 @@ class SspAsReport extends React.Component {
       Header: 'Demand',
       columns: [{
         accessor: 'ssp',
-        Header: <strong>Total</strong>
+        Header: <strong>Total</strong>,
+        Cell: cell => <span>{cell.value ? getPartnerName(cell.value) : ''}</span>
       }]
     }, {
       Header: 'Total Profit',
@@ -280,7 +283,7 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('total.profit', 'percent', 'margin')
       }]
     }, {
-      Header: 'LKQD Profit',
+      Header: getPartnerName('lkqd') + ' Profit',
       columns: [{
         accessor: 'lkqd.profit',
         Cell: this.renderValue('usd'),
@@ -288,14 +291,14 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('lkqd.profit', 'usd', 'sum')
       }]
     }, {
-      Header: 'LKQD Margin',
+      Header: getPartnerName('lkqd') + ' Margin',
       columns: [{
         accessor: 'lkqd.margin',
         Cell: this.renderValue('percent'),
         Header: this.renderTotal('lkqd.profit', 'percent', 'margin')
       }]
     }, {
-      Header: 'StreamRail Profit',
+      Header: getPartnerName('streamrail') + ' Profit',
       columns: [{
         accessor: 'streamrail.profit',
         Cell: this.renderValue('usd'),
@@ -303,14 +306,14 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('streamrail.profit', 'usd', 'sum')
       }]
     }, {
-      Header: 'StreamRail Margin',
+      Header: getPartnerName('streamrail') + ' Margin',
       columns: [{
         accessor: 'streamrail.margin',
         Cell: this.renderValue('percent'),
         Header: this.renderTotal('streamrail.profit', 'percent', 'margin')
       }]
     }, {
-      Header: 'SpringServe Profit',
+      Header: getPartnerName('springserve') + ' Profit',
       columns: [{
         accessor: 'springserve.profit',
         Cell: this.renderValue('usd'),
@@ -318,14 +321,14 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('springserve.profit', 'usd', 'sum')
       }]
     }, {
-      Header: 'SpringServe Margin',
+      Header: getPartnerName('springserve') + ' Margin',
       columns: [{
         accessor: 'springserve.margin',
         Cell: this.renderValue('percent'),
         Header: this.renderTotal('springserve.profit', 'percent', 'margin')
       }]
     }, {
-      Header: 'Aniview Profit',
+      Header: getPartnerName('aniview') + ' Profit',
       columns: [{
         accessor: 'aniview.profit',
         Cell: this.renderValue('usd'),
@@ -333,7 +336,7 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('aniview.profit', 'usd', 'sum')
       }]
     }, {
-      Header: 'Aniview Margin',
+      Header: getPartnerName('aniview') + ' Margin',
       columns: [{
         accessor: 'aniview.margin',
         Cell: this.renderValue('percent'),
@@ -359,7 +362,7 @@ class SspAsReport extends React.Component {
             data={diffWithYesterday}
             columns={columns}
             showPageJump={false}
-            defaultPageSize={6}
+            defaultPageSize={9}
             PaginationComponent={() => <div />}
           />
         </Paper>

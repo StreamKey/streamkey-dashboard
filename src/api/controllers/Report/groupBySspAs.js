@@ -13,7 +13,7 @@ const groupBySsp = results => {
     'spotx': {},
     'improvedigital': {},
     'tappx': {},
-    // 'pulsepointctv': {},
+    'pulsepointctv': {},
     'v2v': {}
   }
   each(sspGroups, (ssp, sspKey) => {

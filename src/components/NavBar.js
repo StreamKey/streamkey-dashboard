@@ -152,21 +152,18 @@ class NavBar extends React.Component {
               <ListItem button onClick={this.navTo('/duplicate-tremor-lkqd')}>
                 <ListItemText primary='Duplicate' />
               </ListItem>
-              <ListItem button onClick={this.navTo('/configuration-ui')}>
-                <ListItemText primary='Configuration UI' />
+              <ListItem button onClick={this.navTo('/thresholds')}>
+                <ListItemText primary='Thresholds' />
               </ListItem>
               <ListItem button onClick={this.navTo('/clean-bl')}>
                 <ListItemText primary='Clean BL' />
               </ListItem>
               <ListItem button onClick={this.navTo('/scripts')}>
-                <ListItemText primary='Scripts' />
+                <ListItemText primary='Reports API' />
               </ListItem>
               <ListHeader text='Logs' />
-              <ListItem button onClick={this.navTo('/logs/activity')}>
-                <ListItemText primary='Activity' />
-              </ListItem>
               <ListItem button onClick={this.navTo('/logs/errors')}>
-                <ListItemText primary='Errors' />
+                <ListItemText primary='Logs' />
               </ListItem>
             </List>
             <List className={classes.list} component='nav' dense>

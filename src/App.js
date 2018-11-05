@@ -17,7 +17,7 @@ import Login from './pages/Login'
 import Logs from './pages/Logs'
 import TagGenerator from './pages/TagGenerator'
 import DuplicateTremorLkqd from './pages/DuplicateTremorLkqd'
-import ConfigurationUI from './pages/ConfigurationUI'
+import Thresholds from './pages/Thresholds'
 import CleanBL from './pages/CleanBL'
 import Scripts from './pages/Scripts'
 import ComingSoon from './pages/ComingSoon'
@@ -110,7 +110,7 @@ class App extends React.Component {
                     <Route exact path='/discrepancy/:date' component={DiscrepancyReport} />
                     <Route exact path='/tag-generator' component={TagGenerator} />
                     <Route exact path='/duplicate-tremor-lkqd' component={DuplicateTremorLkqd} />
-                    <Route exact path='/configuration-ui' component={ConfigurationUI} />
+                    <Route exact path='/thresholds' component={Thresholds} />
                     <Route exact path='/clean-bl' component={CleanBL} />
                     <Route exact path='/scripts' component={Scripts} />
                     <Route exact path='/logs' component={Logs} />

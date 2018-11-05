@@ -82,8 +82,8 @@ export default app => {
   app.post('/api/runLkqdTremorDuplicate/:action', ensureLoggedIn, asyncMiddleware(postRunLkqdTremorDuplicate))
   app.post('/api/cleanBl/:action', ensureLoggedIn, asyncMiddleware(postCleanBl))
   app.put('/api/uploadTagGenerator', ensureLoggedIn, multipartMiddleware, asyncMiddleware(uploadTagGenerator))
-  app.get('/api/configuration-ui/load/:as', ensureLoggedIn, asyncMiddleware(getConfigurationUi))
-  app.post('/api/configuration-ui/save/:as', ensureLoggedIn, asyncMiddleware(postConfigurationUi))
+  app.get('/api/thresholds/load/:as', ensureLoggedIn, asyncMiddleware(getConfigurationUi))
+  app.post('/api/thresholds/save/:as', ensureLoggedIn, asyncMiddleware(postConfigurationUi))
   app.post('/api/exec/:script', ensureLoggedIn, asyncMiddleware(postExec))
 
   app.use('/api/admin/*', ensureAdmin)

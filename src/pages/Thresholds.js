@@ -1,7 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 
-import ConfigurationUI from '../components/ConfigurationUI'
+import Thresholds from '../components/Thresholds'
 
 const styles = theme => {
   return {
@@ -25,16 +25,16 @@ const styles = theme => {
   }
 }
 
-class ConfigurationUIPage extends React.Component {
+class ThresholdsPage extends React.Component {
   render () {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <h3 className={classes.title}>Configuration UI</h3>
-        <ConfigurationUI />
+        <h3 className={classes.title}>Thresholds</h3>
+        <Thresholds />
       </div>
     )
   }
 }
 
-export default withStyles(styles)(ConfigurationUIPage)
+export default withStyles(styles)(ThresholdsPage)

@@ -30,7 +30,7 @@ class ScriptsPage extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.root}>
-        <h3 className={classes.title}>Scripts</h3>
+        <h3 className={classes.title}>Reports API</h3>
         <Scripts />
       </div>
     )

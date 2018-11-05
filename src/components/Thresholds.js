@@ -85,7 +85,7 @@ const styles = theme => {
   }
 }
 
-class ConfigurationUI extends React.Component {
+class Thresholds extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -112,7 +112,7 @@ class ConfigurationUI extends React.Component {
       isDone: false
     }, async () => {
       try {
-        const res = await API.get('/configuration-ui/load/' + this.state.as)
+        const res = await API.get('/thresholds/load/' + this.state.as)
         this.setState({
           ...this.state,
           isLoading: false,
@@ -139,7 +139,7 @@ class ConfigurationUI extends React.Component {
       isDone: false
     }, async () => {
       try {
-        const res = await API.post('/configuration-ui/save/' + this.state.as, this.state.jsonData)
+        const res = await API.post('/thresholds/save/' + this.state.as, this.state.jsonData)
         if (res.data.success !== true) {
           console.error(res)
         }
@@ -364,4 +364,4 @@ class ConfigurationUI extends React.Component {
   }
 }
 
-export default withStyles(styles)(ConfigurationUI)
+export default withStyles(styles)(Thresholds)

@@ -21,6 +21,7 @@ import { asList, sspList, getPartnerName } from '../components/Utils'
 const styles = theme => {
   return {
     root: {
+      width: '100%',
       marginTop: theme.spacing.double,
       marginBottom: theme.spacing.double
     },
@@ -176,55 +177,59 @@ class Scripts extends React.Component {
     const { script, as, ssp, date } = this.state
     return (
       <div className={classes.root}>
+        <FormControl component='fieldset' className={classes.formControl}>
+          <FormLabel component='legend'>Script</FormLabel>
+          <RadioGroup
+            aria-label='Script'
+            name='script'
+            className={classes.group}
+            value={script}
+            onChange={this.onScriptChange}
+          >
+            <FormControlLabel value='fetchData' control={<Radio />} label='Fetch Data' />
+            <FormControlLabel value='createReport' control={<Radio />} label='Create Report' />
+          </RadioGroup>
+        </FormControl>
         <div className={classes.form}>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend'>Script</FormLabel>
-            <RadioGroup
-              aria-label='Script'
-              name='script'
-              className={classes.group}
-              value={script}
-              onChange={this.onScriptChange}
-            >
-              <FormControlLabel value='fetchData' control={<Radio />} label='Fetch Data' />
-              <FormControlLabel value='createReport' control={<Radio />} label='Create Report' />
-            </RadioGroup>
-          </FormControl>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend'>Date</FormLabel>
-            <DatePicker
-              className={classes.datepicker}
-              value={date}
-              onChange={this.onDateChange}
-              labelFunc={this.renderDate}
-            />
-          </FormControl>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend'>Ad Servers</FormLabel>
-            {
-              asList.map(p => <FormGroup key={`as-${p}`}>
-                <FormControlLabel
-                  control={
-                    <Checkbox checked={as[p]} onChange={this.toggleAs(p)} />
-                  }
-                  label={getPartnerName(p)}
-                />
-              </FormGroup>)
-            }
-          </FormControl>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend'>SSPs</FormLabel>
-            {
-              sspList.map(p => <FormGroup key={`ssp-${p}`}>
-                <FormControlLabel
-                  control={
-                    <Checkbox checked={ssp[p]} onChange={this.toggleSsp(p)} />
-                  }
-                  label={getPartnerName(p)}
-                />
-              </FormGroup>)
-            }
-          </FormControl>
+          {
+            script === 'fetchData' && <React.Fragment>
+            <FormControl component='fieldset' className={classes.formControl}>
+              <FormLabel component='legend'>Date</FormLabel>
+              <DatePicker
+                className={classes.datepicker}
+                value={date}
+                onChange={this.onDateChange}
+                labelFunc={this.renderDate}
+              />
+            </FormControl>
+            <FormControl component='fieldset' className={classes.formControl}>
+              <FormLabel component='legend'>Ad Servers</FormLabel>
+              {
+                asList.map(p => <FormGroup key={`as-${p}`}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={as[p]} onChange={this.toggleAs(p)} />
+                    }
+                    label={getPartnerName(p)}
+                  />
+                </FormGroup>)
+              }
+            </FormControl>
+            <FormControl component='fieldset' className={classes.formControl}>
+              <FormLabel component='legend'>SSPs</FormLabel>
+              {
+                sspList.map(p => <FormGroup key={`ssp-${p}`}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={ssp[p]} onChange={this.toggleSsp(p)} />
+                    }
+                    label={getPartnerName(p)}
+                  />
+                </FormGroup>)
+              }
+            </FormControl>
+            </React.Fragment>
+          }
         </div>
         <div className={classes.submitContainer}>
           <Button

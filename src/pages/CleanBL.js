@@ -140,7 +140,7 @@ class CleanBL extends React.Component {
           className={classes.button}
           onClick={this.cleanBundleLkqdBl}
           size='small'
-          variant='raised'
+          variant='contained'
           disabled={this.state.isLoadingBundle}
         >
           {this.state.isLoadingBundle && <CircularProgress size={24} className={classes.progress} />}
@@ -165,7 +165,7 @@ class CleanBL extends React.Component {
           className={classes.button}
           onClick={this.cleanDomainLkqdBl}
           size='small'
-          variant='raised'
+          variant='contained'
           disabled={this.state.isLoadingDomain}
         >
           {this.state.isLoadingDomain && <CircularProgress size={24} className={classes.progress} />}

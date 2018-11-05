@@ -114,7 +114,7 @@ class TagGenerator extends React.Component {
             className={classes.button}
             onClick={this.upload}
             size='small'
-            variant='raised'
+            variant='contained'
             disabled={this.state.isLoading}
           >
             {this.state.isLoading && <CircularProgress size={24} className={classes.progress} />}

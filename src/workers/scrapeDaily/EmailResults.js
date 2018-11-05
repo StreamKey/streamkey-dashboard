@@ -44,8 +44,8 @@ const getLoggerData = utcTime => {
         const firstLog = moment(first.timestamp)
         const runDuration = moment.duration(now.diff(firstLog)).seconds()
         resolve({
-          errors: uniqBy(errors, e => '' + e.error + e.message),
-          warns: uniqBy(warns, e => '' + e.message + JSON.stringify(e.data)),
+          errors: uniqBy(errors, e => getErrorData(e)),
+          warns: uniqBy(warns, e => getErrorData(e)),
           runDuration,
           items
         })

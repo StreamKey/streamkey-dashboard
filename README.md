@@ -16,6 +16,7 @@ GOOGLE_APPLICATION_CREDENTIALS=
 GOOGLE_DRIVE_REPORTS_FOLDER=
 
 RAZZLE_ROOT_URL=http://localhost:3011
+RAZZLE_ROOT_PATH=/absolute/path/to/project
 RAZZLE_LOGS_PATH=/absolute/path/to/logs
 RAZZLE_TMP_PATH=/absolute/path/to/tmp
 

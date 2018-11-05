@@ -18,6 +18,22 @@ export const partnersMap = {
   v2v: 'V2V'
 }
 export const getPartnerName = key => partnersMap[key] || key
+export const asList = [
+  'streamrail',
+  'lkqd',
+  'aniview',
+  'springserve'
+]
+export const sspList = [
+  'telaria',
+  'freewheel',
+  'beachfront',
+  'aerserv',
+  'spotx',
+  'onevideo',
+  'improvedigital',
+  'tappx'
+]
 
 export const promiseTimeout = (ms, promise) => {
   const timeout = new Promise((resolve, reject) => {

@@ -22,13 +22,14 @@ const styles = theme => {
   return {
     root: {
       width: '100%',
+      ...theme.utils.container,
       marginTop: theme.spacing.double,
       marginBottom: theme.spacing.double
     },
     form: {
       width: '100%',
       display: 'flex',
-      justifyContent: 'space-between'
+      flexWrap: 'wrap'
     },
     formControl: {
       margin: theme.spacing.double

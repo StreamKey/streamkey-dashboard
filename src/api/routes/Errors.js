@@ -86,6 +86,11 @@ const errors = {
     id: 24,
     code: 400,
     message: 'Invalid input'
+  },
+  'create-report-invalid-date': {
+    id: 25,
+    code: 400,
+    message: 'Invalid date'
   }
 }
 

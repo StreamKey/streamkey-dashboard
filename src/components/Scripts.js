@@ -211,17 +211,17 @@ class Scripts extends React.Component {
           </RadioGroup>
         </FormControl>
         <div className={classes.form}>
+          <FormControl component='fieldset' className={classes.formControl}>
+            <FormLabel component='legend'>Date</FormLabel>
+            <DatePicker
+              className={classes.datepicker}
+              value={date}
+              onChange={this.onDateChange}
+              labelFunc={this.renderDate}
+            />
+          </FormControl>
           {
             script === 'fetchData' && <React.Fragment>
-            <FormControl component='fieldset' className={classes.formControl}>
-              <FormLabel component='legend'>Date</FormLabel>
-              <DatePicker
-                className={classes.datepicker}
-                value={date}
-                onChange={this.onDateChange}
-                labelFunc={this.renderDate}
-              />
-            </FormControl>
             <FormControl component='fieldset' className={classes.formControl}>
               <FormLabel component='legend'>Ad Servers</FormLabel>
               {

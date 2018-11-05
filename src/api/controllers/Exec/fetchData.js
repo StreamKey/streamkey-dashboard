@@ -1,4 +1,6 @@
 import util from 'util'
+import { isArray, isString } from 'lodash'
+import { asList, sspList } from '../../../components/Utils'
 
 const exec = util.promisify(require('child_process').exec)
 
@@ -16,17 +18,20 @@ const validateInput = body => {
   if (!body.date) {
     throw new Error('fetch-data-missing-date')
   }
-  for (let p in body.as) {
-    if (p.match(/\W/)) {
+  if (!isArray(body.as) || !isArray(body.ssp) || !isString(body.date)) {
+    throw new Error('fetch-data-invalid-input')
+  }
+  for (let p of body.as) {
+    if (!asList.includes(p)) {
       throw new Error('fetch-data-invalid-input')
     }
   }
-  for (let p in body.ssp) {
-    if (p.match(/\W/)) {
+  for (let p of body.ssp) {
+    if (!sspList.includes(p)) {
       throw new Error('fetch-data-invalid-input')
     }
   }
-  if (body.date.match(/[^\d-]/)) {
+  if (!body.date.match(/^\d{4}-\d{2}-\d{2}$/)) {
     throw new Error('fetch-data-invalid-input')
   }
 }

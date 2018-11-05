@@ -21,12 +21,13 @@ import { asList, sspList, getPartnerName } from '../components/Utils'
 const styles = theme => {
   return {
     root: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
       marginTop: theme.spacing.double,
       marginBottom: theme.spacing.double
+    },
+    form: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between'
     },
     formControl: {
       margin: theme.spacing.double
@@ -34,11 +35,14 @@ const styles = theme => {
     datepicker: {
       maxWidth: 120
     },
+    submitContainer: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
     button: {
-      alignSelf: 'start',
-      marginTop: theme.spacing.quad,
       marginBottom: theme.spacing.double,
-      marginLeft: theme.spacing.double,
       paddingLeft: theme.spacing.quad,
       paddingRight: theme.spacing.quad
     },
@@ -144,13 +148,7 @@ class Scripts extends React.Component {
           }
         }
         const res = await API.post('/exec/' + this.state.script, form)
-        const {
-          rootDir,
-          stdout,
-          stderr
-        } = res.data
-        console.log('rootDir', rootDir)
-        console.log('stdout', stdout)
+        const { stderr } = res.data
         console.log('stderr', stderr)
         if (res.data.success !== true) {
           console.error(res)
@@ -178,85 +176,89 @@ class Scripts extends React.Component {
     const { script, as, ssp, date } = this.state
     return (
       <div className={classes.root}>
-        <FormControl component='fieldset' className={classes.formControl}>
-          <FormLabel component='legend'>Script</FormLabel>
-          <RadioGroup
-            aria-label='Script'
-            name='script'
-            className={classes.group}
-            value={script}
-            onChange={this.onScriptChange}
+        <div className={classes.form}>
+          <FormControl component='fieldset' className={classes.formControl}>
+            <FormLabel component='legend'>Script</FormLabel>
+            <RadioGroup
+              aria-label='Script'
+              name='script'
+              className={classes.group}
+              value={script}
+              onChange={this.onScriptChange}
+            >
+              <FormControlLabel value='fetchData' control={<Radio />} label='Fetch Data' />
+              <FormControlLabel value='createReport' control={<Radio />} label='Create Report' />
+            </RadioGroup>
+          </FormControl>
+          <FormControl component='fieldset' className={classes.formControl}>
+            <FormLabel component='legend'>Date</FormLabel>
+            <DatePicker
+              className={classes.datepicker}
+              value={date}
+              onChange={this.onDateChange}
+              labelFunc={this.renderDate}
+            />
+          </FormControl>
+          <FormControl component='fieldset' className={classes.formControl}>
+            <FormLabel component='legend'>Ad Servers</FormLabel>
+            {
+              asList.map(p => <FormGroup key={`as-${p}`}>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={as[p]} onChange={this.toggleAs(p)} />
+                  }
+                  label={getPartnerName(p)}
+                />
+              </FormGroup>)
+            }
+          </FormControl>
+          <FormControl component='fieldset' className={classes.formControl}>
+            <FormLabel component='legend'>SSPs</FormLabel>
+            {
+              sspList.map(p => <FormGroup key={`ssp-${p}`}>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={ssp[p]} onChange={this.toggleSsp(p)} />
+                  }
+                  label={getPartnerName(p)}
+                />
+              </FormGroup>)
+            }
+          </FormControl>
+        </div>
+        <div className={classes.submitContainer}>
+          <Button
+            className={classes.button}
+            color='primary'
+            variant='contained'
+            onClick={this.exec}
+            disabled={this.state.isLoading}
           >
-            <FormControlLabel value='fetchData' control={<Radio />} label='Fetch Data' />
-            <FormControlLabel value='createReport' control={<Radio />} label='Create Report' />
-          </RadioGroup>
-        </FormControl>
-        <FormControl component='fieldset' className={classes.formControl}>
-          <FormLabel component='legend'>Ad Servers</FormLabel>
-          {
-            asList.map(p => <FormGroup key={`as-${p}`}>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={as[p]} onChange={this.toggleAs(p)} />
-                }
-                label={getPartnerName(p)}
-              />
-            </FormGroup>)
-          }
-        </FormControl>
-        <FormControl component='fieldset' className={classes.formControl}>
-          <FormLabel component='legend'>SSPs</FormLabel>
-          {
-            sspList.map(p => <FormGroup key={`ssp-${p}`}>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={ssp[p]} onChange={this.toggleSsp(p)} />
-                }
-                label={getPartnerName(p)}
-              />
-            </FormGroup>)
-          }
-        </FormControl>
-        <FormControl component='fieldset' className={classes.formControl}>
-          <FormLabel component='legend'>Date</FormLabel>
-          <DatePicker
-            className={classes.datepicker}
-            value={date}
-            onChange={this.onDateChange}
-            labelFunc={this.renderDate}
-          />
-        </FormControl>
-        <Button
-          className={classes.button}
-          color='primary'
-          variant='contained'
-          onClick={this.exec}
-          disabled={this.state.isLoading}
-        >
-          Run
-        </Button>
-        <div>
-          {
-            !this.state.isLoading && !this.state.isDone &&
-            <span>&nbsp;</span>
-          }
-          {
-            this.state.isLoading &&
-            <CircularProgress size={24} className={classes.progress} />
-          }
-          {
-            this.state.isDone && this.state.error &&
-            <div className={classes.error}>
-              <ErrorSvg className={classes.icon} />
-              {this.state.error}
-            </div>
-          }
-          {
-            this.state.isDone && !this.state.error &&
-            <div className={classes.success}>
-              <SuccessSvg className={classes.icon} /> Done
-            </div>
-          }
+            Run
+          </Button>
+          <div>
+            {
+              !this.state.isLoading && !this.state.isDone &&
+              <span>&nbsp;</span>
+            }
+            {
+              this.state.isLoading &&
+              <CircularProgress size={24} className={classes.progress} />
+            }
+            {
+              this.state.isDone && this.state.error &&
+              <div className={classes.error}>
+                <ErrorSvg className={classes.icon} />
+                {this.state.error}
+              </div>
+            }
+            {
+              this.state.isDone && !this.state.error &&
+              <div className={classes.success}>
+                <SuccessSvg className={classes.icon} /> Done
+              </div>
+            }
+          </div>
         </div>
       </div>
     )

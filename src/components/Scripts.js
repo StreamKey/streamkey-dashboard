@@ -18,6 +18,9 @@ import ErrorSvg from 'mdi-material-ui/AlertCircleOutline'
 import API from './API'
 import { asList, sspList, getPartnerName } from '../components/Utils'
 
+const BEACHFRONT_REPORT_ID = process.env.RAZZLE_CREDENTIALS_BEACHFRONT_REPORT_ID
+const beachfrontWarningMessage = `Beachfront data is pulled via a specific report ("Yesterday- API": ${BEACHFRONT_REPORT_ID}). Make sure this report date matches the date selected and check this checkbox before running the script.`
+
 const styles = theme => {
   return {
     root: {
@@ -42,6 +45,9 @@ const styles = theme => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center'
+    },
+    beachfrontWarning: {
+      alignSelf: 'flex-start'
     },
     button: {
       marginBottom: theme.spacing.double,
@@ -82,15 +88,16 @@ class Scripts extends React.Component {
       as: {},
       ssp: {},
       date: moment().startOf('day').subtract(1, 'days'),
+      beachfrontCheck: null,
       isLoading: false,
       isDone: false,
       error: false
     }
     for (let p of asList) {
-      state.as[p] = true
+      state.as[p] = false
     }
     for (let p of sspList) {
-      state.ssp[p] = true
+      state.ssp[p] = false
     }
     this.state = state
   }
@@ -116,11 +123,23 @@ class Scripts extends React.Component {
         tmp[p] = !tmp[p]
       }
     }
-    this.setState({ ssp: tmp })
+    this.setState({ ssp: tmp }, this.beachfrontDisplayCheck)
   }
 
   onDateChange = date => {
-    this.setState({ date })
+    this.setState({ date }, this.beachfrontDisplayCheck)
+  }
+
+  beachfrontDisplayCheck = () => {
+    if (this.state.ssp.beachfront === true && this.state.date.format('YYYY-MM-DD') !== moment().startOf('day').subtract(1, 'days').format('YYYY-MM-DD')) {
+      this.setState({ beachfrontCheck: false })
+    } else if (this.state.beachfrontCheck !== null) {
+      this.setState({ beachfrontCheck: null })
+    }
+  }
+
+  toggleBeachfrontCheck = () => {
+    this.setState({ beachfrontCheck: !this.state.beachfrontCheck })
   }
 
   renderDate = date => {
@@ -175,7 +194,7 @@ class Scripts extends React.Component {
 
   render () {
     const { classes } = this.props
-    const { script, as, ssp, date } = this.state
+    const { script, as, ssp, date, beachfrontCheck } = this.state
     return (
       <div className={classes.root}>
         <FormControl component='fieldset' className={classes.formControl}>
@@ -233,12 +252,21 @@ class Scripts extends React.Component {
           }
         </div>
         <div className={classes.submitContainer}>
+          {
+            beachfrontCheck !== null && <FormControlLabel
+              className={classes.beachfrontWarning}
+              control={
+                <Checkbox checked={beachfrontCheck} onChange={this.toggleBeachfrontCheck} />
+              }
+              label={beachfrontWarningMessage}
+            />
+          }
           <Button
             className={classes.button}
             color='primary'
             variant='contained'
             onClick={this.exec}
-            disabled={this.state.isLoading}
+            disabled={this.state.isLoading || beachfrontCheck === false}
           >
             Run
           </Button>

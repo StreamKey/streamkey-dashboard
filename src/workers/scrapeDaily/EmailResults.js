@@ -88,6 +88,8 @@ const getErrorData = error => {
         : error.ssp + ': ' + error.tag
     case 'Invalid SSP Tag':
       return error.ssp + ': ' + error.sspData.tag
+    case 'Invalid SSP Result':
+      return error.result.tag
     case 'Tag Error':
       return (error.ssp ? error.ssp : error.as) + ': ' + error.tag
     default:

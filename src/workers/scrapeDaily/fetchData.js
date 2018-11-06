@@ -10,8 +10,9 @@ import GetSSPData from './GetSSPData'
 import { fetch as fetchAsData } from './GetASData'
 import GetLogsDir from '../../components/Log/GetLogsDir'
 
-const configLogger = () => {
+const configLogger = utcTime => {
   const LOGS_DIR = GetLogsDir()
+  const scriptDate = utcTime.format('YYYY-MM-DD')
   const now = moment().utc().format('YYYY-MM-DD-HH-mm-ss')
   if (!fs.existsSync(LOGS_DIR)) {
     fs.mkdirSync(LOGS_DIR)
@@ -28,11 +29,11 @@ const configLogger = () => {
     ),
     transports: [
       new winston.transports.File({
-        filename: path.join(LOGS_DIR, `reports-fetch-error.${now}.log`),
+        filename: path.join(LOGS_DIR, `reports-fetch-error.${scriptDate}.${now}.log`),
         level: 'error'
       }),
       new winston.transports.File({
-        filename: path.join(LOGS_DIR, `reports-fetch-info.${now}.log`),
+        filename: path.join(LOGS_DIR, `reports-fetch-info.${scriptDate}.${now}.log`),
         level: 'info'
       }),
       new winston.transports.File({
@@ -127,9 +128,9 @@ const getAsSet = () => {
 }
 
 const main = async () => {
-  configLogger()
-  winston.profile('fetch-duration')
   const utcTime = getTargetDate()
+  configLogger(utcTime)
+  winston.profile('fetch-duration')
   const sspList = getSspSet()
   const asList = getAsSet()
   winston.info('Fetch script configuration', {

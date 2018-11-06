@@ -8,7 +8,7 @@ const LOGS_DIR = GetLogsDir()
 export default utcTime => {
   return new Promise((resolve, reject) => {
     const combinedLogs = []
-    const errorLogPattern = 'reports-fetch-error.' + utcTime.format('YYYY-MM-DD') + '-*'
+    const errorLogPattern = 'reports-fetch-error.' + utcTime.format('YYYY-MM-DD') + '.*'
     const fetchErrorFiles = glob.sync(path.join(LOGS_DIR, errorLogPattern))
     for (let f of fetchErrorFiles) {
       const log = fs.readFileSync(f, 'utf8')

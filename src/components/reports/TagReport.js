@@ -59,6 +59,10 @@ const styles = theme => {
         paddingRight: 40
       }
     },
+    tagCellAboveThreshold: {
+      color: 'red',
+      fontWeight: 400
+    },
     sspCell: {
       backgroundColor: theme.palette.green[100]
     },
@@ -212,6 +216,12 @@ class TagReport extends React.Component {
     return <strong>{this.renderValue(cell)}</strong>
   }
 
+  renderTag = cell => {
+    const { profit, margin } = cell.row
+    const isAboveThreshold = (profit <= -20) || (profit >= 100 && margin < 0.15)
+    return <div className={isAboveThreshold ? this.props.classes.tagCellAboveThreshold : null}>{cell.value}</div>
+  }
+
   renderValue = cell => {
     const val = cell.value
     const type = this.cellTypes[cell.column.id]
@@ -284,7 +294,8 @@ class TagReport extends React.Component {
         {
           accessor: 'tag',
           minWidth: 240,
-          Header: this.renderTotal('tag')
+          Header: this.renderTotal('tag'),
+          Cell: this.renderTag
         }
       ]
     }, {

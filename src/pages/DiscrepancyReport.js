@@ -43,7 +43,7 @@ class DiscrepancyReportPage extends React.Component {
     super(props)
     const dateRange = props.match.params.date.split(':')
     const startDate = moment(dateRange[0], 'YYYY-MM-DD')
-    const endDate = moment(dateRange[1], 'YYYY-MM-DD')
+    const endDate = dateRange.length === 2 ? moment(dateRange[1], 'YYYY-MM-DD') : startDate
     this.state = {
       startDate,
       endDate,

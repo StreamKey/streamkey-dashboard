@@ -30,7 +30,7 @@ const groupBySsp = results => {
   })
   each(results, r => {
     const ssp = r.ssp || 'v2v'
-    if (!ssp) {
+    if (!sspGroups[ssp]) {
       return
     }
     const bucket = sspGroups[ssp][r.as]

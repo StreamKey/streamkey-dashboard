@@ -7,7 +7,7 @@ import each from 'lodash/each'
 import Paper from '@material-ui/core/Paper'
 import Tooltip from '@material-ui/core/Tooltip'
 
-import { getPartnerName } from '../Utils'
+import { getPartnerName, sspList } from '../Utils'
 
 import 'react-table/react-table.css'
 
@@ -183,7 +183,7 @@ class DiscrepancyReport extends React.Component {
             data={data}
             columns={columns}
             showPageJump={false}
-            defaultPageSize={9}
+            defaultPageSize={sspList.length + 2}
             PaginationComponent={() => <div />}
           />
         </Paper>

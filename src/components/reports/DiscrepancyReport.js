@@ -175,7 +175,6 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('aniview.revenue')
       }]
     }]
-    console.log(data)
     return (
       <div className={classes.root}>
         <Paper className={classes.tableContainer}>

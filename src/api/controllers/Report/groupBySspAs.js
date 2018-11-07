@@ -18,6 +18,9 @@ const groupBySsp = results => {
   }
   each(sspGroups, (ssp, sspKey) => {
     each(asList, as => {
+      if (!sspGroups[sspKey]) {
+        return
+      }
       sspGroups[sspKey][as] = {
         revenue: 0,
         profit: 0,

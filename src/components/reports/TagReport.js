@@ -261,7 +261,7 @@ class TagReport extends React.Component {
       header: true
     })
     const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'})
-    FileSaver.saveAs(blob, `streamkey-report-${this.props.date.format('YYYY-MM-DD')}.csv`)
+    FileSaver.saveAs(blob, `streamkey-report-${this.props.startDate.format('YYYY-MM-DD')}:${this.props.endDate.format('YYYY-MM-DD')}.csv`)
   }
 
   openLink = links => () => {

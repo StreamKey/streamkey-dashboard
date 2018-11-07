@@ -25,6 +25,9 @@ const styles = theme => {
       paddingTop: theme.spacing.quad,
       paddingBottom: theme.spacing.double
     },
+    datepickerContainer: {
+      display: 'flex'
+    },
     datepicker: {
       marginBottom: theme.spacing.quad,
       '& [class*="MuiInput-input-"]': {
@@ -37,9 +40,10 @@ const styles = theme => {
 class TagReportPage extends React.Component {
   constructor (props) {
     super(props)
-    const date = moment(props.match.params.date, 'YYYY-MM-DD')
+    const endDate = moment(props.match.params.date, 'YYYY-MM-DD')
     this.state = {
-      date,
+      startDate: endDate,
+      endDate,
       data: [],
       links: [],
       isLoading: false,
@@ -58,8 +62,8 @@ class TagReportPage extends React.Component {
       error: false
     }, async () => {
       const form = {
-        from: moment(this.state.date).format('X'),
-        to: moment(this.state.date).add(1, 'day').format('X')
+        from: moment(this.state.startDate).format('X'),
+        to: moment(this.state.endDate).add(1, 'day').format('X')
       }
       const response = await API.get('/reports/tag', { params: form })
       this.setState({
@@ -72,21 +76,36 @@ class TagReportPage extends React.Component {
     })
   }
 
-  onDateChange = date => {
+  onStartDateChange = date => {
+    this.setState({
+      ...this.state,
+      startDate: date
+    }, this.getReport)
+  }
+
+  startPrevDay = () => {
+    this.onStartDateChange(moment(this.state.startDate).subtract(1, 'days'))
+  }
+
+  startNextDay = () => {
+    this.onStartDateChange(moment(this.state.startDate).add(1, 'days'))
+  }
+
+  onEndDateChange = date => {
     const path = '/tag-report/' + date.format('YYYY-MM-DD')
     this.props.history.push(path)
     this.setState({
       ...this.state,
-      date
+      endDate: date
     }, this.getReport)
   }
 
-  prevDay = () => {
-    this.onDateChange(moment(this.state.date).subtract(1, 'days'))
+  endPrevDay = () => {
+    this.onEndDateChange(moment(this.state.endDate).subtract(1, 'days'))
   }
 
-  nextDay = () => {
-    this.onDateChange(moment(this.state.date).add(1, 'days'))
+  endNextDay = () => {
+    this.onEndDateChange(moment(this.state.endDate).add(1, 'days'))
   }
 
   renderDate = date => {
@@ -99,26 +118,50 @@ class TagReportPage extends React.Component {
       <div className={classes.root}>
         <h3 className={classes.title}>Daily Report</h3>
         <div className={classes.datepickerContainer}>
-          <IconButton
-            className={classes.button}
-            onClick={this.prevDay}
-          >
-            <LeftSvg className={classes.menuIcon} />
-          </IconButton>
-          <DatePicker
-            className={classes.datepicker}
-            value={this.state.date}
-            onChange={this.onDateChange}
-            labelFunc={this.renderDate}
-          />
-          <IconButton
-            className={classes.button}
-            onClick={this.nextDay}
-          >
-            <RightSvg className={classes.menuIcon} />
-          </IconButton>
+          <div>
+            <IconButton
+              className={classes.button}
+              onClick={this.startPrevDay}
+            >
+              <LeftSvg className={classes.menuIcon} />
+            </IconButton>
+            <DatePicker
+              label='Start date'
+              className={classes.datepicker}
+              value={this.state.startDate}
+              onChange={this.onStartDateChange}
+              labelFunc={this.renderDate}
+            />
+            <IconButton
+              className={classes.button}
+              onClick={this.startNextDay}
+            >
+              <RightSvg className={classes.menuIcon} />
+            </IconButton>
+          </div>
+          <div>
+            <IconButton
+              className={classes.button}
+              onClick={this.endPrevDay}
+            >
+              <LeftSvg className={classes.menuIcon} />
+            </IconButton>
+            <DatePicker
+              label='End date'
+              className={classes.datepicker}
+              value={this.state.endDate}
+              onChange={this.onEndDateChange}
+              labelFunc={this.renderDate}
+            />
+            <IconButton
+              className={classes.button}
+              onClick={this.endNextDay}
+            >
+              <RightSvg className={classes.menuIcon} />
+            </IconButton>
+          </div>
         </div>
-        <TagReport data={this.state.data} date={this.state.date} links={this.state.links} />
+        <TagReport data={this.state.data} startDate={this.state.startDate} endDate={this.state.endDate} links={this.state.links} />
       </div>
     )
   }

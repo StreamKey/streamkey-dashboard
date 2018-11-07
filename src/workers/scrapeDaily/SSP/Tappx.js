@@ -71,9 +71,9 @@ const normalize = (results, apps) => {
     const appName = apps[r[1]] || 'Unknown Tappx app: ' + r[1]
     return {
       tag: appName,
-      opp: r[6],
-      imp: r[8],
-      rev: r[10],
+      opp: Number(r[6]),
+      imp: Number(r[8]),
+      rev: Number(r[10]),
       sCost: 0
     }
   })

@@ -41,6 +41,9 @@ const groupBySsp = results => {
   })
   each(sspGroups, (ssp, sspKey) => {
     each(ssp, (as, asKey) => {
+      if (!sspGroups[sspKey]) {
+        return
+      }
       const bucket = sspGroups[sspKey][asKey]
       bucket.margin = bucket.revenue === 0 ? 0 : bucket.profit / bucket.revenue
     })

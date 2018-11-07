@@ -8,7 +8,7 @@ class RedirectToYesterday extends React.PureComponent {
     return (
       <Redirect
         to={{
-          pathname: this.props.match.url + '/' + yesterday
+          pathname: `${this.props.match.url}/${yesterday}:${yesterday}`
         }}
       />
     )

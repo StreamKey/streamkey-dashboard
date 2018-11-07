@@ -46,9 +46,11 @@ const styles = theme => {
 class SspAsReportPage extends React.Component {
   constructor (props) {
     super(props)
-    const endDate = moment(props.match.params.date, 'YYYY-MM-DD')
+    const dateRange = props.match.params.date.split(':')
+    const startDate = moment(dateRange[0], 'YYYY-MM-DD')
+    const endDate = moment(dateRange[1], 'YYYY-MM-DD')
     this.state = {
-      startDate: endDate,
+      startDate,
       endDate,
       compareTo: {
         from: null,
@@ -116,7 +118,14 @@ class SspAsReportPage extends React.Component {
     })
   }
 
+  getDateRangeUrl = ({ startDate, endDate }) => {
+    const start = startDate || this.state.startDate
+    const end = endDate || this.state.endDate
+    return '/ssp-adserver/' + start.format('YYYY-MM-DD') + ':' + end.format('YYYY-MM-DD')
+  }
+
   onStartDateChange = date => {
+    this.props.history.push(this.getDateRangeUrl({ startDate: date }))
     this.setState({
       ...this.state,
       startDate: date
@@ -132,8 +141,7 @@ class SspAsReportPage extends React.Component {
   }
 
   onEndDateChange = date => {
-    const path = '/ssp-adserver/' + date.format('YYYY-MM-DD')
-    this.props.history.push(path)
+    this.props.history.push(this.getDateRangeUrl({ endDate: date }))
     this.setState({
       ...this.state,
       endDate: date

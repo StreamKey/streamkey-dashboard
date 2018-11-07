@@ -99,7 +99,7 @@ class NavBar extends React.Component {
 
   navTo = path => () => {
     if (path.endsWith('/:date')) {
-      const re = /^\/(?:discrepancy|ssp-adserver|tag-report)\/(\d+-\d+-\d+)$/ig
+      const re = /^\/(?:discrepancy|ssp-adserver|tag-report)\/(\d+-\d+-\d+:\d+-\d+-\d+)$/ig
       const matches = re.exec(this.props.location.pathname)
       if (matches) {
         this.props.history.push(path.replace(':date', matches[1]))

@@ -7,6 +7,8 @@ import calcDiff from './calcDiff'
 const castTypes = data => {
   return {
     ...data,
+    sspOpp: Number(data.sspOpp),
+    sspImp: Number(data.sspImp),
     sspCpm: Number(data.sspCpm),
     sspRev: Number(data.sspRev),
     sspCost: Number(data.sspCost),
@@ -31,6 +33,10 @@ export default async (fromTs, toTs) => {
     }
   })
   const data = reports.map(report => {
+    if (report.ssp === 'tappx') {
+      const cpmImp = Number(report.asCpm) * Number(report.sspImp)
+      report.sspRev = cpmImp ? (cpmImp / 1000) : 0
+    }
     const diffs = calcDiff(report.dataValues)
     return {
       ...castTypes(report.dataValues),

@@ -11,7 +11,7 @@ const castTypes = data => {
     sspImp: Number(data.sspImp),
     sspCpm: Number(data.sspCpm),
     sspRev: Number(data.sspRev),
-    sspCost: Number(data.sspCost),
+    sspScost: Number(data.sspScost),
     asImp: Number(data.asImp),
     asCost: Number(data.asCost),
     asScost: Number(data.asScost),
@@ -33,13 +33,14 @@ export default async (fromTs, toTs) => {
     }
   })
   const data = reports.map(report => {
-    if (report.ssp === 'tappx') {
-      const cpmImp = Number(report.asCpm) * Number(report.sspImp)
-      report.sspRev = cpmImp ? (cpmImp / 1000) : 0
+    const dataValues = castTypes(report.dataValues)
+    if (dataValues.ssp === 'tappx') {
+      const cpmImp = Number(dataValues.asCpm) * Number(dataValues.sspImp)
+      dataValues.sspRev = cpmImp ? (cpmImp / 1000) : 0
     }
-    const diffs = calcDiff(report.dataValues)
+    const diffs = calcDiff(dataValues)
     return {
-      ...castTypes(report.dataValues),
+      ...dataValues,
       ...diffs
     }
   })

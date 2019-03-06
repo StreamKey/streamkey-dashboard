@@ -1,4 +1,5 @@
 import moment from 'moment'
+import winston from 'winston'
 
 import GenerateAxiosCookies from '../GenerateAxiosCookies'
 
@@ -27,6 +28,10 @@ const login = async () => {
   }
 }
 
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const getResults = async dateTs => {
   const date = moment.utc(dateTs, 'X').format('YYYY-MM-DD')
   const form = {
@@ -39,17 +44,28 @@ const getResults = async dateTs => {
       'demand_tag_id'
     ]
   }
-  try {
-    const res = await axios.post('/api/v0/report', form, {
-      headers: {
-        'Authorization': authHeader
+  const MAX_RETRIES = 30
+  let i
+  for (i = 0; i <= MAX_RETRIES; ++i) {
+    try {
+      const res = await axios.post('/api/v0/report', form, {
+        headers: {
+          'Authorization': authHeader
+        }
+      })
+      if (i > 0) {
+        winston.warn(`SpringServe succeeded on ${i + 1} retry`)
       }
-    })
-    return res.data
-  } catch (e) {
-    e.prevError = e.message
-    e.message = 'SpringServe report failed'
-    throw e
+      return res.data
+    } catch (e) {
+      if (i === MAX_RETRIES) {
+        e.prevError = e.message
+        e.message = 'SpringServe report failed'
+        winston.error(`SpringServe failed after ${MAX_RETRIES} retries`)
+        throw e
+      }
+      await sleep(5000)
+    }
   }
 }
 

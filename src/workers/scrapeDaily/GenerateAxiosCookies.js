@@ -2,6 +2,7 @@ import axios from 'axios'
 import axiosCookieJarSupport from 'axios-cookiejar-support'
 import tough from 'tough-cookie'
 import axiosRetry from 'axios-retry'
+import winston from 'winston'
 
 const SAFE_HTTP_METHODS = ['get', 'head', 'options']
 const IDEMPOTENT_HTTP_METHODS = SAFE_HTTP_METHODS.concat(['put', 'delete'])
@@ -41,7 +42,7 @@ export default (options = {}) => {
         retries: 3,
         retryDelay: axiosRetry.exponentialDelay,
         retryCondition: error => {
-          console.log(error)
+          winston.warn('Default retry failed', error)
           return axiosRetry.isNetworkError(error) || isIdempotentRequestError(error)
         }
       })

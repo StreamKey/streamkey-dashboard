@@ -7,12 +7,8 @@ import Telaria from './SSP/Telaria'
 import Freewheel from './SSP/Freewheel'
 import Beachfront from './SSP/Beachfront'
 import Aerserv from './SSP/Aerserv'
-import SpotX from './SSP/SpotX'
-import OneVideo from './SSP/OneVideo'
 import ImproveDigital from './SSP/ImproveDigital'
-// import PulsePointCTV from './SSP/PulsePointCTV'
 import Tappx from './SSP/Tappx'
-// import Peak from './SSP/Peak'
 
 const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_SECONDS
 
@@ -33,23 +29,11 @@ const SSPs = [
     key: 'aerserv',
     controller: Aerserv
   }, {
-    key: 'spotx',
-    controller: SpotX
-  }, {
-    key: 'onevideo',
-    controller: OneVideo
-  }, {
     key: 'improvedigital',
     controller: ImproveDigital
   }, {
     key: 'tappx',
     controller: Tappx
-  // }, {
-  //   key: 'pulsepointctv',
-  //   controller: PulsePointCTV
-  // }, {
-  //   key: 'peak',
-  //   controller: Peak
   }
 ]
 

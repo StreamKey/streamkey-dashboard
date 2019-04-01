@@ -1,6 +1,3 @@
-// WIP
-// https://streamkey.peak226.com/v1/report/performance?fields=peak_static.dimdate_gmt.date_string&fields=peak_static.advertisers.name&fields=advertiser_id&fields=adv_network_cost&fields=advertiser_network_revenue&fields=profit&fields=impressions&dateRange=2018-10-16-2018-10-16
-
 import qs from 'querystring'
 import moment from 'moment'
 
@@ -13,7 +10,7 @@ const credentials = {
   password: process.env.RAZZLE_CREDENTIALS_PEAK_PASSWORD
 }
 
-axios.defaults.baseURL = 'https://streamkey.peak226.com'
+axios.defaults.baseURL = 'https://api.peak226.com/v2/streamkey'
 
 const login = async () => {
   const form = {
@@ -46,7 +43,7 @@ const getResults = async dateTs => {
       ],
       dateRange: `${date}-${date}`
     }
-    const res = await axios.get('/v1/report/performance?' + qs.stringify(params))
+    const res = await axios.get('/report/performance?' + qs.stringify(params))
     const data = res.data.data
     data.shift()
     return data

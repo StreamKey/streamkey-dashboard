@@ -3,12 +3,13 @@ import winston from 'winston'
 import { promiseTimeout } from '../../components/Utils'
 
 import _Empty_ from './SSP/_Empty_'
-import Telaria from './SSP/Telaria'
-import Freewheel from './SSP/Freewheel'
-import Beachfront from './SSP/Beachfront'
 import Aerserv from './SSP/Aerserv'
+import Beachfront from './SSP/Beachfront'
+import Freewheel from './SSP/Freewheel'
 import ImproveDigital from './SSP/ImproveDigital'
+import Peak from './SSP/Peak'
 import Tappx from './SSP/Tappx'
+import Telaria from './SSP/Telaria'
 
 const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_SECONDS
 
@@ -34,6 +35,9 @@ const SSPs = [
   }, {
     key: 'tappx',
     controller: Tappx
+  }, {
+    key: 'peak',
+    controller: Peak
   }
 ]
 

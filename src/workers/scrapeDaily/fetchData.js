@@ -77,6 +77,7 @@ const getSspSet = () => {
     // 'pulsepointctv'
     'tappx',
     'peak',
+    'appreciate'
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipSsp') {

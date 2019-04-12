@@ -65,18 +65,15 @@ const getTargetDate = () => {
 const getSspSet = () => {
   // Get the list of SSPs to fetch data from (comma separated)
   // Default: All
-  // Example: --sspList freewheel,aerserv,onevideo
+  // Example: --sspList freewheel,aerserv
   const sspOptions = new Set([
     '_empty_',
     'telaria',
     'freewheel',
     'beachfront',
     'aerserv',
-    'spotx',
-    'onevideo',
     'improvedigital',
     'tappx'
-    // 'pulsepointctv'
   ])
   for (let i in process.argv) {
     const next = Number(i) + 1

@@ -4,11 +4,9 @@ import { promiseTimeout } from '../../components/Utils'
 
 import _Empty_ from './SSP/_Empty_'
 import Aerserv from './SSP/Aerserv'
-import Appreciate from './SSP/Appreciate'
 import Beachfront from './SSP/Beachfront'
 import Freewheel from './SSP/Freewheel'
 import ImproveDigital from './SSP/ImproveDigital'
-import Peak from './SSP/Peak'
 import Tappx from './SSP/Tappx'
 import Telaria from './SSP/Telaria'
 
@@ -36,12 +34,6 @@ const SSPs = [
   }, {
     key: 'tappx',
     controller: Tappx
-  }, {
-    key: 'peak',
-    controller: Peak
-  }, {
-    key: 'appreciate',
-    controller: Appreciate
   }
 ]
 

@@ -8,12 +8,9 @@ const groupBySsp = results => {
     'aerserv': {},
     'beachfront': {},
     'freewheel': {},
-    'onevideo': {},
     'telaria': {},
-    'spotx': {},
     'improvedigital': {},
     'tappx': {},
-    // 'pulsepointctv': {},
     'v2v': {}
   }
   each(sspGroups, (ssp, sspKey) => {

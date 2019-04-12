@@ -9,8 +9,6 @@ export const partnersMap = {
   aerserv: 'Aerserv',
   beachfront: 'Beachfront',
   freewheel: 'Freewheel',
-  onevideo: 'OneVideo',
-  spotx: 'SpotX',
   telaria: 'Telaria',
   improvedigital: 'ImproveDigital',
   tappx: 'Tappx',
@@ -29,8 +27,6 @@ export const sspList = [
   'freewheel',
   'beachfront',
   'aerserv',
-  'spotx',
-  'onevideo',
   'improvedigital',
   'tappx'
 ]

@@ -34,7 +34,6 @@ const sequelize = new Sequelize(RAZZLE_PG_DB, RAZZLE_PG_USER, RAZZLE_PG_PASSWORD
   host: RAZZLE_PG_HOST,
   port: RAZZLE_PG_PORT,
   dialect: 'postgres',
-  operatorsAliases: false,
   pool: {
     max: 5,
     min: 0,

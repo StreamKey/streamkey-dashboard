@@ -21,9 +21,6 @@ const load = as => {
       case 'lkqd':
         REMOTE_DESTINATION_PATH += '/lkqd/config/default.json'
         break
-      case 'streamrail':
-        REMOTE_DESTINATION_PATH += '/streamrail/config/default.json'
-        break
       case 'springserve':
         REMOTE_DESTINATION_PATH += '/springserve/config/default.json'
         break
@@ -75,9 +72,6 @@ const save = (as, jsonData) => {
     switch (as) {
       case 'lkqd':
         REMOTE_DESTINATION_PATH += '/lkqd/config/default.json'
-        break
-      case 'streamrail':
-        REMOTE_DESTINATION_PATH += '/streamrail/config/default.json'
         break
       case 'springserve':
         REMOTE_DESTINATION_PATH += '/springserve/config/default.json'

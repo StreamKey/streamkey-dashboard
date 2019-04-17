@@ -94,9 +94,8 @@ const getSspSet = () => {
 const getAsSet = () => {
   // Get the list of ASs to fetch data from (comma separated)
   // Default: All
-  // Example: --asList streamrail,lkqd
+  // Example: --asList aniview,lkqd
   const asOptions = new Set([
-    'streamrail',
     'lkqd',
     'aniview',
     'springserve'

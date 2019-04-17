@@ -163,7 +163,7 @@ class SspAsReport extends React.Component {
     // Assumes the same SSP order in current/previous
     each(current, (row, i) => {
       each(row, (v, k) => {
-        if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
+        if (['lkqd', 'springserve', 'aniview'].includes(k)) {
           total.revenue.current += v.revenue
           total.revenue.previous += previous[i][k].revenue
           total.profit.current += v.profit
@@ -296,21 +296,6 @@ class SspAsReport extends React.Component {
         accessor: 'lkqd.margin',
         Cell: this.renderValue('percent'),
         Header: this.renderTotal('lkqd.profit', 'percent', 'margin')
-      }]
-    }, {
-      Header: getPartnerName('streamrail') + ' Profit',
-      columns: [{
-        accessor: 'streamrail.profit',
-        Cell: this.renderValue('usd'),
-        minWidth: 140,
-        Header: this.renderTotal('streamrail.profit', 'usd', 'sum')
-      }]
-    }, {
-      Header: getPartnerName('streamrail') + ' Margin',
-      columns: [{
-        accessor: 'streamrail.margin',
-        Cell: this.renderValue('percent'),
-        Header: this.renderTotal('streamrail.profit', 'percent', 'margin')
       }]
     }, {
       Header: getPartnerName('springserve') + ' Profit',

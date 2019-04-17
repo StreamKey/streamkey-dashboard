@@ -256,7 +256,6 @@ class Thresholds extends React.Component {
             >
               <MenuItem value='lkqd'>LKQD</MenuItem>
               <MenuItem value='springserve'>SpringServe</MenuItem>
-              <MenuItem value='streamrail'>StreamRail</MenuItem>
             </Select>
             <Button
               className={classes.button}

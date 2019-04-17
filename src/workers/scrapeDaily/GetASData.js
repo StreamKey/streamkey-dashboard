@@ -5,7 +5,6 @@ import { promiseTimeout } from '../../components/Utils'
 import GetTagBase from './GetTagBase'
 import MergeAsResults from './MergeAsResults'
 
-import StreamRail from './AS/StreamRail'
 import Lkqd from './AS/Lkqd'
 import Aniview from './AS/Aniview'
 import SpringServe from './AS/SpringServe'
@@ -14,9 +13,6 @@ const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_S
 
 const AdServers = [
   {
-    key: 'streamrail',
-    controller: StreamRail
-  }, {
     key: 'lkqd',
     controller: Lkqd
   }, {

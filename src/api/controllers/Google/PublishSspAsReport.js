@@ -8,7 +8,6 @@ const sheetTitle = 'SSP-AS ' + moment().format('HH:mm:ss')
 
 const asList = [
   'lkqd',
-  'streamrail',
   'springserve',
   'aniview'
 ]

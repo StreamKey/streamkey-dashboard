@@ -151,14 +151,6 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('lkqd.revenue')
       }]
     }, {
-      Header: getPartnerName('streamrail'),
-      columns: [{
-        accessor: 'streamrail.revenue',
-        Cell: this.renderCell,
-        minWidth: 180,
-        Header: this.renderFooter('streamrail.revenue')
-      }]
-    }, {
       Header: getPartnerName('springserve'),
       columns: [{
         accessor: 'springserve.revenue',

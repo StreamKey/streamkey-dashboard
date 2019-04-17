@@ -75,7 +75,7 @@ class SspAsReportPage extends React.Component {
         margin: 0
       }
       each(row, (v, k) => {
-        if (['lkqd', 'streamrail', 'springserve', 'aniview'].includes(k)) {
+        if (['lkqd', 'springserve', 'aniview'].includes(k)) {
           total.revenue += v.revenue
           total.profit += v.profit
         }

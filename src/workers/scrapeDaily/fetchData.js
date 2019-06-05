@@ -208,7 +208,8 @@ const main = async () => {
     winston.info('Store SSP done', { created: storeSspData.length })
   } catch (e) {
     winston.error('Store SSP error', {
-      error: e.message
+      error: e.message,
+      storeSspData
     })
   }
 

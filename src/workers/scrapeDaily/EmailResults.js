@@ -156,7 +156,6 @@ Discrepancy/SSP-AS Reports: ${reportsUrls.discrepancyUrl}
     text += '\nWarnings:\n'
     html += '<br/><b>Warnings:</b><table>'
     for (let e of loggerData.warns) {
-      console.log(e)
       const errorData = getErrorData(e)
       text += `${e.message}` + '\n'
       html += `<tr><td>- ${e.message}: </td><td>${errorData}</td></tr>`

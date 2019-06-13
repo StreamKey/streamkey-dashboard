@@ -96,7 +96,7 @@ export default (sspResults, asResults) => {
           if (sspData.tag.startsWith('MNL_')) {
             // AS mnl
             result = asGroups.mnl[tagBase]
-          } else if (sspData.tag.startsWith('AUTON_') && sspData.tag.endsWith('_WL')) {
+          } else if ((sspData.tag.toUpperCase()).startsWith('AUTON_') && sspData.tag.endsWith('_WL')) {
             // AS auton_wl
             result = asGroups.auton_wl[tagBase]
           } else if (sspData.tag.endsWith('_RON')) {
@@ -112,7 +112,7 @@ export default (sspResults, asResults) => {
           if (sspData.tag.startsWith('MNL_')) {
             // AS mnl
             result = asGroups.mnl[tagBase]
-          } else if (sspData.tag.startsWith('AUTON_')) {
+          } else if ((sspData.tag.toUpperCase()).startsWith('AUTON_')) {
             // AS auton_wl + auton_for + ron
             result = MergeAsResults(
               MergeAsResults(

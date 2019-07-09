@@ -44,13 +44,14 @@ export const groupAsResults = (asResults, asKey) => {
     try {
       const tagBase = GetTagBase(r.tag)
       let group
-      if (r.tag.startsWith('MNL_')) {
+      const tag = r.tag.toUpperCase()
+      if (tag.startsWith('MNL_')) {
         group = groups.mnl
-      } else if ((r.tag.toUpperCase()).startsWith('AUTON_') && r.tag.endsWith('_WL')) {
+      } else if (tag.startsWith('AUTON_') && tag.endsWith('_WL')) {
         group = groups.auton_wl
-      } else if ((r.tag.toUpperCase()).startsWith('AUTON_') && r.tag.indexOf('_FOR_') > -1) {
+      } else if (tag.startsWith('AUTON_') && tag.indexOf('_FOR_') > -1) {
         group = groups.auton_for
-      } else if (r.tag.endsWith('_RON')) {
+      } else if (tag.endsWith('_RON')) {
         group = groups.ron
       } else {
         group = groups.other

@@ -77,3 +77,4 @@ docker run -it --rm --link streamkey-postgres:postgres postgres psql -h postgres
 
 If something goes wrong, revert to previous deployment with:
 `yarn shipit production rollback`
+`yarn shipit production restart`

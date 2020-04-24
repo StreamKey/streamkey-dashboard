@@ -8,6 +8,7 @@ import MergeAsResults from './MergeAsResults'
 import Lkqd from './AS/Lkqd'
 import Aniview from './AS/Aniview'
 import SpringServe from './AS/SpringServe'
+import Cedato from './AS/Cedato'
 
 const PARTNER_FETCH_TIMEOUT_SECONDS = process.env.RAZZLE_PARTNER_FETCH_TIMEOUT_SECONDS
 
@@ -21,6 +22,9 @@ const AdServers = [
   }, {
     key: 'springserve',
     controller: SpringServe
+  }, {
+    key: 'cedato',
+    controller: Cedato
   }
 ]
 

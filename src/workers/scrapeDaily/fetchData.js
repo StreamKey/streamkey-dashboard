@@ -103,7 +103,8 @@ const getAsSet = () => {
   const asOptions = new Set([
     'lkqd',
     'aniview',
-    'springserve'
+    'springserve',
+    'cedato'
   ])
   for (let i in process.argv) {
     if (process.argv[i] === '--skipAs') {

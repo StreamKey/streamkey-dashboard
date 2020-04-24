@@ -5,6 +5,7 @@ export const partnersMap = {
   aniview: 'Aniview',
   lkqd: 'LKQD',
   springserve: 'Springserve',
+  cedato: 'Cedato',
   aerserv: 'Aerserv',
   beachfront: 'Beachfront',
   freewheel: 'Freewheel',
@@ -18,7 +19,8 @@ export const getPartnerName = key => partnersMap[key] || key
 export const asList = [
   'lkqd',
   'aniview',
-  'springserve'
+  'springserve',
+  'cedato'
 ]
 export const sspList = [
   'telaria',

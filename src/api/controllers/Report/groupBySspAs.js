@@ -3,7 +3,7 @@ import each from 'lodash/each'
 import getByDate from './getByDate'
 
 const groupBySsp = results => {
-  const asList = ['aniview', 'lkqd', 'springserve']
+  const asList = ['aniview', 'lkqd', 'springserve', 'cedato']
   const sspGroups = {
     'aerserv': {},
     'beachfront': {},

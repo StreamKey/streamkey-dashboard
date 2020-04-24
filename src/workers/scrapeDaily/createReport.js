@@ -98,7 +98,8 @@ const getAsSet = () => {
   const asOptions = new Set([
     'lkqd',
     'aniview',
-    'springserve'
+    'springserve',
+    'cedato'
   ])
   for (let i in process.argv) {
     const next = Number(i) + 1

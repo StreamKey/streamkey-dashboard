@@ -55,7 +55,7 @@ docker run -it --rm --link streamkey-postgres:postgres postgres psql -h postgres
 
 ### Add new partner
 1. Create new fetch file at `src/workers/scrapeDaily/[AS|SSP]/`
-2. Store credentials in `.env` and add variable names to `README.md`
+2. Store credentials in `.env` and add variable names to `env.template`
 3. Add partner to `src/workers/scrapeDaily/[GetASData|GetSSPData]`
 4. Add partner key to `src/workers/scrapeDaily/fetchData`
 5. Add partner key to `src/workers/scrapeDaily/createReport`

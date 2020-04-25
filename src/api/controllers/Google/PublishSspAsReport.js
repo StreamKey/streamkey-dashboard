@@ -9,7 +9,8 @@ const sheetTitle = 'SSP-AS ' + moment().format('HH:mm:ss')
 const asList = [
   'lkqd',
   'springserve',
-  'aniview'
+  'aniview',
+  'cedato'
 ]
 
 const styles = ({

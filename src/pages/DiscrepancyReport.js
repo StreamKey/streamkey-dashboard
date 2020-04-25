@@ -65,7 +65,7 @@ class DiscrepancyReportPage extends React.Component {
         asRevenue: 0
       }
       each(ssp, (v, k) => {
-        if (['lkqd', 'springserve', 'aniview'].includes(k)) {
+        if (['lkqd', 'springserve', 'aniview', 'cedato'].includes(k)) {
           as[k] = {
             revenue: {
               value: v.revenue,

@@ -166,6 +166,14 @@ class DiscrepancyReport extends React.Component {
         minWidth: 180,
         Header: this.renderFooter('aniview.revenue')
       }]
+    }, {
+      Header: getPartnerName('cedato'),
+      columns: [{
+        accessor: 'cedato.revenue',
+        Cell: this.renderCell,
+        minWidth: 180,
+        Header: this.renderFooter('cedato.revenue')
+      }]
     }]
     return (
       <div className={classes.root}>

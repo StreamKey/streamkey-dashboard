@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import querystring from 'querystring'
+import winston from 'winston'
 
 const credentials = {
   key: process.env.RAZZLE_CREDENTIALS_CEDATO_APIKEY,
@@ -10,12 +11,16 @@ const toBase64 = str => {
   return Buffer.from(str).toString('base64')
 }
 
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const authStr = `${credentials.key}:${credentials.secret}`
 const axios = Axios.create({
   baseURL: 'https://api.cedato.com/api',
 })
 
-const getResults = async dateTs => {
+const getReportLink = async dateTs => {
   const form = {
     "dimensions": [
       "demand",
@@ -48,12 +53,35 @@ const getResults = async dateTs => {
         }
       }
     )
-    const reportUrl = reportRes.data.data
-    const report = await axios.get(reportUrl)
-    return report.data.data
+    return reportRes.data.data
   } catch (e) {
     e.prevError = e.message
     e.message = 'Cedato report failed'
+    throw e
+  }
+}
+
+const downloadReport = async reportUrl => {
+  try {
+    let res
+    try {
+      res = await axios.get(reportUrl)
+      if (res.data.data.includes('Report is not processed yet')) {
+        winston.warn(`Cedato downloadReport failed once (${reportUrl})`)
+        throw new Error('Cedato report is not ready yet')
+      }
+    } catch (e) {
+      await sleep(15000)
+      res = await axios.get(reportUrl)
+      if (res.data.data.includes('Report is not processed yet')) {
+        winston.warn('Cedato downloadReport failed twice')
+        throw new Error('Cedato report is still not ready')
+      }
+    }
+    return res.data.data
+  } catch (e) {
+    e.prevError = e.message
+    e.message = 'Cedato downloadReport failed twice'
     throw e
   }
 }
@@ -74,7 +102,8 @@ const normalize = results => {
 export default {
   getData: async dateTs => {
     try {
-      const results = await getResults(dateTs)
+      const reportLink = await getReportLink(dateTs)
+      const results = await downloadReport(reportLink)
       return normalize(results)
     } catch (e) {
       throw e

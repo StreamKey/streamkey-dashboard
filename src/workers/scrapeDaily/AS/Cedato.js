@@ -24,11 +24,10 @@ const getReportLink = async dateTs => {
   const form = {
     "dimensions": [
       "demand",
-      "supply",
       "day"
     ],
     "range": "yesterday",
-    "measures": ["ad requests", "impressions", "revenue", "impression rpm", "demand fr"]
+    "measures": ["ad requests", "impressions", "revenue"]
   }
   try {
     const tokenRes = await axios.post(
@@ -63,6 +62,7 @@ const getReportLink = async dateTs => {
 
 const downloadReport = async reportUrl => {
   try {
+    await sleep(5000)
     let res
     try {
       res = await axios.get(reportUrl)
@@ -89,12 +89,12 @@ const downloadReport = async reportUrl => {
 const normalize = results => {
   return results.map(r => {
     return {
-      tag: r[4],
-      asOpp: r[6],
-      asImp: r[7],
-      asRev: r[8],
+      tag: r[1],
+      asOpp: r[4],
+      asImp: r[5],
+      asRev: r[6],
       asCost: 0,
-      asScost: (r[7] / 1000) * 0.2
+      asScost: (r[5] / 1000) * 0.2
     }
   })
 }

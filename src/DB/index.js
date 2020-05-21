@@ -7,6 +7,7 @@ import AsData from './models/asdata'
 import BackupConfigUI from './models/backupconfigui'
 import ReportLink from './models/reportlink'
 import Config from './models/config'
+import CedatoCosts from './models/cedatocosts'
 
 // Order is important for associations
 const modelsDefinitions = [
@@ -16,7 +17,8 @@ const modelsDefinitions = [
   AsData,
   BackupConfigUI,
   ReportLink,
-  Config
+  Config,
+  CedatoCosts
 ]
 
 const models = {}

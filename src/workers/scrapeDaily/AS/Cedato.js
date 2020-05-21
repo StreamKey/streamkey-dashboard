@@ -1,6 +1,9 @@
 import Axios from 'axios'
+import moment from 'moment'
 import querystring from 'querystring'
 import winston from 'winston'
+import Sequelize from 'sequelize'
+import DB from '../../../DB/'
 
 const credentials = {
   key: process.env.RAZZLE_CREDENTIALS_CEDATO_APIKEY,
@@ -20,7 +23,7 @@ const axios = Axios.create({
   baseURL: 'https://api.cedato.com/api',
 })
 
-const getReportLink = async dateTs => {
+const getReportLinks = async dateTs => {
   const form = {
     "dimensions": [
       "demand",
@@ -28,6 +31,13 @@ const getReportLink = async dateTs => {
     ],
     "range": "yesterday",
     "measures": ["ad requests", "impressions", "revenue"]
+  }
+  const costsForm = {
+    "dimensions": [
+      "supply partner"
+    ],
+    "range":"yesterday",
+    "measures":["cost"]
   }
   try {
     const tokenRes = await axios.post(
@@ -52,7 +62,18 @@ const getReportLink = async dateTs => {
         }
       }
     )
-    return reportRes.data.data
+    const costsRes = await axios.post(
+      '/v2.0/reports/',
+      costsForm,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }
+    )
+    return [reportRes.data.data, costsRes.data.data]
   } catch (e) {
     e.prevError = e.message
     e.message = 'Cedato report failed'
@@ -86,6 +107,49 @@ const downloadReport = async reportUrl => {
   }
 }
 
+const storeCosts = async (dateTs, costs) => {
+  const deleteRange = [
+    moment(dateTs).startOf('day').toDate(),
+    moment(dateTs).endOf('day').toDate()
+  ]
+  // Clear existing records for this day
+  try {
+    const deleted = await DB.models.CedatoCosts.destroy({
+      where: {
+        date: {
+          [Sequelize.Op.between]: deleteRange
+        }
+      }
+    })
+    winston.info('Clear Cedato costs existing records', {
+      deleteRange,
+      deleted
+    })
+  } catch (e) {
+    winston.error('Clear Cedato costs existing records error', {
+      error: e.message
+    })
+  }
+  // Store data
+  const storeCedatoCostsData = []
+  for (let c of costs) {
+    storeCedatoCostsData.push({
+      date: dateTs,
+      partner: c[0],
+      cost: c[1]
+    })
+  }
+  try {
+    await DB.models.CedatoCosts.bulkCreate(storeCedatoCostsData)
+    winston.info('Store Cedato costs done', { created: storeCedatoCostsData.length })
+  } catch (e) {
+    winston.error('Store Cedato costs error', {
+      error: e.message,
+      storeCedatoCostsData
+    })
+  }
+}
+
 const normalize = results => {
   return results.map(r => {
     return {
@@ -102,8 +166,10 @@ const normalize = results => {
 export default {
   getData: async dateTs => {
     try {
-      const reportLink = await getReportLink(dateTs)
+      const [reportLink, costsLink] = await getReportLinks(dateTs)
       const results = await downloadReport(reportLink)
+      const costs = await downloadReport(costsLink)
+      await storeCosts(dateTs, costs)
       return normalize(results)
     } catch (e) {
       throw e

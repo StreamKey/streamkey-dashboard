@@ -10,6 +10,9 @@ export default async req => {
     case 'ssp-as':
       report = await Report.groupBySspAs(from, to)
       break
+    case 'cedato-costs':
+      report = await Report.getCedatoCosts(from, to)
+      break
     default:
       throw new Error('no-such-report')
   }

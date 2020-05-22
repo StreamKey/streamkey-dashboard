@@ -143,12 +143,12 @@ class DiscrepancyReport extends React.Component {
         Header: this.renderFooter('total')
       }]
     }, {
-      Header: getPartnerName('lkqd'),
+      Header: getPartnerName('cedato'),
       columns: [{
-        accessor: 'lkqd.revenue',
+        accessor: 'cedato.revenue',
         Cell: this.renderCell,
         minWidth: 180,
-        Header: this.renderFooter('lkqd.revenue')
+        Header: this.renderFooter('cedato.revenue')
       }]
     }, {
       Header: getPartnerName('springserve'),
@@ -157,22 +157,6 @@ class DiscrepancyReport extends React.Component {
         Cell: this.renderCell,
         minWidth: 180,
         Header: this.renderFooter('springserve.revenue')
-      }]
-    }, {
-      Header: getPartnerName('aniview'),
-      columns: [{
-        accessor: 'aniview.revenue',
-        Cell: this.renderCell,
-        minWidth: 180,
-        Header: this.renderFooter('aniview.revenue')
-      }]
-    }, {
-      Header: getPartnerName('cedato'),
-      columns: [{
-        accessor: 'cedato.revenue',
-        Cell: this.renderCell,
-        minWidth: 180,
-        Header: this.renderFooter('cedato.revenue')
       }]
     }]
     return (

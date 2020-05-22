@@ -283,21 +283,6 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('total.profit', 'percent', 'margin')
       }]
     }, {
-      Header: getPartnerName('springserve') + ' Profit',
-      columns: [{
-        accessor: 'springserve.profit',
-        Cell: this.renderValue('usd'),
-        minWidth: 140,
-        Header: this.renderTotal('springserve.profit', 'usd', 'sum')
-      }]
-    }, {
-      Header: getPartnerName('springserve') + ' Margin',
-      columns: [{
-        accessor: 'springserve.margin',
-        Cell: this.renderValue('percent'),
-        Header: this.renderTotal('springserve.profit', 'percent', 'margin')
-      }]
-    }, {
       Header: getPartnerName('cedato') + ' Profit',
       columns: [{
         accessor: 'cedato.profit',
@@ -311,6 +296,21 @@ class SspAsReport extends React.Component {
         accessor: 'cedato.margin',
         Cell: this.renderValue('percent'),
         Header: this.renderTotal('cedato.profit', 'percent', 'margin')
+      }]
+    }, {
+      Header: getPartnerName('springserve') + ' Profit',
+      columns: [{
+        accessor: 'springserve.profit',
+        Cell: this.renderValue('usd'),
+        minWidth: 140,
+        Header: this.renderTotal('springserve.profit', 'usd', 'sum')
+      }]
+    }, {
+      Header: getPartnerName('springserve') + ' Margin',
+      columns: [{
+        accessor: 'springserve.margin',
+        Cell: this.renderValue('percent'),
+        Header: this.renderTotal('springserve.profit', 'percent', 'margin')
       }]
     }]
     return (

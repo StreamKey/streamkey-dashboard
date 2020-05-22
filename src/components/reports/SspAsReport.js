@@ -163,7 +163,7 @@ class SspAsReport extends React.Component {
     // Assumes the same SSP order in current/previous
     each(current, (row, i) => {
       each(row, (v, k) => {
-        if (['lkqd', 'springserve', 'aniview', 'cedato'].includes(k)) {
+        if (['springserve', 'cedato'].includes(k)) {
           total.revenue.current += v.revenue
           total.revenue.previous += previous[i][k].revenue
           total.profit.current += v.profit
@@ -283,21 +283,6 @@ class SspAsReport extends React.Component {
         Header: this.renderTotal('total.profit', 'percent', 'margin')
       }]
     }, {
-      Header: getPartnerName('lkqd') + ' Profit',
-      columns: [{
-        accessor: 'lkqd.profit',
-        Cell: this.renderValue('usd'),
-        minWidth: 140,
-        Header: this.renderTotal('lkqd.profit', 'usd', 'sum')
-      }]
-    }, {
-      Header: getPartnerName('lkqd') + ' Margin',
-      columns: [{
-        accessor: 'lkqd.margin',
-        Cell: this.renderValue('percent'),
-        Header: this.renderTotal('lkqd.profit', 'percent', 'margin')
-      }]
-    }, {
       Header: getPartnerName('springserve') + ' Profit',
       columns: [{
         accessor: 'springserve.profit',
@@ -311,21 +296,6 @@ class SspAsReport extends React.Component {
         accessor: 'springserve.margin',
         Cell: this.renderValue('percent'),
         Header: this.renderTotal('springserve.profit', 'percent', 'margin')
-      }]
-    }, {
-      Header: getPartnerName('aniview') + ' Profit',
-      columns: [{
-        accessor: 'aniview.profit',
-        Cell: this.renderValue('usd'),
-        minWidth: 140,
-        Header: this.renderTotal('aniview.profit', 'usd', 'sum')
-      }]
-    }, {
-      Header: getPartnerName('aniview') + ' Margin',
-      columns: [{
-        accessor: 'aniview.margin',
-        Cell: this.renderValue('percent'),
-        Header: this.renderTotal('aniview.profit', 'percent', 'margin')
       }]
     }, {
       Header: getPartnerName('cedato') + ' Profit',

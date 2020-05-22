@@ -15,6 +15,6 @@ export default async (fromTs, toTs) => {
       from: fromTs,
       to: toTs
     },
-    totalCost
+    totalCost: totalCost.length === 1 ? Number(totalCost[0].sum) : 0
   }
 }

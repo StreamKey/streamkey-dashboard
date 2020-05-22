@@ -105,12 +105,16 @@ class SspAsReportPage extends React.Component {
       }
       const response = await API.get('/reports/ssp-as', { params: form })
       const response2 = await API.get('/reports/ssp-as', { params: form2 })
+      const cedatoResponse = await API.get('/reports/cedato-costs', { params: form })
+      const cedatoResponse2 = await API.get('/reports/cedato-costs', { params: form2 })
       this.setState({
         ...this.state,
         compareTo: form2,
         data: {
           current: this.addTotalSsp(response.data.report.bySsp),
-          previous: this.addTotalSsp(response2.data.report.bySsp)
+          previous: this.addTotalSsp(response2.data.report.bySsp),
+          cedatoCostCurrent: cedatoResponse.data.report.totalCost,
+          cedatoCostPrevious: cedatoResponse2.data.report.totalCost
         },
         isLoading: false,
         error: false

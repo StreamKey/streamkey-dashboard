@@ -139,7 +139,7 @@ class SspAsReport extends React.Component {
   }
 
   calcTotal = data => {
-    const { current, previous } = data
+    const { current, previous, cedatoCostCurrent, cedatoCostPrevious } = data
     const total = {
       revenue: {
         current: 0,
@@ -147,8 +147,8 @@ class SspAsReport extends React.Component {
         diff: 0
       },
       profit: {
-        current: 0,
-        previous: 0,
+        current: -cedatoCostCurrent,
+        previous: -cedatoCostPrevious,
         diff: 0
       },
       margin: {

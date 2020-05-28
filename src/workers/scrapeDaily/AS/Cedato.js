@@ -83,7 +83,7 @@ const getReportLinks = async dateTs => {
 
 const downloadReport = async reportUrl => {
   try {
-    await sleep(5000)
+    await sleep(15000)
     let res
     try {
       res = await axios.get(reportUrl)
@@ -92,7 +92,7 @@ const downloadReport = async reportUrl => {
         throw new Error('Cedato report is not ready yet')
       }
     } catch (e) {
-      await sleep(15000)
+      await sleep(60000)
       res = await axios.get(reportUrl)
       if (res.data.data.includes('Report is not processed yet')) {
         winston.warn('Cedato downloadReport failed twice')

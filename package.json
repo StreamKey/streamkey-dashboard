@@ -50,7 +50,7 @@
     "mdi-material-ui": "^5.5.0",
     "mdi-svg": "^2.2.43",
     "moment": "^2.22.2",
-    "nodemailer": "^4.6.8",
+    "nodemailer": "^6.4.16",
     "numeral": "^2.0.6",
     "pg": "^7.5.0",
     "pg-hstore": "^2.3.2",
